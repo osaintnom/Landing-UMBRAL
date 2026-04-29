@@ -1,0 +1,540 @@
+Guía para bajar UMBRAL a papel
+Esta guía de preguntas no busca responder “todo lo que UMBRAL podría ser”. Busca tomar decisiones para construir una primera comunicación clara, vendible y validable.
+El objetivo es elegir:
+Un cliente principal.
+Un dolor principal.
+Una promesa principal.
+Una primera solución.
+Una frase fuerte para la landing.
+La pregunta más importante de toda esta etapa es:
+¿Cuál es el dolor más urgente, concreto y pagable que UMBRAL resuelve para una desarrolladora?
+Si respondemos bien esa pregunta, la landing y la primera presentación van a ser mucho más fáciles de construir.
+
+Objetivo principal de esta etapa
+Antes de diseñar o desarrollar, necesitamos responder tres preguntas:
+¿Quién es nuestro cliente real?
+Es decir, quién decide y quién paga.
+¿Cuál es su dolor exacto?
+No un problema general, sino una situación concreta que hoy le genera pérdida de tiempo, pérdida de confianza, menor conversión o peor experiencia.
+¿Qué valor concreto le da UMBRAL?
+No solo qué hace la plataforma, sino qué resultado produce para la desarrolladora.
+
+1. Definición simple de UMBRAL
+   Preguntas
+   ¿Qué es UMBRAL en una frase?
+   ¿Qué problema viene a resolver en un renglón?
+   ¿Qué lo hace diferente?
+   ¿Qué NO es UMBRAL?
+   ¿Cuál es la visión a largo plazo?
+   ¿Para qué sirve esta sección?
+   Sirve para ordenar la idea principal y evitar que UMBRAL se explique de muchas maneras distintas.
+   Si no podemos explicar UMBRAL en una frase simple, probablemente todavía no esté listo para comunicarse en una landing.
+   ¿Qué decisión nos ayuda a tomar?
+   Nos ayuda a definir el marco general del proyecto:
+   Qué es.
+   Qué no es.
+   Qué problema ataca.
+   Qué visión tiene.
+   Qué cosas quedan fuera de esta primera etapa.
+   ¿Cómo deberíamos responder?
+   Con respuestas cortas, concretas y sin palabras demasiado abstractas.
+   Ejemplo de buena respuesta:
+   UMBRAL es una solución para que desarrolladoras inmobiliarias comuniquen mejor sus proyectos y acompañen a compradores e inversores durante el proceso de compra o inversión.
+   Ejemplo de respuesta demasiado amplia:
+   UMBRAL es un ecosistema integral que transforma la experiencia inmobiliaria de punta a punta.
+   Esa frase puede sonar bien, pero no ayuda a vender ni a construir una primera landing.
+   ¿Qué deberíamos evitar?
+   Definiciones demasiado aspiracionales.
+   Frases que podrían aplicar a cualquier startup.
+   Hablar de todas las verticales al mismo tiempo.
+   Confundir visión futura con propuesta inicial.
+
+2. Cliente principal
+   Preguntas
+   ¿Quién paga por UMBRAL?
+   ¿La desarrolladora, el inversor, el comprador u otro actor?
+   Dentro de la desarrolladora, ¿quién decide?
+   ¿Dueño, comercial, marketing, postventa?
+   ¿Qué tipo de desarrolladora queremos atacar primero?
+   ¿Para qué sirve esta sección?
+   Sirve para identificar a quién le estamos vendiendo realmente.
+   UMBRAL puede beneficiar a compradores, inversores y desarrolladoras, pero la landing debe hablarle principalmente a quien toma la decisión de compra.
+   ¿Qué decisión nos ayuda a tomar?
+   Nos ayuda a definir:
+   A quién le habla la landing.
+   Qué lenguaje usamos.
+   Qué beneficios priorizamos.
+   Qué objeciones tenemos que resolver.
+   Qué call to action tiene sentido.
+   ¿Cómo deberíamos responder?
+   Debemos responder con el perfil más específico posible.
+   Ejemplo:
+   El cliente principal es una desarrolladora mediana que vende proyectos en pozo y necesita mejorar la comunicación con inversores durante la etapa de obra.
+   Mejor todavía:
+   El decisor probablemente sea el dueño o director comercial de una desarrolladora mediana, porque le importa mejorar la confianza, la experiencia del inversor y la percepción profesional del proyecto.
+   ¿Qué deberíamos evitar?
+   Decir “es para todos”.
+   Mezclar comprador, inversor y desarrolladora como si todos fueran clientes iguales.
+   Diseñar una landing para el usuario final si quien paga es la desarrolladora.
+   Hablarle a marketing si en realidad decide el dueño.
+
+3. Usuario final
+   Preguntas
+   ¿Quién usa o recibe la experiencia de UMBRAL?
+   ¿Comprador, inversor, propietario o potencial cliente?
+   ¿Qué necesita entender?
+   ¿Qué dudas tiene?
+   ¿Qué le genera desconfianza?
+   ¿Qué experiencia recibe hoy?
+   ¿Qué experiencia queremos darle?
+   ¿Para qué sirve esta sección?
+   Sirve para entender a la persona que va a vivir la experiencia de UMBRAL, aunque no sea quien paga.
+   Esto es importante porque la desarrolladora va a comprar UMBRAL si entiende que mejora la experiencia de sus compradores o inversores.
+   ¿Qué decisión nos ayuda a tomar?
+   Nos ayuda a definir:
+   Qué información debe mostrar UMBRAL.
+   Qué tono debe tener la experiencia.
+   Qué dudas debe resolver.
+   Qué funcionalidades son importantes.
+   Qué beneficios puede vender la desarrolladora a sus propios clientes.
+   ¿Cómo deberíamos responder?
+   Pensando en situaciones reales del usuario.
+   Ejemplo:
+   El inversor necesita entender cómo avanza la obra, qué hitos se cumplieron, qué información relevante tiene disponible y sentir que la desarrolladora mantiene una comunicación clara y profesional.
+   ¿Qué deberíamos evitar?
+   Hablar del usuario final de forma genérica.
+   Asumir que todos los compradores tienen las mismas dudas.
+   Diseñar una experiencia linda pero sin resolver ansiedad, incertidumbre o falta de información.
+   Olvidar que el usuario final influye en la percepción de valor de la desarrolladora.
+
+4. Dolor principal
+   Preguntas
+   ¿Cuál es el dolor más fuerte de la desarrolladora?
+   ¿Le cuesta vender?
+   ¿Le cuesta diferenciarse?
+   ¿Le cuesta comunicar sus proyectos?
+   ¿Tiene mala experiencia postventa?
+   ¿Recibe muchas consultas repetidas?
+   ¿Pierde confianza por falta de información clara?
+   ¿Para qué sirve esta sección?
+   Sirve para elegir el problema principal que vamos a comunicar.
+   UMBRAL puede resolver muchas cosas, pero la primera landing no debería intentar vender todas. Tiene que enfocarse en un dolor claro.
+   ¿Qué decisión nos ayuda a tomar?
+   Nos ayuda a definir cómo vamos a vender UMBRAL.
+   Por ejemplo:
+   Si el dolor principal es ventas, hablamos de conversión.
+   Si el dolor principal es comunicación, hablamos de claridad.
+   Si el dolor principal es postventa, hablamos de seguimiento.
+   Si el dolor principal es confianza, hablamos de transparencia.
+   Si el dolor principal es diferenciación, hablamos de experiencia premium.
+   Cada dolor genera una landing distinta.
+   ¿Cómo deberíamos responder?
+   No alcanza con responder “sí, le cuesta comunicar”. Hay que describir una situación concreta.
+   Ejemplo de buena respuesta:
+   La desarrolladora no tiene una forma clara y profesional de mantener informados a sus inversores durante la obra. Eso genera consultas repetidas, incertidumbre y una percepción menos profesional del proyecto.
+   Esa respuesta es útil porque incluye:
+   Quién tiene el problema.
+   Cuándo aparece.
+   Qué lo causa.
+   Qué consecuencia genera.
+   ¿Qué deberíamos evitar?
+   Elegir cinco dolores al mismo tiempo.
+   Usar dolores genéricos como “falta de experiencia”.
+   Decir que el problema es “mejorar la comunicación” sin explicar qué falla hoy.
+   Confundir síntomas con dolor principal.
+   Ejemplo:
+   “Reciben muchas consultas” puede ser un síntoma.
+   El dolor real podría ser: “no existe un canal claro y ordenado para mantener informado al inversor”.
+
+5. Valor que entrega UMBRAL
+   Preguntas
+   ¿Qué resultado concreto prometemos?
+   ¿Más confianza?
+   ¿Mejor comunicación?
+   ¿Menos incertidumbre?
+   ¿Más conversión?
+   ¿Mejor experiencia postventa?
+   ¿Mayor percepción de valor?
+   ¿Cuál de esos beneficios es el más importante?
+   ¿Cuál debería aparecer primero en la landing?
+   ¿Cómo lo demostramos con una solución simple?
+   ¿Para qué sirve esta sección?
+   Sirve para transformar el dolor en una promesa clara.
+   El valor no es “tener una plataforma”. El valor es el resultado que la plataforma genera.
+   ¿Qué decisión nos ayuda a tomar?
+   Nos ayuda a definir la promesa principal de UMBRAL.
+   Por ejemplo:
+   “Reducir incertidumbre durante la obra”.
+   “Mejorar la experiencia del inversor”.
+   “Profesionalizar la comunicación del desarrollo”.
+   “Aumentar la confianza en el proyecto”.
+   “Convertir la experiencia del comprador en una ventaja comercial”.
+   ¿Cómo deberíamos responder?
+   Con un resultado concreto y defendible.
+   Ejemplo:
+   UMBRAL permite que la desarrolladora centralice la información del proyecto, comunique avances de forma profesional y le dé al inversor una experiencia más clara y confiable durante la obra.
+   ¿Qué deberíamos evitar?
+   Prometer resultados difíciles de probar, como “vas a vender mucho más”.
+   Decir beneficios demasiado amplios.
+   Confundir funcionalidad con valor.
+   Ejemplo:
+   “Subir fotos y videos” es una funcionalidad.
+   “Mantener informado al inversor y reducir incertidumbre” es el valor.
+
+6. Propuesta de valor
+   Pregunta
+   Completar esta frase:
+   UMBRAL ayuda a **\_\_\_\_** a lograr **\_\_\_\_** mediante **\_\_\_\_**.
+   Ejemplo:
+   UMBRAL ayuda a desarrolladoras inmobiliarias a mejorar la experiencia de sus compradores e inversores mediante una comunicación más clara, ordenada y profesional.
+   ¿Para qué sirve esta sección?
+   Sirve para unir en una sola frase:
+   Cliente.
+   Resultado.
+   Solución.
+   Es la frase base que después puede convertirse en el hero de la landing, en una presentación comercial o en un pitch.
+   ¿Qué decisión nos ayuda a tomar?
+   Nos obliga a definir qué vamos a comunicar primero.
+   Si no podemos completar esta frase de forma simple, probablemente todavía tenemos demasiadas ideas mezcladas.
+   ¿Cómo deberíamos responder?
+   Con una frase concreta, corta y orientada al cliente.
+   Estructura ideal:
+   UMBRAL ayuda a [cliente] a [resultado deseado] mediante [mecanismo o solución].
+   Ejemplo más fuerte:
+   UMBRAL ayuda a desarrolladoras inmobiliarias a mantener informados a sus inversores durante la obra mediante un portal simple, claro y profesional.
+   ¿Qué deberíamos evitar?
+   Meter todas las verticales en una sola frase.
+   Usar palabras como “ecosistema”, “revolucionar” o “integral” si todavía no son necesarias.
+   Hacer una frase que no diga quién paga o qué resultado obtiene.
+
+7. Mensaje comercial
+   Preguntas
+   ¿Qué le decimos a la desarrolladora para que le interese?
+   ¿Qué beneficio le mostramos primero?
+   ¿Hablamos de ventas, confianza, experiencia, comunicación o diferenciación?
+   ¿Cuál es la promesa principal?
+   ¿Qué frase debería aparecer en el inicio de la landing?
+   ¿Para qué sirve esta sección?
+   Sirve para convertir la propuesta de valor en lenguaje de venta.
+   Una cosa es entender internamente qué es UMBRAL. Otra es decirlo de una manera que una desarrolladora quiera escuchar más.
+   ¿Qué decisión nos ayuda a tomar?
+   Nos ayuda a definir el mensaje principal de la landing.
+   El mensaje comercial debe responder:
+   ¿Por qué una desarrolladora debería prestarnos atención ahora?
+   ¿Cómo deberíamos responder?
+   Pensando en lo que más le importa al cliente.
+   Ejemplos:
+   Si el dolor es comunicación:
+   Mantené informados a tus inversores durante toda la obra con una experiencia clara y profesional.
+   Si el dolor es diferenciación:
+   Convertí la experiencia de tus compradores en una ventaja comercial para tu desarrollo.
+   Si el dolor es confianza:
+   Generá más confianza con una comunicación ordenada, transparente y fácil de seguir.
+   ¿Qué deberíamos evitar?
+   Hablar demasiado desde lo que UMBRAL quiere ser.
+   Usar lenguaje técnico.
+   Prometer demasiadas cosas en el primer mensaje.
+   Hacer una frase linda pero poco comercial.
+
+8. Segmentación inicial
+   Preguntas
+   ¿A qué mercado apuntamos primero?
+   ¿Qué tipo de desarrollos?
+   ¿Pozo, premium, vivienda, inversión, loteos?
+   ¿Qué tamaño de desarrolladora?
+   ¿En qué ciudad o zona?
+   ¿Qué segmento tiene más dolor?
+   ¿Qué segmento puede validar más rápido?
+   ¿Para qué sirve esta sección?
+   Sirve para evitar venderle a todo el mundo al mismo tiempo.
+   Un producto nuevo necesita empezar por un segmento concreto donde el dolor sea más fuerte y la validación sea más rápida.
+   ¿Qué decisión nos ayuda a tomar?
+   Nos ayuda a definir el primer mercado objetivo.
+   Esto impacta en:
+   El tono de la landing.
+   Los ejemplos que usamos.
+   Los beneficios que priorizamos.
+   La lista de contactos.
+   La estrategia comercial inicial.
+   ¿Cómo deberíamos responder?
+   Con una hipótesis específica.
+   Ejemplo:
+   Primero vamos a apuntar a desarrolladoras medianas con proyectos en pozo orientados a inversores, porque necesitan mantener confianza durante la obra y comunicar avances de forma profesional.
+   ¿Qué deberíamos evitar?
+   “Apuntamos a todas las desarrolladoras”.
+   Elegir el segmento más grande sin saber si tiene más dolor.
+   Confundir mercado atractivo con mercado validable.
+   Arrancar por un segmento demasiado complejo o difícil de acceder.
+
+9. Información y confidencialidad
+   Preguntas
+   ¿Qué información puede ser pública?
+   ¿Qué información debe ser privada?
+   ¿Qué información es confidencial?
+   ¿Qué ve un potencial comprador?
+   ¿Qué ve un inversor que ya compró?
+   ¿Qué ve solo la desarrolladora?
+   ¿Quién carga y actualiza la información?
+   ¿Para qué sirve esta sección?
+   Sirve para definir los límites de la experiencia y evitar problemas futuros.
+   En proyectos inmobiliarios puede haber información comercial, financiera, legal o estratégica que no debería estar disponible para todos.
+   ¿Qué decisión nos ayuda a tomar?
+   Nos ayuda a definir:
+   Qué contenido aparece en la landing.
+   Qué contenido iría en un portal privado.
+   Qué permisos necesitaría el MVP.
+   Qué información puede generar confianza sin exponer datos sensibles.
+   Quién administra la información.
+   ¿Cómo deberíamos responder?
+   Separando niveles de acceso.
+   Ejemplo:
+   Público: información general del proyecto, propuesta de valor, beneficios, imágenes seleccionadas.
+   Privado para inversores: avances de obra, novedades, documentos habilitados, hitos del proyecto.
+   Interno desarrolladora: datos comerciales, leads, métricas, información sensible.
+   ¿Qué deberíamos evitar?
+   Mostrar todo por querer ser transparentes.
+   No definir quién puede ver qué.
+   No diferenciar entre potencial comprador e inversor actual.
+   Construir una solución que después tenga problemas por confidencialidad.
+
+10. Landing inicial
+    Preguntas
+    ¿Qué tiene que explicar la landing?
+    ¿Qué es UMBRAL?
+    ¿Para quién es?
+    ¿Qué problema resuelve?
+    ¿Qué valor entrega?
+    ¿Cómo funciona?
+    ¿Por qué deberían contactarnos?
+    ¿Qué call to action usamos?
+    Ejemplo: “Agendar una reunión”, “Solicitar demo”, “Conocer UMBRAL”.
+    ¿Para qué sirve esta sección?
+    Sirve para transformar todo lo anterior en una página clara.
+    La landing no es solo diseño. Es una herramienta comercial para validar si la propuesta genera interés.
+    ¿Qué decisión nos ayuda a tomar?
+    Nos ayuda a definir la estructura de la página:
+    Hero con promesa principal.
+    Problema.
+    Solución.
+    Beneficios.
+    Cómo funciona.
+    Para quién es.
+    CTA.
+    ¿Cómo deberíamos responder?
+    Cada sección de la landing debería tener una función concreta.
+    Ejemplo:
+    Hero: captar atención.
+    Problema: mostrar que entendemos el dolor.
+    Solución: explicar qué hace UMBRAL.
+    Beneficios: conectar con negocio.
+    Cómo funciona: hacerlo tangible.
+    CTA: invitar a una acción.
+    ¿Qué deberíamos evitar?
+    Hacer una landing institucional sin foco.
+    Hablar mucho de la visión y poco del problema.
+    Explicar todas las verticales al mismo nivel.
+    No tener un CTA claro.
+
+11. MVP futuro
+    Preguntas
+    ¿Cuál sería la versión más simple del producto?
+    ¿Necesitamos una app o alcanza con una web app?
+    ¿Qué funcionalidades son esenciales?
+    ¿Qué funcionalidades pueden esperar?
+    ¿Qué podemos resolver manualmente al principio?
+    ¿Cómo validamos si el MVP funciona?
+    ¿Para qué sirve esta sección?
+    Sirve para no construir de más.
+    El MVP no debería ser la versión ideal de UMBRAL, sino la forma más simple de validar si el dolor existe y si la solución genera valor.
+    ¿Qué decisión nos ayuda a tomar?
+    Nos ayuda a definir qué se desarrolla primero y qué se deja para después.
+    ¿Cómo deberíamos responder?
+    Con una solución mínima enfocada en el dolor principal.
+    Ejemplo:
+    Un portal simple donde la desarrolladora pueda cargar avances, imágenes y novedades de obra, y los inversores puedan recibir actualizaciones y consultar la información ordenada.
+    ¿Qué deberíamos evitar?
+    Querer construir una app completa desde el inicio.
+    Agregar funcionalidades porque “estarían buenas”.
+    Confundir MVP con producto final.
+    Automatizar cosas que al principio pueden resolverse manualmente.
+
+12. Métricas de validación
+    Preguntas
+    ¿Cómo sabemos si la idea funciona?
+    ¿Cantidad de reuniones generadas?
+    ¿Interés de desarrolladoras?
+    ¿Leads captados?
+    ¿Tiempo en la landing?
+    ¿Feedback positivo?
+    ¿Clientes dispuestos a pagar?
+    ¿Reducción de consultas repetidas?
+    ¿Mejor percepción del comprador/inversor?
+    ¿Para qué sirve esta sección?
+    Sirve para saber si estamos avanzando con evidencia y no solo con intuición.
+    La validación no es que “nos guste la idea”. La validación es que alguien del mercado muestre interés real.
+    ¿Qué decisión nos ayuda a tomar?
+    Nos ayuda a decidir si seguimos, ajustamos o cambiamos el enfoque.
+    ¿Cómo deberíamos responder?
+    Definiendo señales concretas.
+    Ejemplo:
+    La primera validación será conseguir reuniones con desarrolladoras y entender si reconocen el dolor. La segunda será saber si estarían dispuestas a pagar por una solución simple.
+    Métricas posibles:
+    Cantidad de reuniones agendadas.
+    Cantidad de desarrolladoras interesadas.
+    Calidad del feedback.
+    Objeciones repetidas.
+    Disposición a pagar.
+    Solicitudes de demo.
+    Leads captados por la landing.
+    ¿Qué deberíamos evitar?
+    Medir solo visitas a la landing.
+    Confundir likes o comentarios con validación real.
+    No preguntar por disposición a pagar.
+    No registrar objeciones.
+
+13. Verticales de UMBRAL
+    Preguntas
+    ¿Cuáles son todas las ramas de UMBRAL?
+    ¿Cuál es la más importante para empezar?
+    ¿Cuál resuelve el dolor más urgente?
+    ¿Cuál se puede vender primero?
+    ¿Cuál requiere menos desarrollo?
+    ¿Cuál dejamos para una segunda etapa?
+    ¿Cuál es aspiracional pero no prioritaria?
+    ¿Para qué sirve esta sección?
+    Sirve para ordenar la visión completa sin intentar construir todo desde el principio.
+    UMBRAL puede tener varias verticales, pero la primera etapa necesita foco.
+    ¿Qué decisión nos ayuda a tomar?
+    Nos ayuda a priorizar.
+    Podemos separar:
+    Lo que va en la primera landing.
+    Lo que va como visión futura.
+    Lo que queda fuera por ahora.
+    Lo que puede convertirse en módulo después.
+    ¿Cómo deberíamos responder?
+    Con una priorización clara.
+    Ejemplo:
+    Para la primera etapa, el foco será comunicación y seguimiento de desarrollos. Cartilla UMBRAL, UMBRAL Conecta y Banca UMBRAL quedan como posibles verticales futuras.
+    ¿Qué deberíamos evitar?
+    Presentar todas las verticales como si fueran igual de importantes.
+    Construir la landing como si UMBRAL ya tuviera todo resuelto.
+    Perder foco por querer mostrar una visión demasiado grande.
+    Arrancar por la vertical más compleja.
+
+14. Frase central para ordenar todo
+    Idea guía
+    Primero validamos la propuesta de valor. Después definimos la solución.
+    O también:
+    No construimos tecnología primero. Primero entendemos el dolor, el cliente y el valor.
+    ¿Para qué sirve esta sección?
+    Sirve como criterio de decisión durante todo el proyecto.
+    Cada vez que aparezca una idea nueva, una funcionalidad o una vertical, se puede volver a esta frase.
+    ¿Qué decisión nos ayuda a tomar?
+    Nos ayuda a evitar desarrollar por ansiedad o por entusiasmo.
+    La pregunta siempre debería ser:
+    ¿Esto ayuda a validar el dolor y la propuesta de valor, o nos está distrayendo?
+    ¿Cómo deberíamos responder?
+    Usándola como regla de trabajo.
+    Primero:
+    Cliente.
+    Dolor.
+    Valor.
+    Mensaje.
+    Landing.
+    Validación.
+    Después:
+    MVP.
+    Funcionalidades.
+    Aplicación.
+    Verticales futuras.
+    ¿Qué deberíamos evitar?
+    Construir una app antes de validar interés.
+    Diseñar funcionalidades sin saber qué dolor resuelven.
+    Confundir visión con prioridad.
+    Tomar decisiones por intuición sin hablar con clientes.
+
+15. Resumen del foco inicial
+    Propuesta inicial
+    Para esta primera etapa, yo enfocaría UMBRAL así:
+    Cliente: desarrolladoras inmobiliarias.
+    Usuario: compradores e inversores.
+    Dolor: falta de comunicación clara, confianza y acompañamiento.
+    Valor: mejorar la experiencia, reducir fricciones y aumentar la percepción de valor.
+    Solución inicial: landing + presentación comercial.
+    Objetivo: validar si la propuesta interesa antes de construir una aplicación.
+    ¿Para qué sirve esta sección?
+    Sirve para alinear a todos en una misma dirección.
+    Después de muchas preguntas, necesitamos una síntesis clara que diga: “por ahora vamos por acá”.
+    ¿Qué decisión nos ayuda a tomar?
+    Nos ayuda a definir el foco de la primera etapa.
+    ¿Cómo deberíamos responder?
+    Como una hipótesis, no como una verdad absoluta.
+    Ejemplo:
+    Nuestra hipótesis inicial es que UMBRAL debe enfocarse en ayudar a desarrolladoras a comunicar mejor sus proyectos y acompañar a inversores durante la obra. Vamos a validar si este dolor es real y si el mercado lo considera suficientemente valioso.
+    ¿Qué deberíamos evitar?
+    Presentarlo como definitivo.
+    Hacer un resumen demasiado amplio.
+    Meter todas las verticales.
+    No dejar claro qué se valida primero.
+
+16. Posible definición corta
+    Definición
+    UMBRAL ayuda a desarrolladoras inmobiliarias a comunicar mejor sus proyectos, mejorar la experiencia de compradores e inversores y generar más confianza durante todo el proceso de inversión o compra.
+    ¿Para qué sirve esta sección?
+    Sirve como primera versión de mensaje para explicar UMBRAL.
+    No tiene que ser perfecta. Tiene que ser suficientemente clara para empezar a conversar, testear y mejorar.
+    ¿Qué decisión nos ayuda a tomar?
+    Nos da una base para:
+    El hero de la landing.
+    La presentación comercial.
+    El pitch inicial.
+    Las conversaciones con potenciales clientes.
+    ¿Cómo deberíamos responder?
+    Tomándola como borrador editable.
+    Después de responder las preguntas anteriores, esta frase debería mejorar.
+    Una versión más enfocada podría ser:
+    UMBRAL ayuda a desarrolladoras inmobiliarias a mantener informados a sus compradores e inversores con una experiencia clara, ordenada y profesional durante todo el proceso del desarrollo.
+    ¿Qué deberíamos evitar?
+    Creer que la primera frase ya es la definitiva.
+    Hacerla demasiado larga.
+    Incluir demasiados beneficios.
+    Hablar de tecnología antes de hablar del valor.
+
+Cómo deberían responder las preguntas en general
+La regla sería esta:
+Buena respuesta
+Una buena respuesta debería ser:
+Concreta.
+Corta.
+Priorizada.
+Con ejemplos reales.
+Orientada a decisión.
+Conectada al negocio.
+Fácil de usar en la landing.
+Ejemplo:
+El dolor principal es que, después de vender una unidad, la desarrolladora no tiene una forma profesional de mantener informado al inversor sobre el avance de obra. Eso genera consultas repetidas, ansiedad y pérdida de percepción de valor.
+Mala respuesta
+Una mala respuesta sería:
+Queremos mejorar la experiencia, dar más transparencia, conectar a todos los actores y transformar el mercado inmobiliario.
+No está mal como visión, pero no sirve para tomar decisiones inmediatas.
+
+Criterio final para elegir respuestas
+Cada respuesta debería pasar por este filtro:
+¿Esto ayuda a definir la landing?
+¿Esto ayuda a vender UMBRAL?
+¿Esto ayuda a validar el dolor?
+¿Esto ayuda a decidir qué construir primero?
+¿Esto es suficientemente concreto como para explicárselo a una desarrolladora?
+Si la respuesta no ayuda a ninguna de esas cinco cosas, probablemente es una respuesta demasiado general para esta etapa.
+
+notas que tome en l aultima charla:
+UMBRAL es un comunicador, es el que facilita y le da orden para que la desarrolladora pueda hacer su trabajo: desarollar.
+
+En que te acompaña umbral… en que puntos…
+UMBRAL acompaña en la relación con tu inversor, todo el tiempo y con la mayor madurez.
+
+UMBRAL se construye con vos, se construye con el desarrollo y te acompaña. Crecemos juntos. Hace trasciende con vos (desarrolladora).
+
+UMBRAL es una solucion integral, no es solo acompañamiento
+
+Agregar beneficio al desa que es darle limpieza post obra y estudio de terminacion es esencial para el primer paso .

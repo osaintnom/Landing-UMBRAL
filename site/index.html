@@ -1,0 +1,416 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#fafaf8">
+  <meta name="description" content="UMBRAL Collection — Postventa inmobiliaria premium. La banca privada del real estate.">
+
+  <!-- CSP: landing estática, sin backend. Permite fonts de Google y self. -->
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self';
+                 img-src 'self' data:;
+                 style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+                 font-src https://fonts.gstatic.com;
+                 script-src 'self';
+                 media-src 'self';
+                 connect-src 'self' https://formspree.io;
+                 frame-ancestors 'none';
+                 base-uri 'self';
+                 form-action 'self' https://formspree.io;">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+
+  <title>UMBRAL Collection — Postventa como experiencia</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Be+Vietnam+Pro:wght@300;400;500;600&family=Caveat:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./styles.css">
+  <link rel="icon" href="./assets/logo-mark.png" type="image/png">
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     LOADER — aparece al inicio mientras precargan los 121 frames
+     ═══════════════════════════════════════════════════════════════ -->
+<div id="loader" aria-hidden="true">
+  <img class="loader-mark" src="./assets/logo-mark.png" alt="" width="96" height="88" decoding="async">
+  <span class="loader-label">Preparando la obra</span>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     NAV
+     ═══════════════════════════════════════════════════════════════ -->
+<header class="nav">
+  <a class="nav-logo" href="#top" aria-label="UMBRAL Collection — inicio">
+    <img src="./assets/logo-horizontal.png" alt="UMBRAL Collection" width="160" height="72" decoding="async">
+  </a>
+  <nav class="nav-links" aria-label="Principal">
+    <a href="#filosofia">Filosofía</a>
+    <a href="#perfil">Para quién es</a>
+    <a href="#obra">El proceso</a>
+    <a href="#pilares">Pilares</a>
+    <a href="#contacto" class="nav-cta">Contacto</a>
+  </nav>
+</header>
+
+<main id="top">
+
+<!-- ═══════════════════════════════════════════════════════════════
+     1. HERO
+     ═══════════════════════════════════════════════════════════════ -->
+<section class="hero" aria-label="Hero">
+  <div class="hero-media" aria-hidden="true">
+    <video
+      class="hero-video"
+      src="./assets/background_video.mp4"
+      autoplay
+      muted
+      loop
+      playsinline
+      preload="auto"
+    ></video>
+    <div class="hero-overlay"></div>
+  </div>
+
+  <!-- Frase 1: arriba izquierda — entra primero -->
+  <h1 class="hero-phrase-1">Lo que pasa entre la firma y las llaves define tu reputación.</h1>
+
+  <!-- Frase 2 + CTA: abajo derecha — entra después -->
+  <div class="hero-phrase-2">
+    <p><span class="hero-brand">UMBRAL</span> convierte ese proceso en una ventaja para tu proyecto.</p>
+    <a class="cta-link" href="#filosofia">
+      Descubrí UMBRAL
+      <svg width="28" height="10" viewBox="0 0 28 10" aria-hidden="true"><path d="M0 5 h26 M22 1 L26 5 L22 9" fill="none" stroke="currentColor" stroke-width="1.2"/></svg>
+    </a>
+  </div>
+
+  <div class="hero-signature">
+    <span>UMBRAL · Collection</span>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     2. EL PROBLEMA
+     ═══════════════════════════════════════════════════════════════ -->
+<section class="problem" aria-label="El problema">
+  <canvas class="problem-canvas" aria-hidden="true"></canvas>
+  <img class="problem-logo-bg" src="./assets/logo-horizontal.png" alt="" aria-hidden="true" decoding="async">
+  <div class="stack">
+    <p class="reveal"><em>Tus inversores tienen preguntas.</em><br>Vos tenés un proyecto para construir.</p>
+    <p class="reveal">Cada consulta mal gestionada cuesta tiempo, reputación y confianza.<br>Sin un sistema claro, el silencio habla por vos.</p>
+    <p class="reveal accent">Eso es lo que <strong>UMBRAL</strong> vino a resolver.</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     3. QUÉ ES UMBRAL
+     ═══════════════════════════════════════════════════════════════ -->
+<section class="filosofia" id="filosofia" aria-label="Qué es Umbral">
+  <header class="filosofia-head">
+    <span class="kicker reveal">03 — Qué es UMBRAL</span>
+    <p class="filosofia-statement reveal">Un <em>sistema integral</em> que convierte cada etapa de tu proyecto en una ventaja.</p>
+  </header>
+
+  <div class="filosofia-cols">
+    <div class="filosofia-col">
+      <span class="col-num">01</span>
+      <h3>Desde la firma</h3>
+      <p>Acompañamos desde el primer día. Tu inversor sabe dónde está parado — sin que vos tengas que explicarlo.</p>
+    </div>
+    <span class="col-arrow" aria-hidden="true">→</span>
+    <div class="filosofia-col">
+      <span class="col-num">02</span>
+      <h3>Durante la obra</h3>
+      <p>Comunicación constante, hitos visibles, cero incertidumbre. Tu equipo construye. UMBRAL comunica.</p>
+    </div>
+    <span class="col-arrow" aria-hidden="true">→</span>
+    <div class="filosofia-col">
+      <span class="col-num">03</span>
+      <h3>Hasta las llaves</h3>
+      <p>La entrega define tu reputación. UMBRAL la convierte en una experiencia que tus inversores recuerdan.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     4. BIFURCACIÓN POR PÚBLICO
+     ═══════════════════════════════════════════════════════════════ -->
+<section class="perfil" id="perfil" aria-label="Elegí tu perfil">
+  <header class="perfil-head">
+    <span class="kicker">04 — Dos perspectivas</span>
+    <h2 class="display-md">Tu proyecto.<br>La experiencia de tus inversores.</h2>
+  </header>
+
+  <div class="perfil-switch" role="tablist" aria-label="Perfil de visitante">
+    <button class="perfil-tab is-active" role="tab" aria-selected="true" aria-controls="panel-dev" data-target="dev">
+      <span class="tab-num">A</span>
+      <span class="tab-label">Para la desarrolladora</span>
+    </button>
+    <button class="perfil-tab" role="tab" aria-selected="false" aria-controls="panel-inv" data-target="inv">
+      <span class="tab-num">B</span>
+      <span class="tab-label">Así lo vive tu inversor</span>
+    </button>
+  </div>
+
+  <div class="perfil-panels">
+    <!-- DESARROLLADORA -->
+    <article class="perfil-panel is-visible" id="panel-dev" role="tabpanel" data-panel="dev">
+      <div class="perfil-grid">
+        <div class="perfil-text">
+          <p class="perfil-hook"><em>Tus clientes están al tanto.</em><br>Vos podés enfocarte en lo que sabés hacer.</p>
+          <ul class="perfil-list">
+            <li><span>01</span><p>Comunicación constante con compradores durante toda la obra — sin que armes un equipo para eso.</p></li>
+            <li><span>02</span><p>Cumplimiento de obligaciones legales de información al comprador.</p></li>
+            <li><span>03</span><p>Proveedores calificados de obra: limpieza, terminaciones, serenos — ya evaluados.</p></li>
+            <li><span>04</span><p>Comunidad de compradores organizada antes de que exista el consorcio.</p></li>
+            <li><span>05</span><p>Administración del edificio en el período de transición obra–entrega.</p></li>
+          </ul>
+          <p class="perfil-close">Cada proyecto UMBRAL es un proyecto con <em>menos ruido</em> y <em>más reputación</em>.</p>
+        </div>
+        <div class="perfil-visual perfil-visual--blueprint" aria-hidden="true">
+          <svg viewBox="0 0 400 520" preserveAspectRatio="xMidYMid meet">
+            <defs>
+              <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
+                <path d="M20 0 L0 0 0 20" fill="none" stroke="#395714" stroke-width="0.3" opacity="0.25"/>
+              </pattern>
+            </defs>
+            <rect width="400" height="520" fill="url(#grid)"/>
+            <!-- isométrica edificio -->
+            <g fill="none" stroke="#395714" stroke-width="1">
+              <path d="M110 400 L110 150 L250 100 L250 350 Z"/>
+              <path d="M110 400 L250 350 L350 400 L210 450 Z"/>
+              <path d="M250 350 L250 100 L350 150 L350 400"/>
+              <path d="M110 150 L250 100 L350 150"/>
+              <g opacity="0.6">
+                <path d="M130 170 L130 380 M150 160 L150 380 M170 150 L170 380 M190 140 L190 380 M210 130 L210 380 M230 120 L230 380"/>
+                <path d="M270 120 L270 370 M290 130 L290 380 M310 140 L310 385 M330 150 L330 395"/>
+              </g>
+            </g>
+            <!-- cotas rojas -->
+            <g stroke="#c14836" stroke-width="0.6" fill="none" opacity="0.9">
+              <path d="M90 400 L90 150 M85 400 L95 400 M85 150 L95 150"/>
+              <path d="M110 420 L350 420 M110 415 L110 425 M350 415 L350 425"/>
+            </g>
+            <g font-family="Be Vietnam Pro, sans-serif" font-size="10" fill="#c14836">
+              <text x="60" y="280" transform="rotate(-90 60 280)">+27.40 m</text>
+              <text x="215" y="440">+48.00 m</text>
+            </g>
+            <g font-family="Caveat, cursive" font-size="16" fill="#395714">
+              <text x="260" y="75">rev. 02 · obra gruesa</text>
+              <text x="30" y="490">esc. 1:150</text>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </article>
+
+    <!-- INVERSOR -->
+    <article class="perfil-panel" id="panel-inv" role="tabpanel" data-panel="inv" hidden>
+      <div class="perfil-grid">
+        <div class="perfil-text">
+          <p class="perfil-hook"><em>Tu inversión no duerme.</em><br>Umbral tampoco.</p>
+          <ul class="perfil-list">
+            <li><span>01</span><p>Visibilidad del avance de obra: sabés en qué etapa está tu departamento sin preguntarle a nadie.</p></li>
+            <li><span>02</span><p>Comunicación directa con un equipo que conoce tu inversión.</p></li>
+            <li><span>03</span><p>Gestión centralizada si tenés múltiples inversiones — <em>Banca Umbral</em>.</p></li>
+            <li><span>04</span><p>Beneficios exclusivos: proveedores locales y servicios de la comunidad de propietarios.</p></li>
+            <li><span>05</span><p>Directorio de profesionales calificados al recibir tu unidad — <em>Cartilla Umbral</em>.</p></li>
+          </ul>
+          <p class="perfil-close">Tu inversión no es un número en una escritura. Es un proceso que merece <em>atención constante</em>.</p>
+        </div>
+        <div class="perfil-visual perfil-visual--sketch" aria-hidden="true">
+          <svg viewBox="0 0 400 520" preserveAspectRatio="xMidYMid meet">
+            <g fill="none" stroke="#1a1a1a" stroke-width="0.9" opacity="0.75">
+              <path d="M80 460 L80 120 L220 120 L220 460 Z"/>
+              <path d="M220 460 L220 80 L340 80 L340 460 Z"/>
+              <g>
+                <path d="M95 150 h110 M95 185 h110 M95 220 h110 M95 255 h110 M95 290 h110 M95 325 h110 M95 360 h110 M95 395 h110 M95 430 h110"/>
+                <path d="M232 110 h96 M232 145 h96 M232 180 h96 M232 215 h96 M232 250 h96 M232 285 h96 M232 320 h96 M232 355 h96 M232 390 h96 M232 425 h96"/>
+              </g>
+              <!-- callout -->
+              <circle cx="350" cy="240" r="60"/>
+              <path d="M290 240 L220 240" stroke-dasharray="2 4"/>
+            </g>
+            <g font-family="Caveat, cursive" font-size="18" fill="#395714">
+              <text x="310" y="340">hito 03</text>
+              <text x="40" y="490">avance · etapa 02</text>
+              <text x="245" y="60">tu unidad</text>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     5. SCROLL STORYTELLING — LA OBRA AVANZA
+     ═══════════════════════════════════════════════════════════════ -->
+<section class="obra" id="obra" aria-label="La obra avanza">
+  <div class="obra-intro">
+    <span class="kicker">05 — El proceso</span>
+    <h2 class="display-md">La obra avanza con vos.</h2>
+  </div>
+
+  <div id="scroll-section" class="scroll-section">
+    <div id="sticky-stage" class="sticky-stage">
+      <div class="stage-split">
+        <div class="stage-visual">
+          <video
+            id="scroll-video"
+            src="./assets/edificio.mp4"
+            muted
+            playsinline
+            preload="auto"
+            aria-label="Obra en construcción en construcción"
+          ></video>
+        </div>
+
+        <div class="stage-text" aria-live="polite">
+          <ol class="annotations-list">
+            <li class="annotation" data-from="0.00" data-to="0.22">
+              <span class="ann-num">01</span>
+              <p>Sabés desde el primer día en qué etapa está tu inversión.</p>
+            </li>
+            <li class="annotation" data-from="0.22" data-to="0.48">
+              <span class="ann-num">02</span>
+              <p>Te notificamos cada avance. Sin que tengas que preguntar.</p>
+            </li>
+            <li class="annotation" data-from="0.48" data-to="0.70">
+              <span class="ann-num">03</span>
+              <p>Un equipo presente donde vos no podés estar.</p>
+            </li>
+            <li class="annotation" data-from="0.70" data-to="0.92">
+              <span class="ann-num">04</span>
+              <p>Tu departamento toma forma. Vos lo ves en tiempo real.</p>
+            </li>
+            <li class="annotation annotation--final" data-from="0.92" data-to="1.01">
+              <span class="ann-num">05</span>
+              <p>Umbral estuvo ahí desde el principio.</p>
+            </li>
+          </ol>
+        </div>
+      </div>
+
+      <div id="scroll-hint" class="scroll-hint" aria-hidden="true">
+        <span>scrolleá</span>
+        <svg width="14" height="28" viewBox="0 0 14 28"><path d="M7 1 V26 M1 20 L7 26 L13 20" fill="none" stroke="currentColor" stroke-width="1.2"/></svg>
+      </div>
+
+      <div class="stage-progress" aria-hidden="true">
+        <div class="stage-progress-fill" id="stage-progress-fill"></div>
+        <span class="stage-progress-label">avance</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     6. LOS 5 PILARES
+     ═══════════════════════════════════════════════════════════════ -->
+<section class="pilares" id="pilares" aria-label="Los 5 pilares">
+  <header class="pilares-head">
+    <span class="kicker">06 — El ecosistema</span>
+    <h2 class="display-md">Cinco pilares.<br>Una misma presencia.</h2>
+  </header>
+
+  <ol class="pilares-grid">
+    <li class="pilar reveal">
+      <span class="pilar-num">01</span>
+      <h3>Soporte / Acompañamiento</h3>
+      <p>Presencia continua durante toda la obra.</p>
+    </li>
+    <li class="pilar reveal">
+      <span class="pilar-num">02</span>
+      <h3>Umbral Conecta</h3>
+      <p>La comunidad que nace de tu edificio.</p>
+    </li>
+    <li class="pilar reveal">
+      <span class="pilar-num">03</span>
+      <h3>Beneficios</h3>
+      <p>Alianzas exclusivas para compradores y desarrolladoras.</p>
+    </li>
+    <li class="pilar reveal">
+      <span class="pilar-num">04</span>
+      <h3>Banca Umbral</h3>
+      <p>Tu patrimonio inmobiliario, gestionado como merece.</p>
+    </li>
+    <li class="pilar reveal">
+      <span class="pilar-num">05</span>
+      <h3>Cartilla Umbral</h3>
+      <p>Los profesionales que necesitás cuando recibís tu unidad.</p>
+    </li>
+  </ol>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     7. CONFIANZA
+     ═══════════════════════════════════════════════════════════════ -->
+<section class="confianza" aria-label="Confianza">
+  <div class="confianza-mark reveal">
+    <img src="./assets/logo-mark.png" alt="" width="144" height="132" decoding="async" loading="lazy">
+  </div>
+  <p class="confianza-copy reveal">
+    Cada umbral marca un <em>antes</em> y un <em>después</em>.<br>
+    En ese instante, decidimos estar presentes.
+  </p>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     8. CONTACTO
+     ═══════════════════════════════════════════════════════════════ -->
+<section class="contacto" id="contacto" aria-label="Contacto">
+  <div class="contacto-inner">
+    <span class="kicker light">08 — Contacto</span>
+    <h2 class="display-md">Hablemos.</h2>
+    <p class="contacto-sub">Si querés saber cómo UMBRAL puede potenciar tu proyecto, completá el formulario y nos contactamos en el día.</p>
+
+    <form class="contacto-form" id="contacto-form" novalidate autocomplete="on">
+      <div class="form-grid">
+        <div class="form-field">
+          <label for="nombre">Nombre</label>
+          <input id="nombre" name="nombre" type="text" autocomplete="name" required maxlength="100" placeholder="Tu nombre">
+        </div>
+        <div class="form-field">
+          <label for="empresa">Empresa / Desarrolladora</label>
+          <input id="empresa" name="empresa" type="text" autocomplete="organization" required maxlength="200" placeholder="Nombre de tu empresa">
+        </div>
+        <div class="form-field">
+          <label for="telefono">Teléfono</label>
+          <input id="telefono" name="telefono" type="tel" inputmode="tel" autocomplete="tel" maxlength="30" placeholder="+54 11 ....">
+        </div>
+        <div class="form-field">
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" inputmode="email" autocomplete="email" required maxlength="254" spellcheck="false" placeholder="tu@empresa.com" aria-describedby="form-error">
+        </div>
+      </div>
+      <button type="submit" class="contacto-submit" id="contacto-submit">
+        <span>Enviar</span>
+        <svg width="18" height="10" viewBox="0 0 18 10" aria-hidden="true"><path d="M0 5 h16 M12 1 L16 5 L12 9" fill="none" stroke="currentColor" stroke-width="1.2"/></svg>
+      </button>
+      <p class="field-error" id="form-error" role="alert" aria-live="polite"></p>
+      <p class="field-ok" id="email-ok" aria-live="polite"></p>
+      <p class="contacto-fine">
+        Al enviar, aceptás nuestros <a href="#" rel="nofollow">términos</a>.
+        También podés escribirnos por <a href="https://wa.me/5491127601055" rel="noopener noreferrer">WhatsApp</a>.
+      </p>
+    </form>
+  </div>
+</section>
+
+<footer class="foot">
+  <div>
+    <img src="./assets/logo-mark-white.png" alt="" width="28" height="26" decoding="async" loading="lazy">
+    <span>UMBRAL Collection · 2026</span>
+  </div>
+  <span>Buenos Aires — Argentina</span>
+</footer>
+
+</main>
+
+<script src="./main.js"></script>
+</body>
+</html>
