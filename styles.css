@@ -541,6 +541,19 @@ em { font-style: italic; font-family: var(--serif); }
   border-top: 1px solid var(--ink-10);
 }
 .perfil-list li:last-child { border-bottom: 1px solid var(--ink-10); }
+
+/* Hover en cada fila: fondo muy suave y número se desplaza levemente */
+.perfil-list li {
+  transition: background 0.25s var(--ease), padding-left 0.25s var(--ease);
+  border-radius: 4px;
+  margin: 0 -10px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.perfil-list li:hover {
+  background: rgba(57, 87, 20, 0.045);
+  padding-left: 16px;
+}
 .perfil-list li span {
   font-family: var(--sans);
   font-size: 0.7rem;
@@ -558,7 +571,17 @@ em { font-style: italic; font-family: var(--serif); }
   color: var(--ink-60);
   max-width: 480px;
 }
-.perfil-close em { color: var(--green); font-style: italic; }
+.perfil-close em {
+  color: var(--green);
+  font-style: italic;
+  transition: color 0.25s var(--ease), text-shadow 0.25s var(--ease);
+  cursor: default;
+}
+.perfil-close em:hover {
+  color: var(--green);
+  text-shadow: 0 0 14px color-mix(in srgb, var(--green) 40%, transparent),
+               0 0 32px color-mix(in srgb, var(--green) 18%, transparent);
+}
 .perfil-visual {
   aspect-ratio: 400/520;
   background: var(--cream);
@@ -817,23 +840,91 @@ em { font-style: italic; font-family: var(--serif); }
 /* ═══════════════════════════════════════════════════════════════
    7. CONFIANZA
    ═══════════════════════════════════════════════════════════════ */
+/* ── Confianza: sticky de dos frases ─────────────────────────── */
 .confianza {
-  padding: clamp(140px, 22vh, 260px) clamp(20px, 5vw, 72px);
+  position: relative;
+  height: 260vh; /* espacio para el scroll de transición */
   background: var(--offwhite);
+}
+
+.confianza-sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   text-align: center;
+  padding: 0 clamp(20px, 6vw, 120px);
+  gap: 0;
 }
-.confianza-mark { margin: 0 auto 48px; display: inline-block; }
-.confianza-mark img { width: clamp(96px, 9vw, 144px); height: auto; }
-.confianza-copy {
-  max-width: 720px;
-  margin: 0 auto;
+
+.confianza-mark {
+  margin-bottom: clamp(36px, 5vh, 56px);
+  flex-shrink: 0;
+}
+.confianza-mark img { width: clamp(80px, 8vw, 120px); height: auto; }
+
+/* Contenedor grid: apila las dos frases en la misma celda */
+.confianza-phrases {
+  display: grid;
+  width: 100%;
+  max-width: 820px;
+  /* La celda toma la altura de la frase más alta (frase 1) */
+}
+
+.confianza-phrase {
+  grid-area: 1 / 1; /* ambas en la misma celda */
+  align-self: center;
+  margin: 0;
   font-family: var(--serif);
-  font-style: italic;
-  font-size: clamp(1.4rem, 2.6vw, 2.2rem);
-  line-height: 1.3;
+  font-style: italic;          /* misma tipografía en ambas frases */
+  font-weight: 400;
+  font-size: clamp(1.5rem, 2.8vw, 2.4rem);
+  line-height: 1.28;
   color: var(--ink);
+  transition: opacity 0.65s var(--ease), transform 0.65s var(--ease);
+  will-change: opacity, transform;
 }
-.confianza-copy em { color: var(--green); font-style: italic; }
+
+/* Frase 1 — visible al entrar */
+.confianza-phrase--1 {
+  opacity: 1;
+  transform: translateY(0);
+}
+.confianza-phrase--1 em {
+  font-style: italic;
+  color: var(--green);
+}
+.confianza-phrase--1.is-out {
+  opacity: 0;
+  transform: translateY(-20px);
+  pointer-events: none;
+}
+
+/* Frase 2 — oculta al inicio, aparece desde abajo */
+.confianza-phrase--2 {
+  opacity: 0;
+  transform: translateY(20px);
+  font-style: italic;
+  pointer-events: none;
+}
+.confianza-phrase--2 em {
+  color: var(--green);
+  font-style: italic;
+}
+.confianza-phrase--2.is-in {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+@media (max-width: 768px) {
+  .confianza-phrase {
+    font-size: clamp(1.25rem, 5vw, 1.8rem);
+  }
+}
 
 /* ═══════════════════════════════════════════════════════════════
    8. CONTACTO
@@ -980,6 +1071,839 @@ em { font-style: italic; font-family: var(--serif); }
 .reveal.is-in {
   opacity: 1;
   transform: translateY(0);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   2B. PROBLEM — split layout
+   ═══════════════════════════════════════════════════════════════ */
+/* Cabecera full-width */
+.problem-header {
+  max-width: 1100px;
+  margin: 0 auto clamp(40px, 7vh, 64px);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  position: relative;
+  z-index: 1;
+}
+.problem-title {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(2.6rem, 5.2vw, 5rem);
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+  color: var(--ink);
+  margin: 0;
+}
+.problem-title em { font-style: italic; color: var(--green); }
+
+/* Línea divisora */
+.problem-rule {
+  max-width: 1100px;
+  margin: 0 auto clamp(40px, 7vh, 64px);
+  height: 1px;
+  background: var(--ink-10);
+  position: relative;
+  z-index: 1;
+}
+
+/* Subtítulo centrado */
+.problem-tagline {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: clamp(1.8rem, 3.2vw, 3rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--ink-60);
+  text-align: center;
+  /* salir del padding lateral del padre para centrar en pantalla completa */
+  margin-left: calc(-1 * clamp(20px, 5vw, 72px));
+  margin-right: calc(-1 * clamp(20px, 5vw, 72px));
+  margin-bottom: clamp(48px, 8vh, 80px);
+  position: relative;
+  z-index: 1;
+}
+
+/* Bloque de texto */
+.problem-body {
+  max-width: 620px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(28px, 5vh, 44px);
+  position: relative;
+  z-index: 1;
+}
+.problem-body p {
+  font-family: var(--serif);
+  font-size: clamp(1.05rem, 1.4vw, 1.25rem);
+  line-height: 1.65;
+  margin: 0;
+  color: var(--ink);
+}
+.problem-body p em { font-style: italic; color: var(--ink-60); }
+
+/* ── Word reveal: cada palabra empieza apagada y se ilumina al scrollear ── */
+/* .w lo inyecta JS en problem-tagline y problem-body p */
+.w {
+  color: rgba(26, 26, 26, 0.13);
+  transition: color 0.55s var(--ease);
+  will-change: color;
+}
+.w.lit {
+  color: inherit; /* hereda el color del padre: --ink, --green, --ink-60, etc. */
+}
+/* Accesibilidad: sin animaciones, mostrar todo iluminado */
+@media (prefers-reduced-motion: reduce) {
+  .w { color: inherit; }
+}
+
+/* Scroll-linked fade: la opacidad la maneja JS en tiempo real */
+.scroll-fade { opacity: 0; will-change: opacity; }
+.problem-body p em.glow-hover {
+  transition: color 0.3s var(--ease), text-shadow 0.3s var(--ease);
+  cursor: default;
+}
+.problem-body p em.glow-hover:hover {
+  color: var(--green);
+  text-shadow: 0 0 18px color-mix(in srgb, var(--green) 55%, transparent),
+               0 0 40px color-mix(in srgb, var(--green) 25%, transparent);
+}
+.problem-body p.accent {
+  font-size: clamp(1.1rem, 1.5vw, 1.35rem);
+  line-height: 1.65;
+  padding-top: clamp(20px, 3vh, 32px);
+  border-top: 1px solid var(--ink-10);
+}
+.problem-body p.accent strong { font-weight: 400; color: var(--green); }
+
+@media (max-width: 768px) {
+  .problem-title { font-size: clamp(2.2rem, 7vw, 3.2rem); }
+  .problem-tagline { font-size: clamp(1.5rem, 5.5vw, 2.2rem); text-align: left; }
+  .problem-logo-bg {
+    width: clamp(90px, 22vw, 130px);
+    opacity: 0.25;
+  }
+}
+
+/* Subtítulo extra en panel desarrolladora */
+.perfil-sub {
+  font-size: 0.98rem;
+  color: var(--ink-60);
+  margin: -28px 0 32px;
+  font-family: var(--sans);
+  font-weight: 300;
+}
+
+/* Pilar Banca — glow negro/verde + clickeable */
+.pilar--banca {
+  background: var(--cream);
+  cursor: pointer;
+  outline: 1px solid rgba(57,87,20,0.35);
+  box-shadow:
+    0 0 14px rgba(57,87,20,0.12),
+    0 0 3px rgba(10,10,10,0.08);
+  transition:
+    background 0.45s var(--ease),
+    box-shadow 0.45s var(--ease),
+    outline-color 0.45s var(--ease),
+    color 0.35s var(--ease),
+    transform 0.4s var(--ease);
+}
+.pilar--banca:hover {
+  background: var(--ink);
+  color: var(--offwhite);
+  outline-color: rgba(57,87,20,0.7);
+  box-shadow:
+    0 0 32px rgba(57,87,20,0.22),
+    0 8px 40px rgba(10,10,10,0.45);
+  transform: translateY(-3px);
+}
+.pilar--banca::before { display: none; }
+
+.pilar--banca .pilar-num {
+  color: var(--green);
+  transition: color 0.35s var(--ease);
+}
+.pilar--banca:hover .pilar-num { color: var(--green-40); }
+.pilar--banca h3,
+.pilar--banca .pilar-title {
+  color: var(--ink);
+  margin-top: auto;
+  transition: color 0.35s var(--ease);
+}
+.pilar--banca:hover h3,
+.pilar--banca:hover .pilar-title { color: var(--offwhite); }
+.pilar--banca p,
+.pilar--banca .pilar-desc {
+  color: var(--ink-60);
+  transition: color 0.35s var(--ease);
+}
+.pilar--banca:hover p,
+.pilar--banca:hover .pilar-desc { color: rgba(250,250,248,0.55); }
+
+.pilar-banca-hint {
+  font-family: var(--sans);
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--green-80);
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 1px solid rgba(57,87,20,0.2);
+  transition: color 0.3s var(--ease), letter-spacing 0.3s var(--ease), border-color 0.35s var(--ease);
+}
+.pilar--banca:hover .pilar-banca-hint {
+  color: var(--green-40);
+  letter-spacing: 0.28em;
+  border-top-color: rgba(57,87,20,0.3);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   7. BANCA UMBRAL
+   ═══════════════════════════════════════════════════════════════ */
+.banca {
+  background: var(--ink);
+  color: var(--offwhite);
+  padding: clamp(120px, 20vh, 220px) clamp(20px, 5vw, 72px);
+  position: relative;
+  overflow: hidden;
+}
+.banca::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 15% 50%, rgba(57,87,20,0.12), transparent 55%),
+    radial-gradient(circle at 85% 20%, rgba(250,250,248,0.04), transparent 45%);
+  pointer-events: none;
+}
+.banca-inner {
+  max-width: 760px;
+  margin: 0 auto;
+  text-align: center;
+  position: relative;
+}
+.banca-kicker { color: rgba(250,250,248,0.45); }
+.banca-title {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(2.2rem, 4.5vw, 4.2rem);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  color: var(--offwhite);
+  margin: 28px 0 0;
+}
+.banca-title em { font-style: italic; color: var(--green-40); }
+.banca-body {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: clamp(1rem, 1.4vw, 1.2rem);
+  line-height: 1.65;
+  color: rgba(250,250,248,0.65);
+  max-width: 580px;
+  margin: clamp(28px, 5vh, 48px) auto 0;
+}
+.banca-body--secondary {
+  color: rgba(250,250,248,0.45);
+  margin-top: clamp(18px, 3vh, 28px);
+}
+.banca-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: clamp(44px, 7vh, 72px);
+  padding: 14px 0;
+  font-family: var(--sans);
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--offwhite);
+  border-bottom: 1px solid rgba(250,250,248,0.35);
+  transition: gap 0.3s var(--ease), border-color 0.3s var(--ease);
+}
+.banca-cta:hover { gap: 22px; border-color: var(--offwhite); }
+.banca-cta svg { flex-shrink: 0; }
+
+/* ═══════════════════════════════════════════════════════════════
+   8. ROADMAP
+   ═══════════════════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════
+   8. ROADMAP — timeline alternante
+   ═══════════════════════════════════════════════════════════════ */
+.roadmap {
+  padding: clamp(100px, 16vh, 180px) clamp(20px, 5vw, 72px);
+  background: var(--offwhite);
+  border-top: 1px solid var(--ink-10);
+}
+.roadmap-head {
+  max-width: 760px;
+  margin: 0 auto clamp(80px, 14vh, 140px);
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+.roadmap-head .kicker { display: block; }
+.roadmap-head .display-md em { font-style: italic; color: var(--green); }
+.roadmap-intro {
+  font-family: var(--sans);
+  font-size: 0.98rem;
+  line-height: 1.75;
+  color: var(--ink-60);
+  margin: 0;
+  max-width: 560px;
+}
+
+/* Contenedor del timeline */
+.roadmap-timeline {
+  position: relative;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding-bottom: 20px;
+}
+
+/* Espina vertical central */
+.timeline-spine {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  transform: translateX(-50%);
+  background: var(--ink-10);
+  pointer-events: none;
+  z-index: 0;
+}
+.timeline-spine-progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 0%;
+  background: var(--green);
+  transition: height 0.1s linear;
+}
+
+/* Cada ítem: 3 columnas — card · nodo · espacio (o al revés) */
+.timeline-item {
+  display: grid;
+  grid-template-columns: 1fr 110px 1fr;
+  align-items: center;
+  margin-bottom: clamp(56px, 10vh, 96px);
+  position: relative;
+}
+.timeline-item:last-child { margin-bottom: 0; }
+
+/* Sobreescribir el reveal genérico (translateY) para estos items */
+.timeline-item.reveal {
+  opacity: 1;
+  transform: none;
+}
+.timeline-spacer { /* columna vacía */ }
+
+/* ── Nodo central ────────────────────────────────────────────── */
+.timeline-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+  z-index: 2;
+  padding: 6px 0;
+  opacity: 0;
+  transform: scale(0.65);
+  transition: opacity 0.55s var(--ease) 0.3s, transform 0.55s var(--ease) 0.3s;
+}
+.timeline-item.is-in .timeline-node {
+  opacity: 1;
+  transform: scale(1);
+}
+.timeline-node-dot {
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: var(--offwhite);
+  border: 2px solid var(--green);
+  box-shadow: 0 0 0 5px var(--offwhite);
+  flex-shrink: 0;
+}
+.timeline-node-num {
+  font-family: var(--serif);
+  font-size: clamp(1.7rem, 2.2vw, 2.4rem);
+  font-weight: 400;
+  color: var(--green);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  text-align: center;
+}
+.phase-status {
+  display: inline-block;
+  font-family: var(--sans);
+  font-size: 0.6rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 4px 9px;
+  border-radius: 999px;
+  border: 1px solid currentColor;
+  white-space: nowrap;
+}
+.phase-status--active { color: var(--green); border-color: var(--green); background: var(--green-10); }
+.phase-status--dev    { color: var(--ink-60); border-color: var(--ink-40); }
+.phase-status--soon   { color: var(--ink-40); border-color: var(--ink-10); }
+.phase-status--future { color: var(--ink-40); border-color: var(--ink-10); opacity: 0.65; }
+
+/* ── Card ────────────────────────────────────────────────────── */
+.timeline-card {
+  border: 1px solid var(--ink-10);
+  border-radius: 3px;
+  padding: clamp(22px, 3.2vw, 36px);
+  background: var(--offwhite);
+  cursor: default;
+  will-change: transform;
+  /* Transición rápida para hover */
+  transition: transform 0.36s var(--ease),
+              box-shadow 0.36s var(--ease),
+              border-color 0.36s var(--ease);
+}
+
+/* Entrada: animación keyframe — no interfiere con hover */
+.timeline-item--left .timeline-card {
+  animation: tl-from-left 0.85s var(--ease) both;
+  animation-play-state: paused;
+}
+.timeline-item--right .timeline-card {
+  animation: tl-from-right 0.85s var(--ease) both;
+  animation-play-state: paused;
+}
+.timeline-item.is-in .timeline-card { animation-play-state: running; }
+
+@keyframes tl-from-left {
+  from { opacity: 0; transform: translateX(-42px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes tl-from-right {
+  from { opacity: 0; transform: translateX(42px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* Hover: la card se agranda */
+.timeline-card:hover {
+  transform: scale(1.035);
+  box-shadow: 0 18px 56px rgba(57, 87, 20, 0.1);
+  border-color: var(--green-40);
+}
+
+/* Contenido interno de la card */
+.timeline-card-name {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(1.35rem, 1.9vw, 1.8rem);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  margin: 0 0 12px;
+}
+.timeline-card-desc {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: clamp(0.9rem, 1.2vw, 1.02rem);
+  color: var(--ink-60);
+  margin: 0 0 18px;
+  line-height: 1.55;
+}
+.timeline-card-services {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+.timeline-card-services li {
+  font-family: var(--sans);
+  font-size: 0.88rem;
+  color: var(--ink);
+  padding: 10px 0;
+  border-top: 1px solid var(--ink-10);
+  line-height: 1.5;
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+}
+.timeline-card-services li::before {
+  content: '—';
+  color: var(--green-40);
+  font-size: 0.66rem;
+  flex-shrink: 0;
+}
+
+/* ── Mobile ──────────────────────────────────────────────────── */
+@media (max-width: 660px) {
+  .timeline-spine { display: none; }
+  .timeline-item {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 48px;
+  }
+  .timeline-spacer { display: none; }
+  .timeline-node {
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0;
+    opacity: 1;
+    transform: none;
+  }
+  .timeline-item.is-in .timeline-node { transform: none; }
+  .timeline-item--left .timeline-card,
+  .timeline-item--right .timeline-card {
+    animation: tl-from-left 0.75s var(--ease) both;
+  }
+  .timeline-card:hover { transform: none; box-shadow: none; border-color: var(--ink-10); }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   6.b PILARES — flip cards (botón + cara trasera expandida)
+   ═══════════════════════════════════════════════════════════════ */
+
+/* hint chiquito al pie del header */
+.pilares-hint {
+  font-family: var(--script);
+  font-size: 1.15rem;
+  color: var(--green);
+  margin: 14px 0 0;
+  letter-spacing: 0.01em;
+}
+
+/* el <li> es transparente para la grilla; el <button> es la celda */
+.pilar-cell { display: contents; }
+
+/* button-reset sobre .pilar (mantiene todos los estilos previos) */
+.pilar {
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  width: 100%;
+  border-top: none;
+  border-left: none;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.pilar:focus-visible {
+  outline: 2px solid var(--green);
+  outline-offset: -2px;
+}
+
+/* spans que reemplazan al h3/p dentro del botón */
+.pilar-title {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(1.5rem, 2.2vw, 2rem);
+  line-height: 1.15;
+  color: var(--ink);
+  margin: 0;
+  margin-top: auto;
+  display: block;
+}
+.pilar-desc {
+  display: block;
+  margin: 0;
+  color: var(--ink-60);
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+
+/* OVERLAY ───────────────────────────────────────────────────── */
+.pilar-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  pointer-events: none;
+}
+.pilar-overlay.is-active { pointer-events: auto; }
+
+.pilar-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(26,26,26,0);
+  backdrop-filter: blur(0px);
+  -webkit-backdrop-filter: blur(0px);
+  transition: background 0.4s var(--ease), backdrop-filter 0.4s var(--ease);
+  cursor: default;
+}
+.pilar-overlay.is-active .pilar-backdrop {
+  background: rgba(26,26,26,0.55);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* CARD ──────────────────────────────────────────────────────── */
+.pilar-card {
+  position: fixed;
+  z-index: 91;
+  perspective: 1400px;
+  -webkit-perspective: 1400px;
+  background: transparent;
+  opacity: 0;
+  pointer-events: none;
+  border: none;
+  outline: none;
+  transition:
+    top 0.5s var(--ease-deep),
+    left 0.5s var(--ease-deep),
+    width 0.5s var(--ease-deep),
+    height 0.5s var(--ease-deep),
+    opacity 0.32s var(--ease);
+}
+.pilar-card.is-mounted {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.pilar-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 4px;
+  box-shadow: 0 30px 80px -20px rgba(0,0,0,0.45);
+}
+
+.pilar-card-face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: clamp(28px, 4vw, 48px);
+  background: var(--cream);
+  border: 1px solid var(--ink-10);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+/* Cara frontal — copia visual del botón. Se difumina al montarse
+   para que el título no quede "estirándose" mientras la card crece. */
+.pilar-card-face--front {
+  z-index: 1;
+  opacity: 1;
+  transition: opacity 0.28s var(--ease);
+}
+.pilar-card.is-mounted .pilar-card-face--front {
+  opacity: 0;
+  pointer-events: none;
+}
+.pilar-card-face--front .pilar-num { color: var(--green); }
+.pilar-card-front-title {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(1.5rem, 2.2vw, 2rem);
+  line-height: 1.15;
+  color: var(--ink);
+  margin-top: auto;
+}
+.pilar-card-front-desc {
+  color: var(--ink-60);
+  font-size: 0.95rem;
+}
+
+/* Cara trasera — entra con fade + leve slide-up cuando termina el crecimiento */
+.pilar-card-face--back {
+  z-index: 2;
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.42s var(--ease) 0.2s, transform 0.55s var(--ease-deep) 0.2s;
+  border-top: 2px solid var(--green);
+  overflow-y: auto;
+  padding-top: clamp(34px, 4vw, 52px);
+}
+.pilar-card.is-open .pilar-card-face--back {
+  opacity: 1;
+  transform: translateY(0);
+}
+.pilar-card-face--back .pilar-num {
+  color: var(--green);
+  margin-top: 0;
+  font-size: 0.7rem;
+  letter-spacing: 0.22em;
+}
+.pilar-card-face--back h3 {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(1.55rem, 2.3vw, 2rem);
+  line-height: 1.18;
+  margin: 0;
+  color: var(--ink);
+}
+.pilar-card-face--back h3 em {
+  font-family: var(--serif);
+  font-style: italic;
+  color: var(--green);
+}
+.pilar-card-lead {
+  margin: 0;
+  color: var(--ink-80);
+  font-size: 1rem;
+  line-height: 1.55;
+}
+.pilar-card-subtitle {
+  display: block;
+  font-family: var(--sans);
+  font-size: 0.7rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--green);
+  margin-bottom: 12px;
+}
+.pilar-card-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.pilar-card-list li {
+  position: relative;
+  padding-left: 18px;
+  color: var(--ink-80);
+  font-size: 0.94rem;
+  line-height: 1.5;
+}
+.pilar-card-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.7em;
+  width: 8px;
+  height: 1px;
+  background: var(--green);
+}
+.pilar-card-foot {
+  margin: auto 0 22px;
+  text-align: center;
+  align-self: stretch;
+  font-family: var(--script);
+  font-size: clamp(1.75rem, 2.6vw, 2.15rem);
+  color: var(--green);
+  line-height: 1.18;
+  letter-spacing: 0.01em;
+}
+
+/* Card 03 — dos columnas (Beneficios doble audiencia) */
+.pilar-card-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  padding-top: 14px;
+  border-top: 1px solid var(--ink-10);
+  margin-top: 4px;
+}
+@media (max-width: 700px) {
+  .pilar-card-cols { grid-template-columns: 1fr; gap: 22px; }
+}
+
+/* Botón × cerrar */
+.pilar-card-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--ink-10);
+  border-radius: 50%;
+  background: var(--offwhite);
+  color: var(--ink);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: background 0.25s var(--ease), border-color 0.25s var(--ease), color 0.25s var(--ease);
+  z-index: 2;
+  padding: 0;
+  font: inherit;
+}
+.pilar-card-close:hover {
+  background: var(--green);
+  color: var(--offwhite);
+  border-color: var(--green);
+}
+.pilar-card-close:focus-visible {
+  outline: 2px solid var(--green);
+  outline-offset: 2px;
+}
+
+/* CTA Banca dentro de la card */
+.pilar-card-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 22px;
+  border: 1px solid var(--green);
+  background: var(--green);
+  color: var(--offwhite);
+  font-family: var(--sans);
+  font-size: 0.78rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: 999px;
+  margin-top: 6px;
+  align-self: flex-start;
+  transition: background 0.3s var(--ease), border-color 0.3s var(--ease), color 0.3s var(--ease);
+}
+.pilar-card-cta:hover {
+  background: transparent;
+  color: var(--green);
+}
+
+/* Card 05 — Banca: variante institucional, fondo --ink */
+.pilar-card--banca .pilar-card-face--back {
+  background: var(--ink);
+  border-top-color: var(--green);
+}
+.pilar-card--banca .pilar-card-face--back .pilar-num { color: var(--green-40); }
+.pilar-card--banca .pilar-card-face--back h3 { color: var(--offwhite); }
+.pilar-card--banca .pilar-card-face--back h3 em { color: var(--green-40); }
+.pilar-card--banca .pilar-card-lead { color: rgba(250,250,248,0.78); }
+.pilar-card--banca .pilar-card-list li { color: rgba(250,250,248,0.78); }
+.pilar-card--banca .pilar-card-list li::before { background: var(--green-40); }
+.pilar-card--banca .pilar-card-foot { color: var(--green-40); }
+.pilar-card--banca .pilar-card-close {
+  background: rgba(250,250,248,0.08);
+  border-color: rgba(250,250,248,0.2);
+  color: var(--offwhite);
+}
+.pilar-card--banca .pilar-card-close:hover {
+  background: var(--green);
+  border-color: var(--green);
+}
+.pilar-card--banca .pilar-card-cta {
+  background: transparent;
+  border-color: var(--green-40);
+  color: var(--green-40);
+}
+.pilar-card--banca .pilar-card-cta:hover {
+  background: var(--green-40);
+  color: var(--ink);
+  border-color: var(--green-40);
+}
+
+/* Lock de scroll mientras hay card abierta */
+html.pilar-card-open,
+html.pilar-card-open body {
+  overflow: hidden;
+}
+
+/* Reduced motion override específico para las cards
+   (el bloque global de abajo mata todas las transiciones; acá
+   damos una salida limpia mostrando la cara trasera directo) */
+@media (prefers-reduced-motion: reduce) {
+  .pilar-card-face--front { display: none; }
+  .pilar-card-face--back { transform: none; opacity: 1; transition: none; }
+  .pilar-backdrop { transition: opacity 0.2s ease; }
 }
 
 /* ═══════════════════════════════════════════════════════════════

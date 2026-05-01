@@ -270,6 +270,140 @@ const FORMSPREE_ENDPOINT = '';
     ioSketch.observe(problemSection);
   }
 
+  /* ── WORD REVEAL: iluminación palabra por palabra al scrollear ─ */
+  // Aplica a: .problem-tagline y .problem-body p
+  // Cada palabra arranca en rgba(26,26,26,0.13) y pasa a color:inherit
+  // cuando el usuario scrollea y la palabra cruza el 78% superior del viewport.
+  (function setupWordReveal() {
+    const targets = document.querySelectorAll('.problem-tagline, .problem-body p');
+    if (!targets.length) return;
+
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // Construye un DocumentFragment wrapeando cada palabra en <span class="w">
+    // mientras preserva elementos inline (em, strong, br, etc.)
+    function buildWrapped(sourceEl, target) {
+      Array.from(sourceEl.childNodes).forEach((node) => {
+        if (node.nodeType === 3 /* TEXT_NODE */) {
+          node.textContent.split(/(\s+)/).forEach((part) => {
+            if (!part) return;
+            if (/^\s+$/.test(part)) {
+              target.appendChild(document.createTextNode(part));
+            } else {
+              const s = document.createElement('span');
+              s.className = reducedMotion ? 'w lit' : 'w';
+              s.textContent = part;
+              target.appendChild(s);
+            }
+          });
+        } else if (node.nodeType === 1 /* ELEMENT_NODE */) {
+          // Clonar el elemento (vacío) y recursar
+          const clone = node.cloneNode(false);
+          buildWrapped(node, clone);
+          target.appendChild(clone);
+        }
+      });
+    }
+
+    const allWords = [];
+    targets.forEach((el) => {
+      const frag = document.createDocumentFragment();
+      buildWrapped(el, frag);
+      el.innerHTML = '';
+      el.appendChild(frag);
+      allWords.push(...Array.from(el.querySelectorAll('.w')));
+    });
+
+    if (reducedMotion) return; // Todo ya está como .lit desde el build
+
+    function updateWordReveal() {
+      const threshold = window.innerHeight * 0.66;
+      allWords.forEach((w) => {
+        const top = w.getBoundingClientRect().top;
+        w.classList.toggle('lit', top < threshold);
+      });
+    }
+
+    window.addEventListener('scroll', updateWordReveal, { passive: true });
+    window.addEventListener('resize', updateWordReveal);
+    updateWordReveal(); // Estado inicial
+  })();
+
+  /* ── SCROLL-FADE: opacidad ligada al scroll ─────────────────── */
+  const scrollFades = document.querySelectorAll('.scroll-fade');
+  if (scrollFades.length && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    function updateScrollFades() {
+      const vh = window.innerHeight;
+      scrollFades.forEach((el) => {
+        const rect = el.getBoundingClientRect();
+        // Fade-in: desde que el borde inferior entra por abajo hasta que el borde superior
+        // cruza el 60% del viewport. Fade-out: simétrico al subir.
+        const fadeInStart = vh;           // elemento empieza a entrar
+        const fadeInEnd = vh * 0.35;      // totalmente visible
+        const progress = (fadeInStart - rect.top) / (fadeInStart - fadeInEnd);
+        el.style.opacity = Math.min(1, Math.max(0, progress));
+      });
+    }
+    window.addEventListener('scroll', updateScrollFades, { passive: true });
+    window.addEventListener('resize', updateScrollFades);
+    updateScrollFades();
+  } else {
+    scrollFades.forEach((el) => { el.style.opacity = 1; });
+  }
+
+  /* ── CONFIANZA: swap de frases al scrollear ─────────────────── */
+  // La sección tiene height:260vh con contenido sticky.
+  // Cuando el usuario scrolleó ~45% del espacio extra → frase 1 sale, frase 2 entra.
+  (function setupConfianzaSwap() {
+    const section  = document.getElementById('confianza-scroll');
+    const phrase1  = document.querySelector('.confianza-phrase--1');
+    const phrase2  = document.querySelector('.confianza-phrase--2');
+    if (!section || !phrase1 || !phrase2) return;
+
+    function update() {
+      const rect     = section.getBoundingClientRect();
+      const scrolled = -rect.top;                          // px scrolleados dentro de la sección
+      const extra    = section.offsetHeight - window.innerHeight; // px de scroll extra (≈160vh)
+      const progress = Math.max(0, Math.min(1, scrolled / extra));
+
+      if (progress < 0.4) {
+        // Frase 1 visible
+        phrase1.classList.remove('is-out');
+        phrase2.classList.remove('is-in');
+        phrase2.setAttribute('aria-hidden', 'true');
+      } else {
+        // Frase 2 visible
+        phrase1.classList.add('is-out');
+        phrase2.classList.add('is-in');
+        phrase2.removeAttribute('aria-hidden');
+      }
+    }
+
+    window.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    update();
+  })();
+
+  /* ── TIMELINE PROGRESS: línea verde crece con el scroll ─────── */
+  (function setupTimelineProgress() {
+    const progressEl = document.getElementById('timeline-spine-progress');
+    const timelineEl = document.querySelector('.roadmap-timeline');
+    if (!progressEl || !timelineEl) return;
+
+    function update() {
+      const rect = timelineEl.getBoundingClientRect();
+      // Empieza a crecer cuando la sección entra, termina cuando sale
+      const pct = Math.max(0, Math.min(1,
+        (window.innerHeight - rect.top) / (rect.height + window.innerHeight * 0.4)
+      ));
+      progressEl.style.height = (pct * 100) + '%';
+    }
+
+    window.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    update();
+  })();
+
   /* ── FORMULARIO DE CONTACTO ──────────────────────────────────── */
   const form = document.getElementById('contacto-form');
   if (!form) return;
@@ -352,5 +486,233 @@ const FORMSPREE_ENDPOINT = '';
       }
     }
   });
+
+  /* ── PILARES: flip cards (FLIP + grow + scroll hand-off) ──────── */
+  const pilaresGrid = document.querySelector('.pilares-grid');
+  const pilarOverlay = document.querySelector('.pilar-overlay');
+
+  if (pilaresGrid && pilarOverlay) {
+    const pilarState = { open: null, sourceBtn: null, lastFocus: null };
+
+    // Sólo permitimos data-pilar de 01 a 05 — evita que un valor inesperado
+    // construya un id arbitrario (#pilar-card-${num}) y dispare lookups raros.
+    const VALID = new Set(['01', '02', '03', '04', '05']);
+
+    const targetW = (num) => {
+      const max = num === '03' ? 640 : 560; // 03 (Beneficios) es la card asimétrica
+      return Math.min(max, window.innerWidth * 0.92);
+    };
+    const targetH = () => Math.min(720, window.innerHeight * 0.84);
+    const centerCoords = (w, h) => ({
+      top: Math.max(20, (window.innerHeight - h) / 2),
+      left: Math.max(16, (window.innerWidth - w) / 2),
+    });
+
+    function applyRect(card, rect) {
+      card.style.top = rect.top + 'px';
+      card.style.left = rect.left + 'px';
+      card.style.width = rect.width + 'px';
+      card.style.height = rect.height + 'px';
+    }
+
+    function openPilar(num) {
+      if (!VALID.has(num) || pilarState.open) return;
+      const sourceBtn = pilaresGrid.querySelector(`.pilar[data-pilar="${num}"]`);
+      const card = document.getElementById(`pilar-card-${num}`);
+      if (!sourceBtn || !card) return;
+
+      pilarState.lastFocus = document.activeElement;
+      pilarState.open = num;
+      pilarState.sourceBtn = sourceBtn;
+
+      // 1. Posicionar card en el rect del botón origen
+      const origin = sourceBtn.getBoundingClientRect();
+      applyRect(card, origin);
+
+      // 2. Mostrar overlay y card (todavía con tamaño origen)
+      pilarOverlay.hidden = false;
+      card.hidden = false;
+      document.documentElement.classList.add('pilar-card-open');
+
+      // 3. En la próxima frame: activar fade del backdrop y mounted de la card
+      requestAnimationFrame(() => {
+        pilarOverlay.classList.add('is-active');
+        card.classList.add('is-mounted');
+
+        // 4. Frame siguiente: transicionar a centro/grande
+        requestAnimationFrame(() => {
+          const w = targetW(num);
+          const h = targetH();
+          const { top, left } = centerCoords(w, h);
+          card.style.top = top + 'px';
+          card.style.left = left + 'px';
+          card.style.width = w + 'px';
+          card.style.height = h + 'px';
+          // 5. Disparar el flip cuando ya está creciendo
+          setTimeout(() => card.classList.add('is-open'), 140);
+        });
+      });
+
+      sourceBtn.setAttribute('aria-expanded', 'true');
+
+      // Focus al botón × cuando termina la coreografía
+      setTimeout(() => {
+        const close = card.querySelector('.pilar-card-close');
+        if (close && pilarState.open === num) close.focus();
+      }, 720);
+    }
+
+    function closePilar(opts) {
+      const num = pilarState.open;
+      if (!num) return;
+      const card = document.getElementById(`pilar-card-${num}`);
+      const sourceBtn = pilarState.sourceBtn;
+      if (!card || !sourceBtn) return;
+
+      // closePilar() → cierre normal con anim de vuelta al rect del botón.
+      // closePilar(fn) → cierre rápido + callback (hand-off a otra sección).
+      // closePilar({ fast: true }) → cierre rápido sin destino (Cartilla).
+      let fastExit = false;
+      let thenCallback = null;
+      if (typeof opts === 'function') {
+        fastExit = true;
+        thenCallback = opts;
+      } else if (opts && opts.fast) {
+        fastExit = true;
+      }
+
+      // En cierre rápido liberamos el lock ya — la card es position:fixed,
+      // así que sigue visible mientras la página scrollea/se acomoda por debajo.
+      if (fastExit) document.documentElement.classList.remove('pilar-card-open');
+
+      card.classList.remove('is-open');
+
+      if (fastExit) {
+        // salida rápida con fade (no anima vuelta a origen)
+        setTimeout(() => {
+          pilarOverlay.classList.remove('is-active');
+          card.classList.remove('is-mounted');
+        }, 60);
+        setTimeout(() => {
+          pilarOverlay.hidden = true;
+          card.hidden = true;
+          card.style.cssText = '';
+          sourceBtn.setAttribute('aria-expanded', 'false');
+          if (!thenCallback && pilarState.lastFocus && document.contains(pilarState.lastFocus)) {
+            pilarState.lastFocus.focus();
+          }
+          pilarState.open = null;
+          pilarState.sourceBtn = null;
+          pilarState.lastFocus = null;
+        }, 420);
+        if (thenCallback) thenCallback();
+        return;
+      }
+
+      // cierre normal: anima de vuelta al rect del origen
+      const origin = sourceBtn.getBoundingClientRect();
+      setTimeout(() => applyRect(card, origin), 80);
+
+      setTimeout(() => {
+        pilarOverlay.classList.remove('is-active');
+        card.classList.remove('is-mounted');
+      }, 120);
+
+      setTimeout(() => {
+        pilarOverlay.hidden = true;
+        card.hidden = true;
+        card.style.cssText = '';
+        document.documentElement.classList.remove('pilar-card-open');
+        sourceBtn.setAttribute('aria-expanded', 'false');
+        const focusTarget = pilarState.lastFocus && document.contains(pilarState.lastFocus)
+          ? pilarState.lastFocus
+          : sourceBtn;
+        if (focusTarget && typeof focusTarget.focus === 'function') focusTarget.focus();
+        pilarState.open = null;
+        pilarState.sourceBtn = null;
+        pilarState.lastFocus = null;
+      }, 600);
+    }
+
+    // Click en grilla → abrir
+    pilaresGrid.addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-pilar]');
+      if (!btn) return;
+      e.preventDefault();
+      openPilar(btn.dataset.pilar);
+    });
+
+    // Click en overlay → manejar acciones (cerrar, ir a banca)
+    pilarOverlay.addEventListener('click', (e) => {
+      const action = e.target.closest('[data-action]');
+      if (!action) return;
+      const kind = action.dataset.action;
+      if (kind === 'close') {
+        e.preventDefault();
+        closePilar();
+      } else if (kind === 'goto-banca') {
+        e.preventDefault();
+        closePilar(() => {
+          const banca = document.getElementById('banca');
+          if (banca) banca.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      }
+    });
+
+    // ESC → cerrar
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && pilarState.open) {
+        e.preventDefault();
+        closePilar();
+      }
+    });
+
+    // Scroll hand-off:
+    //   - Banca (05): scroll hacia abajo cierra y lleva a #banca.
+    //   - Cartilla (04): cualquier scroll cierra (sin destino — quedás en Pilares).
+    const handoff = (e) => {
+      const num = pilarState.open;
+      if (num !== '04' && num !== '05') return;
+
+      let trigger = false;
+      if (e.type === 'wheel') {
+        trigger = num === '05' ? e.deltaY > 0 : Math.abs(e.deltaY) > 0;
+      } else if (e.type === 'touchmove') {
+        trigger = true;
+      } else if (e.type === 'keydown') {
+        const downKeys = ['ArrowDown', 'PageDown', 'Space'];
+        const allKeys = ['ArrowDown', 'PageDown', 'Space', 'ArrowUp', 'PageUp', 'Home', 'End'];
+        trigger = (num === '05' ? downKeys : allKeys).includes(e.code);
+      }
+      if (!trigger) return;
+      if (e.cancelable) e.preventDefault();
+
+      if (num === '05') {
+        closePilar(() => {
+          const banca = document.getElementById('banca');
+          if (banca) banca.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      } else {
+        closePilar({ fast: true });
+      }
+    };
+    window.addEventListener('wheel', handoff, { passive: false });
+    window.addEventListener('touchmove', handoff, { passive: false });
+    window.addEventListener('keydown', handoff);
+
+    // Resize → recentrar la card abierta
+    window.addEventListener('resize', () => {
+      if (!pilarState.open) return;
+      const card = document.getElementById(`pilar-card-${pilarState.open}`);
+      if (!card || !card.classList.contains('is-mounted')) return;
+      const w = targetW(pilarState.open);
+      const h = targetH();
+      const { top, left } = centerCoords(w, h);
+      card.style.top = top + 'px';
+      card.style.left = left + 'px';
+      card.style.width = w + 'px';
+      card.style.height = h + 'px';
+    });
+  }
 
 })();

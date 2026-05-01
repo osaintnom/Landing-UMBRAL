@@ -48,10 +48,12 @@
     <img src="./assets/logo-horizontal.png" alt="UMBRAL Collection" width="160" height="72" decoding="async">
   </a>
   <nav class="nav-links" aria-label="Principal">
+    <a href="#que-es">Qué es</a>
     <a href="#filosofia">Filosofía</a>
     <a href="#perfil">Para quién es</a>
     <a href="#obra">El proceso</a>
     <a href="#pilares">Pilares</a>
+    <a href="#banca">Banca</a>
     <a href="#contacto" class="nav-cta">Contacto</a>
   </nav>
 </header>
@@ -81,7 +83,7 @@
   <!-- Frase 2 + CTA: abajo derecha — entra después -->
   <div class="hero-phrase-2">
     <p><span class="hero-brand">UMBRAL</span> convierte ese proceso en una ventaja para tu proyecto.</p>
-    <a class="cta-link" href="#filosofia">
+    <a class="cta-link" href="#que-es">
       Descubrí UMBRAL
       <svg width="28" height="10" viewBox="0 0 28 10" aria-hidden="true"><path d="M0 5 h26 M22 1 L26 5 L22 9" fill="none" stroke="currentColor" stroke-width="1.2"/></svg>
     </a>
@@ -95,13 +97,29 @@
 <!-- ═══════════════════════════════════════════════════════════════
      2. EL PROBLEMA
      ═══════════════════════════════════════════════════════════════ -->
-<section class="problem" aria-label="El problema">
+<section class="problem" id="que-es" aria-label="Qué es UMBRAL">
   <canvas class="problem-canvas" aria-hidden="true"></canvas>
   <img class="problem-logo-bg" src="./assets/logo-horizontal.png" alt="" aria-hidden="true" decoding="async">
-  <div class="stack">
-    <p class="reveal"><em>Tus inversores tienen preguntas.</em><br>Vos tenés un proyecto para construir.</p>
-    <p class="reveal">Cada consulta mal gestionada cuesta tiempo, reputación y confianza.<br>Sin un sistema claro, el silencio habla por vos.</p>
-    <p class="reveal accent">Eso es lo que <strong>UMBRAL</strong> vino a resolver.</p>
+
+  <!-- Kicker + Título -->
+  <div class="problem-header">
+    <span class="kicker reveal">02 — Qué es UMBRAL</span>
+    <h2 class="problem-title reveal">
+      UMBRAL Collection<br>
+      nace de una <em>convicción.</em>
+    </h2>
+  </div>
+
+  <div class="problem-rule reveal" aria-hidden="true"></div>
+
+  <!-- Subtítulo centrado -->
+  <p class="problem-tagline">Acompañar &amp; multiplicar.</p>
+
+  <!-- Texto — word-reveal lo maneja main.js -->
+  <div class="problem-body">
+    <p>Los momentos más importantes en el proceso inmobiliario merecen ser tratados con <em class="glow-hover">intención, orden y significado.</em></p>
+    <p>En un mercado donde la firma y la entrega se reducen a procedimientos formales, UMBRAL propone elevar cada instancia a la categoría de experiencia.</p>
+    <p class="accent">UMBRAL no es un producto.<br>Es un <strong>sistema de acompañamiento</strong>.<br>Es el ritual que formaliza el comienzo.</p>
   </div>
 </section>
 
@@ -118,19 +136,19 @@
     <div class="filosofia-col">
       <span class="col-num">01</span>
       <h3>Desde la firma</h3>
-      <p>Acompañamos desde el primer día. Tu inversor sabe dónde está parado — sin que vos tengas que explicarlo.</p>
+      <p>Tu inversor sabe exactamente dónde está parado — sin que vos tengas que explicarlo. UMBRAL comunica por vos desde el primer día.</p>
     </div>
     <span class="col-arrow" aria-hidden="true">→</span>
     <div class="filosofia-col">
       <span class="col-num">02</span>
       <h3>Durante la obra</h3>
-      <p>Comunicación constante, hitos visibles, cero incertidumbre. Tu equipo construye. UMBRAL comunica.</p>
+      <p>Cada hito visible. Cero incertidumbre. Tu equipo construye mientras UMBRAL mantiene viva la confianza.</p>
     </div>
     <span class="col-arrow" aria-hidden="true">→</span>
     <div class="filosofia-col">
       <span class="col-num">03</span>
-      <h3>Hasta las llaves</h3>
-      <p>La entrega define tu reputación. UMBRAL la convierte en una experiencia que tus inversores recuerdan.</p>
+      <h3>Al día de la entrega</h3>
+      <p>La entrega no es el final — es el momento donde tu reputación se consolida. UMBRAL la convierte en experiencia.</p>
     </div>
   </div>
 </section>
@@ -147,7 +165,7 @@
   <div class="perfil-switch" role="tablist" aria-label="Perfil de visitante">
     <button class="perfil-tab is-active" role="tab" aria-selected="true" aria-controls="panel-dev" data-target="dev">
       <span class="tab-num">A</span>
-      <span class="tab-label">Para la desarrolladora</span>
+      <span class="tab-label">Para tu desarrolladora</span>
     </button>
     <button class="perfil-tab" role="tab" aria-selected="false" aria-controls="panel-inv" data-target="inv">
       <span class="tab-num">B</span>
@@ -160,15 +178,15 @@
     <article class="perfil-panel is-visible" id="panel-dev" role="tabpanel" data-panel="dev">
       <div class="perfil-grid">
         <div class="perfil-text">
-          <p class="perfil-hook"><em>Tus clientes están al tanto.</em><br>Vos podés enfocarte en lo que sabés hacer.</p>
+          <p class="perfil-hook"><em>Vos desarrollás, no entregás unidades.</em><br>Con UMBRAL construís permanencia.</p>
+          <p class="perfil-sub">Tus clientes están al tanto. Vos podés enfocarte en lo que sabés hacer.</p>
           <ul class="perfil-list">
             <li><span>01</span><p>Comunicación constante con compradores durante toda la obra — sin que armes un equipo para eso.</p></li>
-            <li><span>02</span><p>Cumplimiento de obligaciones legales de información al comprador.</p></li>
-            <li><span>03</span><p>Proveedores calificados de obra: limpieza, terminaciones, serenos — ya evaluados.</p></li>
-            <li><span>04</span><p>Comunidad de compradores organizada antes de que exista el consorcio.</p></li>
-            <li><span>05</span><p>Administración del edificio en el período de transición obra–entrega.</p></li>
+            <li><span>02</span><p>Gestión de proveedores por proyecto — limpieza, terminaciones, serenos, ya evaluados.</p></li>
+            <li><span>03</span><p>Comunidad organizada por proyecto, antes de que exista el consorcio.</p></li>
+            <li><span>04</span><p>Administración del edificio en el período de transición obra–entrega.</p></li>
           </ul>
-          <p class="perfil-close">Cada proyecto UMBRAL es un proyecto con <em>menos ruido</em> y <em>más reputación</em>.</p>
+          <p class="perfil-close">Cada proyecto que entra en UMBRAL <em>reduce ruido</em> y <em>multiplica valor</em>.</p>
         </div>
         <div class="perfil-visual perfil-visual--blueprint" aria-hidden="true">
           <svg viewBox="0 0 400 520" preserveAspectRatio="xMidYMid meet">
@@ -215,9 +233,9 @@
           <ul class="perfil-list">
             <li><span>01</span><p>Visibilidad del avance de obra: sabés en qué etapa está tu departamento sin preguntarle a nadie.</p></li>
             <li><span>02</span><p>Comunicación directa con un equipo que conoce tu inversión.</p></li>
-            <li><span>03</span><p>Gestión centralizada si tenés múltiples inversiones — <em>Banca Umbral</em>.</p></li>
+            <li><span>03</span><p>Gestión centralizada si tenés múltiples inversiones — <br><em>Banca Umbral</em>.</p></li>
             <li><span>04</span><p>Beneficios exclusivos: proveedores locales y servicios de la comunidad de propietarios.</p></li>
-            <li><span>05</span><p>Directorio de profesionales calificados al recibir tu unidad — <em>Cartilla Umbral</em>.</p></li>
+            <li><span>05</span><p>Directorio de profesionales calificados al recibir tu unidad — <br><em>Cartilla Umbral</em>.</p></li>
           </ul>
           <p class="perfil-close">Tu inversión no es un número en una escritura. Es un proceso que merece <em>atención constante</em>.</p>
         </div>
@@ -285,7 +303,7 @@
             </li>
             <li class="annotation" data-from="0.70" data-to="0.92">
               <span class="ann-num">04</span>
-              <p>Tu departamento toma forma. Vos lo ves en tiempo real.</p>
+              <p>Tus metros avanzan. Cada etapa se comunica, se registra y se comparte.</p>
             </li>
             <li class="annotation annotation--final" data-from="0.92" data-to="1.01">
               <span class="ann-num">05</span>
@@ -315,48 +333,336 @@
   <header class="pilares-head">
     <span class="kicker">06 — El ecosistema</span>
     <h2 class="display-md">Cinco pilares.<br>Una misma presencia.</h2>
+    <p class="pilares-hint reveal">Tocá cada cuadro para entrar.</p>
   </header>
 
   <ol class="pilares-grid">
-    <li class="pilar reveal">
-      <span class="pilar-num">01</span>
-      <h3>Soporte / Acompañamiento</h3>
-      <p>Presencia continua durante toda la obra.</p>
+    <li class="pilar-cell reveal">
+      <button class="pilar" type="button" data-pilar="01" aria-haspopup="dialog" aria-expanded="false" aria-controls="pilar-card-01">
+        <span class="pilar-num">01</span>
+        <span class="pilar-title">Soporte / Acompañamiento</span>
+        <span class="pilar-desc">Presencia continua durante toda la obra.</span>
+      </button>
     </li>
-    <li class="pilar reveal">
-      <span class="pilar-num">02</span>
-      <h3>Umbral Conecta</h3>
-      <p>La comunidad que nace de tu edificio.</p>
+    <li class="pilar-cell reveal">
+      <button class="pilar" type="button" data-pilar="02" aria-haspopup="dialog" aria-expanded="false" aria-controls="pilar-card-02">
+        <span class="pilar-num">02</span>
+        <span class="pilar-title">Umbral Conecta</span>
+        <span class="pilar-desc">Una red comercial entre los propietarios de tu proyecto.</span>
+      </button>
     </li>
-    <li class="pilar reveal">
-      <span class="pilar-num">03</span>
-      <h3>Beneficios</h3>
-      <p>Alianzas exclusivas para compradores y desarrolladoras.</p>
+    <li class="pilar-cell reveal">
+      <button class="pilar" type="button" data-pilar="03" aria-haspopup="dialog" aria-expanded="false" aria-controls="pilar-card-03">
+        <span class="pilar-num">03</span>
+        <span class="pilar-title">Beneficios</span>
+        <span class="pilar-desc">Alianzas exclusivas — para compradores y para desarrolladoras.</span>
+      </button>
     </li>
-    <li class="pilar reveal">
-      <span class="pilar-num">04</span>
-      <h3>Banca Umbral</h3>
-      <p>Tu patrimonio inmobiliario, gestionado como merece.</p>
+    <li class="pilar-cell reveal">
+      <button class="pilar" type="button" data-pilar="04" aria-haspopup="dialog" aria-expanded="false" aria-controls="pilar-card-04">
+        <span class="pilar-num">04</span>
+        <span class="pilar-title">Cartilla Umbral</span>
+        <span class="pilar-desc">Profesionales calificados y sustentables.</span>
+      </button>
     </li>
-    <li class="pilar reveal">
-      <span class="pilar-num">05</span>
-      <h3>Cartilla Umbral</h3>
-      <p>Los profesionales que necesitás cuando recibís tu unidad.</p>
+    <li class="pilar-cell reveal">
+      <button class="pilar pilar--banca" type="button" data-pilar="05" aria-haspopup="dialog" aria-expanded="false" aria-controls="pilar-card-05">
+        <span class="pilar-num">05</span>
+        <span class="pilar-title">Banca Umbral</span>
+        <span class="pilar-desc">No se solicita pertenecer. Se califica para pertenecer.</span>
+        <span class="pilar-banca-hint" aria-hidden="true">Tocá para abrir →</span>
+      </button>
     </li>
   </ol>
+
+  <!-- Pilares: overlay + cards expandidas (flip + grow) -->
+  <div class="pilar-overlay" hidden>
+    <div class="pilar-backdrop" data-action="close" aria-hidden="true"></div>
+
+    <article class="pilar-card" id="pilar-card-01" role="dialog" aria-modal="true" aria-labelledby="pilar-card-01-title" hidden>
+      <div class="pilar-card-inner">
+        <div class="pilar-card-face pilar-card-face--front" aria-hidden="true">
+          <span class="pilar-num">01</span>
+          <span class="pilar-card-front-title">Soporte / Acompañamiento</span>
+          <span class="pilar-card-front-desc">Presencia continua durante toda la obra.</span>
+        </div>
+        <div class="pilar-card-face pilar-card-face--back">
+          <button class="pilar-card-close" type="button" aria-label="Cerrar" data-action="close">
+            <svg width="14" height="14" viewBox="0 0 18 18" aria-hidden="true"><path d="M2 2 L16 16 M16 2 L2 16" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>
+          </button>
+          <span class="pilar-num">01 — Confianza</span>
+          <h3 id="pilar-card-01-title">El acompañamiento es producto, no agregado.</h3>
+          <p class="pilar-card-lead">Una capa de presencia operativa y humana entre la firma y el día D. No es algo que llega cuando la obra termina — es parte del producto desde antes.</p>
+          <ul class="pilar-card-list">
+            <li>Presencia institucional durante toda la obra.</li>
+            <li>Comunicación activa con compradores e inversores.</li>
+            <li>Hitos visibles en cada etapa constructiva.</li>
+            <li>Invitaciones a momentos clave: bajada de hormigón, estructura terminada, día D.</li>
+            <li>Continuidad de la relación cuando el constructor desaparece.</li>
+          </ul>
+          <p class="pilar-card-foot">No llegamos después. Estamos desde antes.</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="pilar-card" id="pilar-card-02" role="dialog" aria-modal="true" aria-labelledby="pilar-card-02-title" hidden>
+      <div class="pilar-card-inner">
+        <div class="pilar-card-face pilar-card-face--front" aria-hidden="true">
+          <span class="pilar-num">02</span>
+          <span class="pilar-card-front-title">Umbral Conecta</span>
+          <span class="pilar-card-front-desc">Una red comercial entre los propietarios de tu proyecto.</span>
+        </div>
+        <div class="pilar-card-face pilar-card-face--back">
+          <button class="pilar-card-close" type="button" aria-label="Cerrar" data-action="close">
+            <svg width="14" height="14" viewBox="0 0 18 18" aria-hidden="true"><path d="M2 2 L16 16 M16 2 L2 16" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>
+          </button>
+          <span class="pilar-num">02 — Continuidad · Experiencia</span>
+          <h3 id="pilar-card-02-title">Una red comercial dentro de tu propio edificio.</h3>
+          <p class="pilar-card-lead">La comunidad de un proyecto no es solo vecinal: es comercial. Quienes compraron en el mismo desarrollo se conectan entre sí — para ofrecerse servicios, oportunidades y contactos.</p>
+          <ul class="pilar-card-list">
+            <li>Alcance por proyecto: la red de Cabildo 3000 vive dentro de Cabildo 3000.</li>
+            <li>Cada propietario puede listar su oficio o servicio.</li>
+            <li>El contador, la diseñadora, el dueño del local en PB, el asesor — visibles para los demás.</li>
+            <li>Negocios entre quienes ya comparten patrimonio en el mismo edificio.</li>
+            <li>Una capa de pertenencia que excede el m² comprado.</li>
+          </ul>
+          <p class="pilar-card-foot">El edificio también se vuelve red.</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="pilar-card pilar-card--wide" id="pilar-card-03" role="dialog" aria-modal="true" aria-labelledby="pilar-card-03-title" hidden>
+      <div class="pilar-card-inner">
+        <div class="pilar-card-face pilar-card-face--front" aria-hidden="true">
+          <span class="pilar-num">03</span>
+          <span class="pilar-card-front-title">Beneficios</span>
+          <span class="pilar-card-front-desc">Alianzas exclusivas — para compradores y para desarrolladoras.</span>
+        </div>
+        <div class="pilar-card-face pilar-card-face--back">
+          <button class="pilar-card-close" type="button" aria-label="Cerrar" data-action="close">
+            <svg width="14" height="14" viewBox="0 0 18 18" aria-hidden="true"><path d="M2 2 L16 16 M16 2 L2 16" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>
+          </button>
+          <span class="pilar-num">03 — Inteligencia</span>
+          <h3 id="pilar-card-03-title">Beneficios que se activan por pertenencia.</h3>
+          <p class="pilar-card-lead">Dos lecturas en el mismo pilar — compradores y desarrolladoras acceden a cosas distintas, ambas exclusivas por estar dentro del sistema.</p>
+          <div class="pilar-card-cols">
+            <div>
+              <span class="pilar-card-subtitle">Para compradores e inversores</span>
+              <ul class="pilar-card-list">
+                <li>Alianzas con comercios y servicios cercanos a cada proyecto.</li>
+                <li>Acuerdos exclusivos por zonificación.</li>
+                <li>Por ser parte de tu proyecto, accedés a UMBRAL Beneficios.</li>
+                <li>Beneficios que se renuevan con la trayectoria.</li>
+              </ul>
+            </div>
+            <div>
+              <span class="pilar-card-subtitle">Para desarrolladoras</span>
+              <ul class="pilar-card-list">
+                <li>Limpieza final de obra — el detalle que el constructor suele dejar abierto.</li>
+                <li>Serenos de obra — un recurso escaso, dentro del sistema.</li>
+                <li>Empresa de terminación post-constructora.</li>
+                <li>Administración interina hasta que se designa el consorcio.</li>
+              </ul>
+            </div>
+          </div>
+          <p class="pilar-card-foot">Lo que cierra la obra. Lo que ordena la entrega.</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="pilar-card" id="pilar-card-04" role="dialog" aria-modal="true" aria-labelledby="pilar-card-04-title" hidden>
+      <div class="pilar-card-inner">
+        <div class="pilar-card-face pilar-card-face--front" aria-hidden="true">
+          <span class="pilar-num">04</span>
+          <span class="pilar-card-front-title">Cartilla Umbral</span>
+          <span class="pilar-card-front-desc">Profesionales calificados y sustentables.</span>
+        </div>
+        <div class="pilar-card-face pilar-card-face--back">
+          <button class="pilar-card-close" type="button" aria-label="Cerrar" data-action="close">
+            <svg width="14" height="14" viewBox="0 0 18 18" aria-hidden="true"><path d="M2 2 L16 16 M16 2 L2 16" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>
+          </button>
+          <span class="pilar-num">04 — Visión</span>
+          <h3 id="pilar-card-04-title">Profesionales calificados, cuando recibís tu unidad.</h3>
+          <p class="pilar-card-lead">Para compradores. Una red de oficios y profesionales seleccionados con criterio de calidad y sustentabilidad — los que vas a necesitar el día que entrás al departamento.</p>
+          <ul class="pilar-card-list">
+            <li>Pintores con opciones de paleta y trayectoria.</li>
+            <li>Plomeros y electricistas calificados.</li>
+            <li>Servicio llave en mano para terminaciones y reformas chicas.</li>
+            <li>Asesores inmobiliarios para quienes quieran vender.</li>
+            <li>Seguros de hogar adaptados al edificio.</li>
+            <li>Servicios de mudanza con experiencia en altura.</li>
+          </ul>
+          <p class="pilar-card-foot">Los mejores profesionales, alcancables y confiables.</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="pilar-card pilar-card--banca" id="pilar-card-05" role="dialog" aria-modal="true" aria-labelledby="pilar-card-05-title" hidden>
+      <div class="pilar-card-inner">
+        <div class="pilar-card-face pilar-card-face--front" aria-hidden="true">
+          <span class="pilar-num">05</span>
+          <span class="pilar-card-front-title">Banca Umbral</span>
+          <span class="pilar-card-front-desc">No se solicita pertenecer. Se califica para pertenecer.</span>
+        </div>
+        <div class="pilar-card-face pilar-card-face--back">
+          <button class="pilar-card-close" type="button" aria-label="Cerrar" data-action="close">
+            <svg width="14" height="14" viewBox="0 0 18 18" aria-hidden="true"><path d="M2 2 L16 16 M16 2 L2 16" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>
+          </button>
+          <span class="pilar-num">05 — Crecimiento · Recurrencia</span>
+          <h3 id="pilar-card-05-title">No se solicita pertenecer.<br><em>Se califica para pertenecer.</em></h3>
+          <p class="pilar-card-lead">Una capa exclusiva, financiera, reservada. El acceso se mide por patrimonio en m², no por capital declarado — eso la vuelve exclusiva sin ser invasiva.</p>
+          <ul class="pilar-card-list">
+            <li>Acceso por patrimonio en m², no por capital declarado.</li>
+            <li>Gestión privada y presencia institucional.</li>
+            <li>Reconocimiento a quienes ya construyeron trayectoria.</li>
+            <li>Una banca que filtra antes de invitar.</li>
+          </ul>
+          <a class="pilar-card-cta" href="#banca" data-action="goto-banca">
+            Entrar a Banca UMBRAL
+            <svg width="22" height="10" viewBox="0 0 28 10" aria-hidden="true"><path d="M0 5 h26 M22 1 L26 5 L22 9" fill="none" stroke="currentColor" stroke-width="1.2"/></svg>
+          </a>
+          <p class="pilar-card-foot pilar-card-foot--script">o seguí scrolleando ↓</p>
+        </div>
+      </div>
+    </article>
+  </div>
 </section>
 
 <!-- ═══════════════════════════════════════════════════════════════
-     7. CONFIANZA
+     7. BANCA UMBRAL
      ═══════════════════════════════════════════════════════════════ -->
-<section class="confianza" aria-label="Confianza">
-  <div class="confianza-mark reveal">
-    <img src="./assets/logo-mark.png" alt="" width="144" height="132" decoding="async" loading="lazy">
+<section class="banca" id="banca" aria-label="Banca UMBRAL">
+  <div class="banca-inner">
+    <span class="kicker banca-kicker reveal">07 — Banca UMBRAL</span>
+    <h2 class="banca-title reveal">No se solicita pertenecer.<br><em>Se califica para pertenecer.</em></h2>
+    <p class="banca-body reveal">El acceso a Banca UMBRAL se define por patrimonio en m², no por capital declarado. Una forma de reconocer a quienes construyeron trayectoria en el mercado inmobiliario — sin exponer lo que no es necesario exponer.</p>
+    <p class="banca-body banca-body--secondary reveal">Gestión privada. Acceso exclusivo. Una presencia institucional que acompaña tu patrimonio con la misma filosofía con la que acompañamos tus proyectos.</p>
+    <a class="banca-cta reveal" href="#contacto">
+      Solicitar evaluación
+      <svg width="28" height="10" viewBox="0 0 28 10" aria-hidden="true"><path d="M0 5 h26 M22 1 L26 5 L22 9" fill="none" stroke="currentColor" stroke-width="1.2"/></svg>
+    </a>
   </div>
-  <p class="confianza-copy reveal">
-    Cada umbral marca un <em>antes</em> y un <em>después</em>.<br>
-    En ese instante, decidimos estar presentes.
-  </p>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     8. ROADMAP — CÓMO CRECE UMBRAL
+     ═══════════════════════════════════════════════════════════════ -->
+<section class="roadmap" id="roadmap" aria-label="Cómo crece UMBRAL">
+  <header class="roadmap-head">
+    <span class="kicker reveal">08 — Cómo crece UMBRAL</span>
+    <h2 class="display-md reveal">Así es como va a crecer <br><em>UMBRAL.</em></h2>
+    <p class="roadmap-intro reveal">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Cada etapa activa nuevos servicios.</p>
+  </header>
+
+  <div class="roadmap-timeline">
+
+    <!-- Espina central — progresa con el scroll -->
+    <div class="timeline-spine" aria-hidden="true">
+      <div class="timeline-spine-progress" id="timeline-spine-progress"></div>
+    </div>
+
+    <!-- Etapa I — izquierda -->
+    <div class="timeline-item timeline-item--left reveal">
+      <div class="timeline-card">
+        <h3 class="timeline-card-name">Lorem ipsum lanzamiento</h3>
+        <p class="timeline-card-desc">Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+        <ul class="timeline-card-services">
+          <li>Lorem ipsum dolor sit amet consectetur</li>
+          <li>Sed do eiusmod tempor incididunt ut labore</li>
+          <li>Ut enim ad minim veniam quis nostrud</li>
+          <li>Duis aute irure dolor in reprehenderit</li>
+        </ul>
+      </div>
+      <div class="timeline-node">
+        <div class="timeline-node-dot"></div>
+        <span class="timeline-node-num">I</span>
+        <span class="phase-status phase-status--active">Activo</span>
+      </div>
+      <div class="timeline-spacer"></div>
+    </div>
+
+    <!-- Etapa II — derecha -->
+    <div class="timeline-item timeline-item--right reveal">
+      <div class="timeline-spacer"></div>
+      <div class="timeline-node">
+        <div class="timeline-node-dot"></div>
+        <span class="timeline-node-num">II</span>
+        <span class="phase-status phase-status--dev">En desarrollo</span>
+      </div>
+      <div class="timeline-card">
+        <h3 class="timeline-card-name">Lorem ipsum expansión</h3>
+        <p class="timeline-card-desc">Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+        <ul class="timeline-card-services">
+          <li>Lorem ipsum dolor sit amet consectetur</li>
+          <li>Sed do eiusmod tempor incididunt ut labore</li>
+          <li>Ut enim ad minim veniam quis nostrud</li>
+          <li>Duis aute irure dolor in reprehenderit</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Etapa III — izquierda -->
+    <div class="timeline-item timeline-item--left reveal">
+      <div class="timeline-card">
+        <h3 class="timeline-card-name">Lorem ipsum ecosistema</h3>
+        <p class="timeline-card-desc">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur excepteur.</p>
+        <ul class="timeline-card-services">
+          <li>Lorem ipsum dolor sit amet consectetur</li>
+          <li>Sed do eiusmod tempor incididunt ut labore</li>
+          <li>Ut enim ad minim veniam quis nostrud</li>
+          <li>Duis aute irure dolor in reprehenderit</li>
+        </ul>
+      </div>
+      <div class="timeline-node">
+        <div class="timeline-node-dot"></div>
+        <span class="timeline-node-num">III</span>
+        <span class="phase-status phase-status--soon">Próximamente</span>
+      </div>
+      <div class="timeline-spacer"></div>
+    </div>
+
+    <!-- Etapa IV — derecha -->
+    <div class="timeline-item timeline-item--right reveal">
+      <div class="timeline-spacer"></div>
+      <div class="timeline-node">
+        <div class="timeline-node-dot"></div>
+        <span class="timeline-node-num">IV</span>
+        <span class="phase-status phase-status--future">Visión</span>
+      </div>
+      <div class="timeline-card">
+        <h3 class="timeline-card-name">Lorem ipsum visión</h3>
+        <p class="timeline-card-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore.</p>
+        <ul class="timeline-card-services">
+          <li>Lorem ipsum dolor sit amet consectetur</li>
+          <li>Sed do eiusmod tempor incididunt ut labore</li>
+          <li>Ut enim ad minim veniam quis nostrud</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     9. CONFIANZA — sticky con dos frases que se alternan al scrollear
+     ═══════════════════════════════════════════════════════════════ -->
+<section class="confianza" id="confianza-scroll" aria-label="Confianza">
+  <div class="confianza-sticky">
+    <div class="confianza-mark">
+      <img src="./assets/logo-mark.png" alt="" width="144" height="132" decoding="async" loading="lazy">
+    </div>
+    <div class="confianza-phrases" aria-live="polite">
+      <!-- Frase 1: visible al entrar -->
+      <p class="confianza-phrase confianza-phrase--1">
+        UMBRAL no es un producto. Es un <em>sistema de acompañamiento</em>. Una presencia institucional que convierte cada hito de tu inversión en una experiencia organizada, visible y memorable.
+      </p>
+      <!-- Frase 2: aparece al scrollear un poco más -->
+      <p class="confianza-phrase confianza-phrase--2" aria-hidden="true">
+        Cada umbral marca un <em>antes</em> y un <em>después</em>.<br>
+        En ese instante, decidimos estar presentes.
+      </p>
+    </div>
+  </div>
 </section>
 
 <!-- ═══════════════════════════════════════════════════════════════
@@ -364,9 +670,9 @@
      ═══════════════════════════════════════════════════════════════ -->
 <section class="contacto" id="contacto" aria-label="Contacto">
   <div class="contacto-inner">
-    <span class="kicker light">08 — Contacto</span>
+    <span class="kicker light">10 — Contacto</span>
     <h2 class="display-md">Hablemos.</h2>
-    <p class="contacto-sub">Si querés saber cómo UMBRAL puede potenciar tu proyecto, completá el formulario y nos contactamos en el día.</p>
+    <p class="contacto-sub">Cada desarrollo tiene un momento ideal para empezar a construir confianza. Hablemos de tu proyecto y veamos cuándo UMBRAL puede sumar más valor.</p>
 
     <form class="contacto-form" id="contacto-form" novalidate autocomplete="on">
       <div class="form-grid">
