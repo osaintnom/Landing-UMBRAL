@@ -1,20 +1,28 @@
 /* ═══════════════════════════════════════════════════════════════
-   UMBRAL COLLECTION — main.js
+   UMBRAL COLLECTION — main.js (mobile-first)
+   - Loader
    - Nav scrolled state
    - Reveal (IntersectionObserver)
-   - Perfil tab switch
-   - Scroll-driven video (Sección 5)
-   - Formulario de contacto → Formspree
+   - Filosofía cols flow-in
+   - Problem canvas sketch (desktop+hover only)
+   - Word reveal (scroll-linked)
+   - Pilares flip cards
+   - Formularios: contacto (solo email) + mini-form
    ═══════════════════════════════════════════════════════════════ */
 
-// Para activar el envío de formulario:
+// Para activar el envío real:
 // 1. Crear cuenta en formspree.io
 // 2. Crear un form apuntando a umbralestructura@gmail.com
-// 3. Reemplazar el valor de FORMSPREE_ENDPOINT con la URL que te dan (ej: https://formspree.io/f/abcd1234)
+// 3. Reemplazar FORMSPREE_ENDPOINT con la URL (ej: https://formspree.io/f/abcd1234)
+// El dominio formspree.io ya está autorizado en la CSP.
 const FORMSPREE_ENDPOINT = '';
 
 (() => {
   'use strict';
+
+  const mqDesktop = window.matchMedia('(min-width: 768px)');
+  const mqHover   = window.matchMedia('(hover: hover) and (pointer: fine)');
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   /* ── LOADER ──────────────────────────────────────────────────── */
   const loader = document.getElementById('loader');
@@ -22,55 +30,125 @@ const FORMSPREE_ENDPOINT = '';
     setTimeout(() => {
       loader.classList.add('hidden');
       setTimeout(() => loader.setAttribute('aria-hidden', 'true'), 600);
-    }, 1400);
+    }, 1200);
   }
 
-  /* ── HERO VIDEO: slow motion ─────────────────────────────────── */
-  const heroVideo = document.querySelector('.hero-video');
-  if (heroVideo) {
-    heroVideo.playbackRate = 0.6;
-    heroVideo.addEventListener('canplay', () => { heroVideo.playbackRate = 0.6; });
-  }
+  /* ── HERO: scroll expansion ─────────────────────────────────── */
+  // Traducción vanilla del componente scroll-expansion-hero.tsx.
+  // Wheel/touch drives scrollProgress 0→1. Al llegar a 1 se libera el scroll.
+  (function setupHeroExpansion() {
+    const hero    = document.getElementById('hero-expand');
+    if (!hero) return;
+    const media   = hero.querySelector('.hx-media');
+    const overlay = hero.querySelector('.hx-video-overlay');
+    const wordA   = hero.querySelector('.hx-word-a');
+    const wordB   = hero.querySelector('.hx-word-b');
+    const hint    = hero.querySelector('.hx-hint');
+    if (!media) return;
 
-  /* ── HERO PHRASE 2: scroll-locked reveal ────────────────────── */
-  // Flujo: carga → frase 1 → usuario intenta scrollear → frase 2 aparece
-  // → 1.3s después → scroll se desbloquea
-  const phrase2 = document.querySelector('.hero-phrase-2');
-  if (phrase2) {
-    let lockActive = false;
+    // Si prefers-reduced-motion: expandir de entrada y salir directamente
+    if (reducedMotion) {
+      hero.classList.add('is-expanded');
+      media.style.width  = '100vw';
+      media.style.height = '100dvh';
+      if (overlay) overlay.style.opacity = '0.2';
+      if (hint)    hint.style.opacity    = '0';
+      return;
+    }
 
-    // Activar lock después de que el loader desaparece
-    setTimeout(() => {
-      lockActive = true;
-      document.documentElement.style.overflow = 'hidden';
-    }, 1500);
+    let progress   = 0;
+    let expanded   = false;
+    let touchY     = 0;
+    let rafPending = false;
 
-    const revealAndUnlock = (e) => {
-      if (!lockActive) return;
-      if (e.cancelable) e.preventDefault();
-      lockActive = false;
+    function isMobile() { return window.innerWidth < 768; }
 
-      phrase2.classList.add('is-revealed');
+    function applyProgress(p) {
+      const mob = isMobile();
+      const w   = 260 + p * (mob ?  720 : 1360);
+      const h   = 360 + p * (mob ?  260 :  440);
+      const tx  = p   * (mob ?  160 :  140);
 
-      window.removeEventListener('wheel', revealAndUnlock);
-      window.removeEventListener('touchstart', revealAndUnlock);
-      window.removeEventListener('keydown', revealAndUnlock);
+      media.style.width  = Math.min(w, window.innerWidth)  + 'px';
+      media.style.height = Math.min(h, window.innerHeight) + 'px';
+      // border-radius suave hasta 0
+      media.style.borderRadius = (10 * (1 - p)) + 'px';
+      media.style.boxShadow    = p >= 1
+        ? 'none'
+        : `0 12px ${Math.round(64 * (1 - p))}px rgba(0,0,0,${0.6 - p * 0.35})`;
 
-      // Desbloquear scroll después de que el usuario tuvo tiempo de leer
-      setTimeout(() => {
-        document.documentElement.style.overflow = '';
-      }, 1300);
-    };
+      if (overlay) overlay.style.opacity = String(Math.max(0.2, 0.42 - p * 0.22));
+      if (wordA)   wordA.style.transform  = `translateX(${-tx}vw)`;
+      if (wordB)   wordB.style.transform  = `translateX(${tx}vw)`;
+      if (hint)    hint.style.opacity     = String(Math.max(0, 1 - p * 4));
+    }
 
-    window.addEventListener('wheel', revealAndUnlock, { passive: false });
-    window.addEventListener('touchstart', revealAndUnlock, { passive: false });
-    // También se activa con Space / flechas / PageDown (teclado)
-    window.addEventListener('keydown', (e) => {
-      if (['ArrowDown', 'ArrowUp', 'Space', 'PageDown', 'PageUp'].includes(e.code)) {
-        revealAndUnlock(e);
+    function setProgress(newP) {
+      progress = Math.max(0, Math.min(1, newP));
+      if (!rafPending) {
+        rafPending = true;
+        requestAnimationFrame(() => { applyProgress(progress); rafPending = false; });
       }
-    }, { passive: false });
-  }
+      if (progress >= 1 && !expanded) {
+        expanded = true;
+        hero.classList.add('is-expanded');
+      } else if (progress < 0.75 && expanded) {
+        expanded = false;
+        hero.classList.remove('is-expanded');
+      }
+    }
+
+    function onWheel(e) {
+      // Al tope de la página scrolleando hacia arriba: colapsar el hero
+      if (expanded && e.deltaY < 0 && window.scrollY <= 5) {
+        e.preventDefault();
+        setProgress(progress + e.deltaY * 0.0009);
+        return;
+      }
+      // Hero no expandido aún: interceptar y manejar la expansión
+      if (!expanded) {
+        e.preventDefault();
+        setProgress(progress + e.deltaY * 0.0009);
+      }
+    }
+
+    function onScroll() {
+      if (!expanded) window.scrollTo(0, 0);
+    }
+
+    function onTouchStart(e) {
+      touchY = e.touches[0].clientY;
+    }
+
+    function onTouchMove(e) {
+      if (!touchY) return;
+      const y     = e.touches[0].clientY;
+      const delta = touchY - y;
+      // Swipe hacia arriba desde el tope: colapsar
+      if (expanded && delta < -20 && window.scrollY <= 5) {
+        e.preventDefault();
+        setProgress(progress + delta * 0.005);
+        touchY = y;
+        return;
+      }
+      // Hero no expandido: manejar expansión/colapso
+      if (!expanded) {
+        e.preventDefault();
+        setProgress(progress + delta * (delta < 0 ? 0.008 : 0.005));
+        touchY = y;
+      }
+    }
+
+    function onTouchEnd() { touchY = 0; }
+
+    window.addEventListener('wheel',      onWheel,      { passive: false });
+    window.addEventListener('scroll',     onScroll,     { passive: true  });
+    window.addEventListener('touchstart', onTouchStart, { passive: false });
+    window.addEventListener('touchmove',  onTouchMove,  { passive: false });
+    window.addEventListener('touchend',   onTouchEnd);
+
+    applyProgress(0); // estado inicial
+  })();
 
   /* ── NAV: estado scrolled ────────────────────────────────────── */
   const nav = document.querySelector('.nav');
@@ -97,106 +175,16 @@ const FORMSPREE_ENDPOINT = '';
     revealables.forEach((el) => el.classList.add('is-in'));
   }
 
-  /* ── PERFIL: switch de tabs ──────────────────────────────────── */
-  const tabs = document.querySelectorAll('.perfil-tab');
-  const panels = document.querySelectorAll('.perfil-panel');
+  /* ── ETAPAS — layout estático, 3 cols en desktop / stack en mobile ── */
+  // El CSS maneja todo; no se necesita JS para esta sección.
 
-  function activatePanel(key) {
-    tabs.forEach((tab) => {
-      const isTarget = tab.dataset.target === key;
-      tab.classList.toggle('is-active', isTarget);
-      tab.setAttribute('aria-selected', isTarget ? 'true' : 'false');
-    });
-    panels.forEach((panel) => {
-      const match = panel.dataset.panel === key;
-      if (match) {
-        panel.hidden = false;
-        requestAnimationFrame(() => panel.classList.add('is-visible'));
-      } else {
-        panel.classList.remove('is-visible');
-        setTimeout(() => { if (panel.dataset.panel !== key) panel.hidden = true; }, 500);
-      }
-    });
-  }
-
-  tabs.forEach((tab) => {
-    tab.addEventListener('click', () => activatePanel(tab.dataset.target));
-  });
-
-  /* ── FILOSOFIA COLS: animación de flujo ─────────────────────── */
-  const filosCols = document.querySelector('.filosofia-cols');
-  if (filosCols && 'IntersectionObserver' in window) {
-    const ioFlow = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) {
-        filosCols.classList.add('flow-in');
-        ioFlow.disconnect();
-      }
-    }, { threshold: 0.25 });
-    ioFlow.observe(filosCols);
-  }
-
-  /* ── SCROLL-DRIVEN VIDEO (Sección 5) ─────────────────────────── */
-  const video = document.getElementById('scroll-video');
-  const section = document.getElementById('scroll-section');
-  const annotations = document.querySelectorAll('.annotation');
-  const progressFill = document.getElementById('stage-progress-fill');
-  const hint = document.getElementById('scroll-hint');
-
-  if (video && section) {
-    // Pausa el video — lo manejamos con currentTime vía scroll
-    video.pause();
-
-    let sectionTop = 0;
-    let scrollRange = 0;
-
-    function updateMetrics() {
-      sectionTop = section.offsetTop;
-      scrollRange = Math.max(1, section.offsetHeight - window.innerHeight);
-    }
-
-    function updateAnnotations(progress) {
-      annotations.forEach((ann) => {
-        const from = parseFloat(ann.dataset.from);
-        const to = parseFloat(ann.dataset.to);
-        ann.classList.toggle('visible', progress >= from && progress < to);
-      });
-      if (progressFill) progressFill.style.width = (progress * 100) + '%';
-    }
-
-    let rafPending = false;
-    let lastProgress = -1;
-
-    function onScroll() {
-      const scrolled = window.scrollY - sectionTop;
-      const progress = Math.max(0, Math.min(1, scrolled / scrollRange));
-
-      if (Math.abs(progress - lastProgress) < 0.001) return;
-      lastProgress = progress;
-
-      if (!rafPending) {
-        rafPending = true;
-        requestAnimationFrame(() => {
-          if (video.readyState >= 2 && video.duration) {
-            video.currentTime = progress * video.duration;
-          }
-          updateAnnotations(progress);
-          if (scrolled > 20 && hint) hint.classList.add('gone');
-          rafPending = false;
-        });
-      }
-    }
-
-    updateMetrics();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', () => { updateMetrics(); onScroll(); });
-    onScroll();
-  }
-
-  /* ── PROBLEM CANVAS: sketch lines hover ─────────────────────── */
+  /* ── PROBLEM CANVAS: sketch lines hover (desktop + hover only) ─ */
+  // Sólo se inicializa en desktop con puntero fino. En touch/mobile no aporta
+  // (no hay hover) y el canvas redibujándose en cada resize encarece el scroll.
   const problemCanvas = document.querySelector('.problem-canvas');
   const problemSection = document.querySelector('.problem');
 
-  if (problemCanvas && problemSection && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  if (problemCanvas && problemSection && mqDesktop.matches && mqHover.matches && !reducedMotion) {
     const ctx = problemCanvas.getContext('2d');
     let targetX = 0.5, targetY = 0.5;
     let curX = 0.5, curY = 0.5;
@@ -215,7 +203,6 @@ const FORMSPREE_ENDPOINT = '';
       const dx = (curX - 0.5) * 32;
       const dy = (curY - 0.5) * 16;
 
-      // Horizontal lines with slight tilt from mouse
       ctx.lineWidth = 0.6;
       const count = 22;
       for (let i = 0; i < count; i++) {
@@ -230,7 +217,6 @@ const FORMSPREE_ENDPOINT = '';
         ctx.stroke();
       }
 
-      // Sparse vertical accent lines
       ctx.lineWidth = 0.5;
       [0.12, 0.38, 0.62, 0.88].forEach((xr) => {
         const x = w * xr + dx * 0.45;
@@ -272,16 +258,11 @@ const FORMSPREE_ENDPOINT = '';
 
   /* ── WORD REVEAL: iluminación palabra por palabra al scrollear ─ */
   // Aplica a: .problem-tagline y .problem-body p
-  // Cada palabra arranca en rgba(26,26,26,0.13) y pasa a color:inherit
-  // cuando el usuario scrollea y la palabra cruza el 78% superior del viewport.
+  // Cada palabra arranca apagada y se ilumina cuando cruza el umbral.
   (function setupWordReveal() {
     const targets = document.querySelectorAll('.problem-tagline, .problem-body p');
     if (!targets.length) return;
 
-    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    // Construye un DocumentFragment wrapeando cada palabra en <span class="w">
-    // mientras preserva elementos inline (em, strong, br, etc.)
     function buildWrapped(sourceEl, target) {
       Array.from(sourceEl.childNodes).forEach((node) => {
         if (node.nodeType === 3 /* TEXT_NODE */) {
@@ -297,7 +278,6 @@ const FORMSPREE_ENDPOINT = '';
             }
           });
         } else if (node.nodeType === 1 /* ELEMENT_NODE */) {
-          // Clonar el elemento (vacío) y recursar
           const clone = node.cloneNode(false);
           buildWrapped(node, clone);
           target.appendChild(clone);
@@ -314,7 +294,7 @@ const FORMSPREE_ENDPOINT = '';
       allWords.push(...Array.from(el.querySelectorAll('.w')));
     });
 
-    if (reducedMotion) return; // Todo ya está como .lit desde el build
+    if (reducedMotion) return;
 
     function updateWordReveal() {
       const threshold = window.innerHeight * 0.66;
@@ -326,393 +306,214 @@ const FORMSPREE_ENDPOINT = '';
 
     window.addEventListener('scroll', updateWordReveal, { passive: true });
     window.addEventListener('resize', updateWordReveal);
-    updateWordReveal(); // Estado inicial
+    updateWordReveal();
   })();
 
-  /* ── SCROLL-FADE: opacidad ligada al scroll ─────────────────── */
-  const scrollFades = document.querySelectorAll('.scroll-fade');
-  if (scrollFades.length && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    function updateScrollFades() {
-      const vh = window.innerHeight;
-      scrollFades.forEach((el) => {
-        const rect = el.getBoundingClientRect();
-        // Fade-in: desde que el borde inferior entra por abajo hasta que el borde superior
-        // cruza el 60% del viewport. Fade-out: simétrico al subir.
-        const fadeInStart = vh;           // elemento empieza a entrar
-        const fadeInEnd = vh * 0.35;      // totalmente visible
-        const progress = (fadeInStart - rect.top) / (fadeInStart - fadeInEnd);
-        el.style.opacity = Math.min(1, Math.max(0, progress));
-      });
-    }
-    window.addEventListener('scroll', updateScrollFades, { passive: true });
-    window.addEventListener('resize', updateScrollFades);
-    updateScrollFades();
-  } else {
-    scrollFades.forEach((el) => { el.style.opacity = 1; });
-  }
+  /* ── PILARES: scroll storytelling ───────────────────────────── */
+  // Mobile: IntersectionObserver ya maneja los .reveal de cada slide.
+  // Desktop: sticky + scroll listener crossfadea entre slides.
+  (function setupPilaresScrolly() {
+    if (reducedMotion || !mqDesktop.matches) return;
 
-  /* ── CONFIANZA: swap de frases al scrollear ─────────────────── */
-  // La sección tiene height:260vh con contenido sticky.
-  // Cuando el usuario scrolleó ~45% del espacio extra → frase 1 sale, frase 2 entra.
-  (function setupConfianzaSwap() {
-    const section  = document.getElementById('confianza-scroll');
-    const phrase1  = document.querySelector('.confianza-phrase--1');
-    const phrase2  = document.querySelector('.confianza-phrase--2');
-    if (!section || !phrase1 || !phrase2) return;
+    const scrollWrap = document.querySelector('.pilares-scroll-wrap');
+    const slides     = Array.from(document.querySelectorAll('.pilar-slide'));
+    const dots       = Array.from(document.querySelectorAll('.pilares-dot'));
+    if (!scrollWrap || slides.length < 2) return;
 
-    function update() {
-      const rect     = section.getBoundingClientRect();
-      const scrolled = -rect.top;                          // px scrolleados dentro de la sección
-      const extra    = section.offsetHeight - window.innerHeight; // px de scroll extra (≈160vh)
-      const progress = Math.max(0, Math.min(1, scrolled / extra));
-
-      if (progress < 0.4) {
-        // Frase 1 visible
-        phrase1.classList.remove('is-out');
-        phrase2.classList.remove('is-in');
-        phrase2.setAttribute('aria-hidden', 'true');
-      } else {
-        // Frase 2 visible
-        phrase1.classList.add('is-out');
-        phrase2.classList.add('is-in');
-        phrase2.removeAttribute('aria-hidden');
-      }
-    }
-
-    window.addEventListener('scroll', update, { passive: true });
-    window.addEventListener('resize', update);
-    update();
-  })();
-
-  /* ── TIMELINE PROGRESS: línea verde crece con el scroll ─────── */
-  (function setupTimelineProgress() {
-    const progressEl = document.getElementById('timeline-spine-progress');
-    const timelineEl = document.querySelector('.roadmap-timeline');
-    if (!progressEl || !timelineEl) return;
-
-    function update() {
-      const rect = timelineEl.getBoundingClientRect();
-      // Empieza a crecer cuando la sección entra, termina cuando sale
-      const pct = Math.max(0, Math.min(1,
-        (window.innerHeight - rect.top) / (rect.height + window.innerHeight * 0.4)
-      ));
-      progressEl.style.height = (pct * 100) + '%';
-    }
-
-    window.addEventListener('scroll', update, { passive: true });
-    window.addEventListener('resize', update);
-    update();
-  })();
-
-  /* ── FORMULARIO DE CONTACTO ──────────────────────────────────── */
-  const form = document.getElementById('contacto-form');
-  if (!form) return;
-
-  const submitBtn = document.getElementById('contacto-submit');
-  const errorEl = document.getElementById('form-error');
-  const okEl = document.getElementById('email-ok');
-
-  const EMAIL_RE = /^[A-Za-z0-9._%+-]{1,64}@[A-Za-z0-9.-]{1,253}\.[A-Za-z]{2,}$/;
-
-  function setMessage(type, text) {
-    errorEl.textContent = type === 'error' ? text : '';
-    okEl.textContent = type === 'ok' ? text : '';
-  }
-
-  function clearMessages() { setMessage('', ''); }
-
-  form.querySelectorAll('input').forEach((input) => {
-    input.addEventListener('input', clearMessages);
-  });
-
-  form.addEventListener('submit', async (ev) => {
-    ev.preventDefault();
-    clearMessages();
-
-    const nombre = form.querySelector('[name="nombre"]').value.trim();
-    const empresa = form.querySelector('[name="empresa"]').value.trim();
-    const email = form.querySelector('[name="email"]').value.trim();
-    const telefono = form.querySelector('[name="telefono"]').value.trim();
-
-    if (!nombre) {
-      setMessage('error', 'Ingresá tu nombre para continuar.');
-      form.querySelector('[name="nombre"]').focus();
-      return;
-    }
-    if (!empresa) {
-      setMessage('error', 'Ingresá el nombre de tu empresa.');
-      form.querySelector('[name="empresa"]').focus();
-      return;
-    }
-    if (!email || email.length > 254 || !EMAIL_RE.test(email)) {
-      setMessage('error', 'El email no parece válido. Revisalo.');
-      form.querySelector('[name="email"]').focus();
-      return;
-    }
-
-    // Si no hay endpoint configurado, confirmación optimista
-    if (!FORMSPREE_ENDPOINT) {
-      setMessage('ok', 'Gracias. Te contactamos dentro del día.');
-      form.reset();
-      return;
-    }
-
-    if (submitBtn) {
-      submitBtn.disabled = true;
-      submitBtn.querySelector('span').textContent = 'Enviando...';
-    }
-
-    try {
-      const res = await fetch(FORMSPREE_ENDPOINT, {
-        method: 'POST',
-        headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-        body: JSON.stringify({ nombre, empresa, telefono, email }),
-      });
-
-      if (res.ok) {
-        setMessage('ok', 'Gracias. Te contactamos dentro del día.');
-        form.reset();
-      } else {
-        const data = await res.json().catch(() => ({}));
-        const msg = data?.errors?.[0]?.message || 'Algo falló. Escribinos por WhatsApp.';
-        setMessage('error', msg);
-      }
-    } catch {
-      setMessage('error', 'No pudimos enviar. Escribinos por WhatsApp.');
-    } finally {
-      if (submitBtn) {
-        submitBtn.disabled = false;
-        submitBtn.querySelector('span').textContent = 'Enviar';
-      }
-    }
-  });
-
-  /* ── PILARES: flip cards (FLIP + grow + scroll hand-off) ──────── */
-  const pilaresGrid = document.querySelector('.pilares-grid');
-  const pilarOverlay = document.querySelector('.pilar-overlay');
-
-  if (pilaresGrid && pilarOverlay) {
-    const pilarState = { open: null, sourceBtn: null, lastFocus: null };
-
-    // Sólo permitimos data-pilar de 01 a 05 — evita que un valor inesperado
-    // construya un id arbitrario (#pilar-card-${num}) y dispare lookups raros.
-    const VALID = new Set(['01', '02', '03', '04', '05']);
-
-    const targetW = (num) => {
-      const max = num === '03' ? 640 : 560; // 03 (Beneficios) es la card asimétrica
-      return Math.min(max, window.innerWidth * 0.92);
-    };
-    const targetH = () => Math.min(720, window.innerHeight * 0.84);
-    const centerCoords = (w, h) => ({
-      top: Math.max(20, (window.innerHeight - h) / 2),
-      left: Math.max(16, (window.innerWidth - w) / 2),
+    // En desktop los slides usan position:absolute/opacity — quitamos el
+    // opacity:0 que el reveal añade para que el JS controle la visibilidad.
+    slides.forEach((s) => {
+      s.classList.remove('reveal');
+      s.classList.add('is-in'); // evita que el observer los muestre
     });
 
-    function applyRect(card, rect) {
-      card.style.top = rect.top + 'px';
-      card.style.left = rect.left + 'px';
-      card.style.width = rect.width + 'px';
-      card.style.height = rect.height + 'px';
-    }
+    let lastIdx    = -1;
+    let rafPending = false;
 
-    function openPilar(num) {
-      if (!VALID.has(num) || pilarState.open) return;
-      const sourceBtn = pilaresGrid.querySelector(`.pilar[data-pilar="${num}"]`);
-      const card = document.getElementById(`pilar-card-${num}`);
-      if (!sourceBtn || !card) return;
+    function update() {
+      const rect      = scrollWrap.getBoundingClientRect();
+      const scrollable = scrollWrap.offsetHeight - window.innerHeight;
+      const progress   = Math.max(0, Math.min(1, -rect.top / Math.max(1, scrollable)));
+      // Distribuimos los 5 slides linealmente a lo largo del scroll
+      const raw = progress * slides.length;
+      const idx = Math.min(slides.length - 1, Math.floor(raw));
 
-      pilarState.lastFocus = document.activeElement;
-      pilarState.open = num;
-      pilarState.sourceBtn = sourceBtn;
-
-      // 1. Posicionar card en el rect del botón origen
-      const origin = sourceBtn.getBoundingClientRect();
-      applyRect(card, origin);
-
-      // 2. Mostrar overlay y card (todavía con tamaño origen)
-      pilarOverlay.hidden = false;
-      card.hidden = false;
-      document.documentElement.classList.add('pilar-card-open');
-
-      // 3. En la próxima frame: activar fade del backdrop y mounted de la card
-      requestAnimationFrame(() => {
-        pilarOverlay.classList.add('is-active');
-        card.classList.add('is-mounted');
-
-        // 4. Frame siguiente: transicionar a centro/grande
-        requestAnimationFrame(() => {
-          const w = targetW(num);
-          const h = targetH();
-          const { top, left } = centerCoords(w, h);
-          card.style.top = top + 'px';
-          card.style.left = left + 'px';
-          card.style.width = w + 'px';
-          card.style.height = h + 'px';
-          // 5. Disparar el flip cuando ya está creciendo
-          setTimeout(() => card.classList.add('is-open'), 140);
-        });
-      });
-
-      sourceBtn.setAttribute('aria-expanded', 'true');
-
-      // Focus al botón × cuando termina la coreografía
-      setTimeout(() => {
-        const close = card.querySelector('.pilar-card-close');
-        if (close && pilarState.open === num) close.focus();
-      }, 720);
-    }
-
-    function closePilar(opts) {
-      const num = pilarState.open;
-      if (!num) return;
-      const card = document.getElementById(`pilar-card-${num}`);
-      const sourceBtn = pilarState.sourceBtn;
-      if (!card || !sourceBtn) return;
-
-      // closePilar() → cierre normal con anim de vuelta al rect del botón.
-      // closePilar(fn) → cierre rápido + callback (hand-off a otra sección).
-      // closePilar({ fast: true }) → cierre rápido sin destino (Cartilla).
-      let fastExit = false;
-      let thenCallback = null;
-      if (typeof opts === 'function') {
-        fastExit = true;
-        thenCallback = opts;
-      } else if (opts && opts.fast) {
-        fastExit = true;
+      if (idx !== lastIdx) {
+        lastIdx = idx;
+        slides.forEach((s, i) => s.classList.toggle('is-active', i === idx));
+        dots.forEach((d, i)   => d.classList.toggle('is-active', i === idx));
       }
+    }
 
-      // En cierre rápido liberamos el lock ya — la card es position:fixed,
-      // así que sigue visible mientras la página scrollea/se acomoda por debajo.
-      if (fastExit) document.documentElement.classList.remove('pilar-card-open');
+    function onScroll() {
+      if (rafPending) return;
+      rafPending = true;
+      requestAnimationFrame(() => { update(); rafPending = false; });
+    }
 
-      card.classList.remove('is-open');
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    update();
+  })();
 
-      if (fastExit) {
-        // salida rápida con fade (no anima vuelta a origen)
-        setTimeout(() => {
-          pilarOverlay.classList.remove('is-active');
-          card.classList.remove('is-mounted');
-        }, 60);
-        setTimeout(() => {
-          pilarOverlay.hidden = true;
-          card.hidden = true;
-          card.style.cssText = '';
-          sourceBtn.setAttribute('aria-expanded', 'false');
-          if (!thenCallback && pilarState.lastFocus && document.contains(pilarState.lastFocus)) {
-            pilarState.lastFocus.focus();
-          }
-          pilarState.open = null;
-          pilarState.sourceBtn = null;
-          pilarState.lastFocus = null;
-        }, 420);
-        if (thenCallback) thenCallback();
+
+  /* ── FORMS: contacto (solo email) + mini-form ────────────────── */
+  const EMAIL_RE = /^[A-Za-z0-9._%+-]{1,64}@[A-Za-z0-9.-]{1,253}\.[A-Za-z]{2,}$/;
+
+  function attachForm({ formId, errorId, okId, submitId, defaultLabel }) {
+    const form = document.getElementById(formId);
+    if (!form) return;
+    const errorEl = document.getElementById(errorId);
+    const okEl    = okId ? document.getElementById(okId) : null;
+    const submit  = submitId ? document.getElementById(submitId) : form.querySelector('button[type="submit"]');
+
+    function setMessage(type, text) {
+      if (errorEl) errorEl.textContent = type === 'error' ? text : '';
+      if (okEl)    okEl.textContent    = type === 'ok'    ? text : '';
+    }
+    function clearMessages() { setMessage('', ''); }
+
+    form.querySelectorAll('input').forEach((input) => {
+      input.addEventListener('input', clearMessages);
+    });
+
+    form.addEventListener('submit', async (ev) => {
+      ev.preventDefault();
+      clearMessages();
+
+      // Honeypot: si un bot completó el campo oculto, descartamos en silencio.
+      const gotcha = form.querySelector('input[name="_gotcha"]');
+      if (gotcha && gotcha.value) return;
+
+      const emailInput = form.querySelector('input[type="email"]');
+      const email = emailInput ? emailInput.value.trim() : '';
+
+      if (!email || email.length > 254 || !EMAIL_RE.test(email)) {
+        setMessage('error', 'El email no parece válido. Revisalo.');
+        if (emailInput) emailInput.focus();
         return;
       }
 
-      // cierre normal: anima de vuelta al rect del origen
-      const origin = sourceBtn.getBoundingClientRect();
-      setTimeout(() => applyRect(card, origin), 80);
+      // Modo optimista: si no hay endpoint configurado, confirmamos sin enviar.
+      if (!FORMSPREE_ENDPOINT) {
+        setMessage('ok', 'Gracias. Te contactamos dentro del día.');
+        form.reset();
+        return;
+      }
 
-      setTimeout(() => {
-        pilarOverlay.classList.remove('is-active');
-        card.classList.remove('is-mounted');
-      }, 120);
+      if (submit) {
+        submit.disabled = true;
+        const lbl = submit.querySelector('span');
+        if (lbl) lbl.textContent = 'Enviando…';
+      }
 
-      setTimeout(() => {
-        pilarOverlay.hidden = true;
-        card.hidden = true;
-        card.style.cssText = '';
-        document.documentElement.classList.remove('pilar-card-open');
-        sourceBtn.setAttribute('aria-expanded', 'false');
-        const focusTarget = pilarState.lastFocus && document.contains(pilarState.lastFocus)
-          ? pilarState.lastFocus
-          : sourceBtn;
-        if (focusTarget && typeof focusTarget.focus === 'function') focusTarget.focus();
-        pilarState.open = null;
-        pilarState.sourceBtn = null;
-        pilarState.lastFocus = null;
-      }, 600);
-    }
-
-    // Click en grilla → abrir
-    pilaresGrid.addEventListener('click', (e) => {
-      const btn = e.target.closest('[data-pilar]');
-      if (!btn) return;
-      e.preventDefault();
-      openPilar(btn.dataset.pilar);
-    });
-
-    // Click en overlay → manejar acciones (cerrar, ir a banca)
-    pilarOverlay.addEventListener('click', (e) => {
-      const action = e.target.closest('[data-action]');
-      if (!action) return;
-      const kind = action.dataset.action;
-      if (kind === 'close') {
-        e.preventDefault();
-        closePilar();
-      } else if (kind === 'goto-banca') {
-        e.preventDefault();
-        closePilar(() => {
-          const banca = document.getElementById('banca');
-          if (banca) banca.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      try {
+        const res = await fetch(FORMSPREE_ENDPOINT, {
+          method: 'POST',
+          headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, source: formId }),
         });
+
+        if (res.ok) {
+          setMessage('ok', 'Gracias. Te contactamos dentro del día.');
+          form.reset();
+        } else {
+          const data = await res.json().catch(() => ({}));
+          const msg = data?.errors?.[0]?.message || 'Algo falló. Escribinos por WhatsApp.';
+          setMessage('error', msg);
+        }
+      } catch {
+        setMessage('error', 'No pudimos enviar. Escribinos por WhatsApp.');
+      } finally {
+        if (submit) {
+          submit.disabled = false;
+          const lbl = submit.querySelector('span');
+          if (lbl) lbl.textContent = defaultLabel || 'Enviar';
+        }
       }
-    });
-
-    // ESC → cerrar
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && pilarState.open) {
-        e.preventDefault();
-        closePilar();
-      }
-    });
-
-    // Scroll hand-off:
-    //   - Banca (05): scroll hacia abajo cierra y lleva a #banca.
-    //   - Cartilla (04): cualquier scroll cierra (sin destino — quedás en Pilares).
-    const handoff = (e) => {
-      const num = pilarState.open;
-      if (num !== '04' && num !== '05') return;
-
-      let trigger = false;
-      if (e.type === 'wheel') {
-        trigger = num === '05' ? e.deltaY > 0 : Math.abs(e.deltaY) > 0;
-      } else if (e.type === 'touchmove') {
-        trigger = true;
-      } else if (e.type === 'keydown') {
-        const downKeys = ['ArrowDown', 'PageDown', 'Space'];
-        const allKeys = ['ArrowDown', 'PageDown', 'Space', 'ArrowUp', 'PageUp', 'Home', 'End'];
-        trigger = (num === '05' ? downKeys : allKeys).includes(e.code);
-      }
-      if (!trigger) return;
-      if (e.cancelable) e.preventDefault();
-
-      if (num === '05') {
-        closePilar(() => {
-          const banca = document.getElementById('banca');
-          if (banca) banca.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        });
-      } else {
-        closePilar({ fast: true });
-      }
-    };
-    window.addEventListener('wheel', handoff, { passive: false });
-    window.addEventListener('touchmove', handoff, { passive: false });
-    window.addEventListener('keydown', handoff);
-
-    // Resize → recentrar la card abierta
-    window.addEventListener('resize', () => {
-      if (!pilarState.open) return;
-      const card = document.getElementById(`pilar-card-${pilarState.open}`);
-      if (!card || !card.classList.contains('is-mounted')) return;
-      const w = targetW(pilarState.open);
-      const h = targetH();
-      const { top, left } = centerCoords(w, h);
-      card.style.top = top + 'px';
-      card.style.left = left + 'px';
-      card.style.width = w + 'px';
-      card.style.height = h + 'px';
     });
   }
+
+  attachForm({
+    formId: 'contacto-form',
+    errorId: 'form-error',
+    okId: 'email-ok',
+    submitId: 'contacto-submit',
+    defaultLabel: 'Enviar',
+  });
+
+  attachForm({
+    formId: 'mini-form',
+    errorId: 'mini-form-error',
+    okId: null,
+    submitId: null,
+    defaultLabel: 'Quiero saber más →',
+  });
+
+  /* ── MOBILE DOCK ─────────────────────────────────────────────
+     Solo opera en mobile (el CSS ya oculta el dock en desktop).
+     Maneja:
+       1. Ocultar el dock al entrar en #contacto (y footer)
+       2. Marcar el ítem activo según la sección más próxima al
+          top del viewport
+  ─────────────────────────────────────────────────────────────── */
+  (function mobileDock() {
+    const dock = document.getElementById('mobile-dock');
+    if (!dock) return;
+
+    const dockItems = dock.querySelectorAll('.dock-item');
+
+    /* ── 1. Ocultar en #contacto ──────────────────────────── */
+    const contactoEl = document.getElementById('contacto');
+
+    function updateDockVisibility() {
+      if (!contactoEl) return;
+      const rect = contactoEl.getBoundingClientRect();
+      // Ocultar en cuanto #contacto empiece a asomarse desde el borde inferior
+      dock.classList.toggle('dock-hidden', rect.top < window.innerHeight);
+    }
+
+    /* ── 2. Estado activo ─────────────────────────────────── */
+    // Mapa: id del elemento DOM → data-dock-section del ítem
+    const sectionMap = {
+      'hero-expand':   'top',
+      'que-es':        'que-es',
+      'como-funciona': 'como-funciona',
+      'pilares':       'pilares',
+      'escuchamos':    'escuchamos',
+    };
+
+    function setActive(dockSection) {
+      dockItems.forEach(item =>
+        item.classList.toggle('is-active', item.dataset.dockSection === dockSection)
+      );
+    }
+
+    function updateActiveSection() {
+      let bestId   = 'top';
+      let bestDist = Infinity;
+
+      Object.keys(sectionMap).forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        const dist = Math.abs(el.getBoundingClientRect().top);
+        if (dist < bestDist) { bestDist = dist; bestId = sectionMap[id]; }
+      });
+
+      setActive(bestId);
+    }
+
+    /* ── Combinar ambos en un único scroll listener ───────── */
+    function onDockScroll() {
+      updateDockVisibility();
+      updateActiveSection();
+    }
+
+    window.addEventListener('scroll', onDockScroll, { passive: true });
+
+    // Estado inicial
+    updateDockVisibility();
+    updateActiveSection();
+  })();
 
 })();
