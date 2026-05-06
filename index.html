@@ -121,21 +121,24 @@
           <span class="etapa-num">01</span>
           <h3 class="etapa-title">Desde la firma</h3>
           <p class="etapa-body">Tu inversor sabe dónde está parado. <em>UMBRAL comunica por vos desde el primer día.</em></p>
+          <span class="etapa-bar" aria-hidden="true"></span>
         </li>
         <li class="etapa-scene" data-scene="2">
           <span class="etapa-num">02</span>
           <h3 class="etapa-title">Durante la obra</h3>
           <p class="etapa-body">Cada hito visible. Tu equipo construye mientras <em>UMBRAL mantiene viva la confianza.</em></p>
+          <span class="etapa-bar" aria-hidden="true"></span>
         </li>
         <li class="etapa-scene" data-scene="3">
           <span class="etapa-num">03</span>
           <h3 class="etapa-title">Al día D</h3>
           <p class="etapa-body">La entrega no es el final — es donde tu reputación se consolida. <em>UMBRAL la convierte en experiencia.</em></p>
+          <span class="etapa-bar" aria-hidden="true"></span>
         </li>
       </ol>
 
-      <!-- Indicador de progreso (desktop only) -->
-      <nav class="etapas-progress" aria-hidden="true">
+      <!-- Indicador de progreso — dots en mobile, oculto en desktop -->
+      <nav class="etapas-progress" aria-label="Etapas de acompañamiento">
         <ol class="etapas-dots">
           <li class="etapas-dot is-active" data-step="1"><span>01</span></li>
           <li class="etapas-dot" data-step="2"><span>02</span></li>
@@ -150,8 +153,11 @@
 
   <!-- Para tu desarrolladora -->
   <div class="perfil-grid">
-    <div class="perfil-text">
-      <p class="perfil-hook"><em>Vos desarrollás, no entregás unidades.</em><br>Con UMBRAL construís permanencia.</p>
+    <p class="perfil-hook">El edificio lo construís vos. La confianza de tus inversores,<br><em class="perfil-hook-payoff">la construimos <span class="juntos-word">juntos.</span></em></p>
+    <div class="perfil-visual perfil-visual--foto" aria-hidden="true">
+      <img src="./assets/edificio_paso3.jpg" alt="" decoding="async" loading="lazy">
+    </div>
+    <div class="perfil-content">
       <ul class="perfil-list" role="list">
         <li>
           <span class="perfil-list-num">01</span>
@@ -172,72 +178,70 @@
       </ul>
       <p class="perfil-close">Cada proyecto que entra en UMBRAL <em>reduce ruido</em> y <em>multiplica valor</em>.</p>
       <p class="perfil-inv-note">Tu inversor lo vive como protagonismo y pertenencia — la misma experiencia que lo hace volverte a elegir.</p>
-      <p class="perfil-scroll-hint" aria-hidden="true">
-        <span>seguí leyendo</span>
-        <svg width="10" height="18" viewBox="0 0 12 24" fill="none" aria-hidden="true"><path d="M6 1 V22 M1 17 L6 22 L11 17" stroke="currentColor" stroke-width="1.2"/></svg>
-      </p>
-    </div>
-    <div class="perfil-visual perfil-visual--foto" aria-hidden="true">
-      <img src="./assets/edificio_paso3.jpg" alt="" decoding="async" loading="lazy">
     </div>
   </div>
 
   <!-- CTA 2: WhatsApp -->
   <div class="section-cta reveal">
-    <a class="cta-link" href="https://wa.me/5491127601055?text=Hola%2C%20vengo%20de%20la%20web%20de%20UMBRAL" target="_blank" rel="noopener noreferrer">
+    <a class="cta-link" href="#contacto">
       ¿Querés saber cómo UMBRAL se aplica en tu próximo proyecto? Escribinos.
       <svg width="28" height="10" viewBox="0 0 28 10" aria-hidden="true"><path d="M0 5 h26 M22 1 L26 5 L22 9" fill="none" stroke="currentColor" stroke-width="1.2"/></svg>
     </a>
+    <p class="perfil-scroll-hint" aria-hidden="true">
+      <span>seguí leyendo</span>
+    <svg width="10" height="20" viewBox="0 0 12 24" fill="none"><path d="M6 1 V22 M1 17 L6 22 L11 17" stroke="currentColor" stroke-width="1.2"/></svg>
+    </p>
   </div>
 </section>
 
 <!-- ═══════════════════════════════════════════════════════════════
-     3. CÓMO FUNCIONA
-     Versión estática — sin scroll-driven video
-     WS3: remover lógica scroll-driven de main.js
+     3. CÓMO FUNCIONA — cards reveal al entrar en viewport
      ═══════════════════════════════════════════════════════════════ -->
 <section class="obra obra--static" id="como-funciona" aria-label="Cómo funciona UMBRAL">
+
   <div class="obra-intro">
     <span class="kicker">02 — Cómo funciona</span>
     <h2 class="display-md">La obra avanza con vos.</h2>
   </div>
 
-  <ol class="annotations-list annotations-list--static">
-    <li class="annotation reveal">
-      <span class="ann-num">01</span>
+  <ol class="stack-cards">
+    <li class="scard">
+      <span class="scard-label">inicio</span>
       <p>Sabés desde el primer día en qué etapa está tu inversión.</p>
     </li>
-    <li class="annotation reveal">
-      <span class="ann-num">02</span>
+    <li class="scard">
+      <span class="scard-label">avance</span>
       <p>Te notificamos cada avance. Sin que tengas que preguntar.</p>
     </li>
-    <li class="annotation reveal">
-      <span class="ann-num">03</span>
+    <li class="scard">
+      <span class="scard-label">presencia</span>
       <p>Un equipo presente donde vos no podés estar.</p>
     </li>
-    <li class="annotation reveal">
-      <span class="ann-num">04</span>
+    <li class="scard">
+      <span class="scard-label">registro</span>
       <p>Tus metros avanzan. Cada etapa se comunica, se registra y se comparte.</p>
     </li>
-    <li class="annotation annotation--final reveal">
-      <span class="ann-num">05</span>
+    <li class="scard scard--final">
+      <span class="scard-label">reputación</span>
       <p>UMBRAL estuvo ahí desde el principio. Tu reputación, también.</p>
     </li>
   </ol>
 
-  <!-- CTA 3: mini-form inline (WS5: definir endpoint — mismo Formspree o separado) -->
-  <div class="mini-form-wrap reveal">
-    <p class="mini-form-label">Dejá tu mail. Te contamos cómo entra tu proyecto.</p>
-    <form class="mini-form" id="mini-form" novalidate autocomplete="on">
-      <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" style="display:none">
-      <div class="form-field">
-        <label for="mini-email" class="sr-only">Tu mail</label>
-        <input id="mini-email" name="email" type="email" inputmode="email" autocomplete="email" required maxlength="254" spellcheck="false" placeholder="tu@empresa.com" aria-describedby="mini-form-error">
-      </div>
-      <button type="submit" class="mini-form-submit"><span>Quiero saber más →</span></button>
-      <p class="field-error" id="mini-form-error" role="alert" aria-live="polite"></p>
-    </form>
+  <div class="obra-pad">
+    <div class="mini-form-wrap reveal">
+      <p class="mini-form-label">Dejá tu mail. Te contamos cómo entra tu proyecto.</p>
+      <form class="mini-form" id="mini-form" novalidate autocomplete="on">
+        <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true" style="display:none">
+        <div class="form-field">
+          <label for="mini-email" class="sr-only">Tu mail</label>
+          <input id="mini-email" name="email" type="email" inputmode="email" autocomplete="email" required maxlength="254" spellcheck="false" placeholder="tu@empresa.com" aria-describedby="mini-form-error">
+        </div>
+        <button type="submit" class="mini-form-submit"><span>Quiero saber más →</span></button>
+        <p class="field-error" id="mini-form-error" role="alert" aria-live="polite"></p>
+      </form>
+    </div>
   </div>
+
 </section>
 
 <!-- ═══════════════════════════════════════════════════════════════
@@ -272,7 +276,7 @@
             <h3 class="pilar-slide-title">Acompañamiento</h3>
           </div>
           <div class="pilar-slide-body">
-            <p class="pilar-slide-lead">Una capa de presencia operativa y humana entre la firma y el día D. No es algo que llega cuando la obra termina — es parte del producto desde antes.</p>
+            <p class="pilar-slide-lead">Una capa de presencia operativa y humana  <br> entre la firma y el día D. No es algo que llega cuando la obra termina — es parte del producto desde antes.</p>
             <ul class="pilar-slide-list">
               <li>Presencia institucional durante toda la obra.</li>
               <li>Comunicación activa con compradores e inversores.</li>
@@ -280,7 +284,7 @@
               <li>Invitaciones a momentos clave: bajada de hormigón, estructura terminada, día D.</li>
               <li>Continuidad cuando el constructor desaparece.</li>
             </ul>
-            <p class="pilar-slide-foot">No llegamos después. Estamos desde antes.</p>
+            <p class="pilar-slide-foot">Siempre estamos presentes. Somos parte del proceso.</p>
           </div>
         </li>
 
@@ -390,34 +394,87 @@
   </header>
 
   <ol class="objeciones">
+
     <li class="objecion reveal">
       <span class="objecion-num">01</span>
       <div class="objecion-body">
-        <p class="objecion-q">"En este mercado no le puedo agregar más $ al m²."</p>
-        <p class="objecion-a">UMBRAL no sube el costo del m² — suma valor a tu imagen. El inversor no paga más por estar adentro. Vos tampoco.</p>
+        <button class="objecion-trigger" aria-expanded="false">
+          <span class="objecion-q">"En este mercado no le puedo agregar más $ al m²."</span>
+          <span class="objecion-icon" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path class="icon-h" d="M1 7h12" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+              <path class="icon-v" d="M7 1v12" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+            </svg>
+          </span>
+        </button>
+        <div class="objecion-panel" role="region">
+          <div class="objecion-panel-inner">
+            <p class="objecion-a">UMBRAL no sube el costo del m² — suma valor a tu imagen. El inversor no paga más por estar adentro. Vos tampoco.</p>
+          </div>
+        </div>
       </div>
     </li>
+
     <li class="objecion reveal">
       <span class="objecion-num">02</span>
       <div class="objecion-body">
-        <p class="objecion-q">"Comunicamos vía mail."</p>
-        <p class="objecion-a">UMBRAL no reemplaza tu canal — lo organiza. La diferencia no es el medio: es que alguien está presente antes de que el inversor necesite preguntar.</p>
+        <button class="objecion-trigger" aria-expanded="false">
+          <span class="objecion-q">"Comunicamos vía mail."</span>
+          <span class="objecion-icon" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path class="icon-h" d="M1 7h12" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+              <path class="icon-v" d="M7 1v12" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+            </svg>
+          </span>
+        </button>
+        <div class="objecion-panel" role="region">
+          <div class="objecion-panel-inner">
+            <p class="objecion-a">UMBRAL no reemplaza tu canal — lo organiza. La diferencia no es el medio: es que alguien está presente antes de que el inversor necesite preguntar.</p>
+          </div>
+        </div>
       </div>
     </li>
+
     <li class="objecion reveal">
       <span class="objecion-num">03</span>
       <div class="objecion-body">
-        <p class="objecion-q">"Para eso tenemos un grupo de WhatsApp."</p>
-        <p class="objecion-a">Un grupo de WhatsApp es reactivo. UMBRAL construye relación. La diferencia se mide en el próximo proyecto — en quién vuelve y quién refiere.</p>
+        <button class="objecion-trigger" aria-expanded="false">
+          <span class="objecion-q">"Para eso tenemos un grupo de WhatsApp."</span>
+          <span class="objecion-icon" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path class="icon-h" d="M1 7h12" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+              <path class="icon-v" d="M7 1v12" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+            </svg>
+          </span>
+        </button>
+        <div class="objecion-panel" role="region">
+          <div class="objecion-panel-inner">
+            <p class="objecion-a">Un grupo de WhatsApp es reactivo. UMBRAL construye relación. La diferencia se mide en el próximo proyecto — en quién vuelve y quién refiere.</p>
+          </div>
+        </div>
       </div>
     </li>
+
     <li class="objecion reveal">
       <span class="objecion-num">04</span>
       <div class="objecion-body">
-        <p class="objecion-q">"Lo hacemos internamente."</p>
-        <p class="objecion-a">Bien. Pero el que lo hace internamente está atendiendo obra al mismo tiempo. UMBRAL es presencia constante sin distraerte de lo que sabés hacer.</p>
+        <button class="objecion-trigger" aria-expanded="false">
+          <span class="objecion-q">"Lo hacemos internamente."</span>
+          <span class="objecion-icon" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path class="icon-h" d="M1 7h12" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+              <path class="icon-v" d="M7 1v12" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+            </svg>
+          </span>
+        </button>
+        <div class="objecion-panel" role="region">
+          <div class="objecion-panel-inner">
+            <p class="objecion-a">Bien. Pero el que lo hace internamente está atendiendo obra al mismo tiempo. UMBRAL es presencia constante sin distraerte de lo que sabés hacer.</p>
+          </div>
+        </div>
       </div>
     </li>
+
   </ol>
 
   <!-- CTA 5: lista de espera -->
@@ -425,7 +482,7 @@
     <h3 class="display-sm">¿Cómo se ve tu proyecto dentro de UMBRAL?</h3>
     <p>Sumate a la lista de espera. Te mostramos cómo UMBRAL se aplica al tuyo.</p>
     <a class="cta-link" href="#contacto">
-      Sumarme →
+      Quiero sumarme
       <svg width="28" height="10" viewBox="0 0 28 10" aria-hidden="true"><path d="M0 5 h26 M22 1 L26 5 L22 9" fill="none" stroke="currentColor" stroke-width="1.2"/></svg>
     </a>
   </div>

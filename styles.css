@@ -298,6 +298,27 @@ em { font-style: italic; font-family: var(--serif); }
 .hx-word-b em {
   font-style: italic;
   color: rgba(250, 250, 248, 0.62);
+  text-shadow:
+    0 0 14px rgba(250, 250, 248, 0.50),
+    0 0 40px rgba(250, 250, 248, 0.24),
+    0 0 80px rgba(250, 250, 248, 0.10);
+  animation: glowPulse 3.6s ease-in-out infinite;
+}
+@keyframes glowPulse {
+  0%, 100% {
+    text-shadow:
+      0 0 14px rgba(250, 250, 248, 0.50),
+      0 0 40px rgba(250, 250, 248, 0.24),
+      0 0 80px rgba(250, 250, 248, 0.10);
+    color: rgba(250, 250, 248, 0.62);
+  }
+  50% {
+    text-shadow:
+      0 0 22px rgba(250, 250, 248, 0.80),
+      0 0 60px rgba(250, 250, 248, 0.45),
+      0 0 120px rgba(250, 250, 248, 0.20);
+    color: rgba(250, 250, 248, 0.88);
+  }
 }
 
 /* Hint: aparece al cargar, se desvanece al scrollear */
@@ -472,7 +493,7 @@ em { font-style: italic; font-family: var(--serif); }
 /* ── Las tres etapas: scrollytelling en desktop, stack en mobile ── */
 .etapas {
   max-width: 1100px;
-  margin: clamp(36px, 7vh, 80px) auto 0;
+  margin: clamp(62px, 12vh, 144px) auto clamp(77px, 14vh, 173px);
   position: relative;
   z-index: 1;
 }
@@ -485,16 +506,34 @@ em { font-style: italic; font-family: var(--serif); }
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: clamp(28px, 5vh, 48px);
+  gap: clamp(32px, 6vh, 54px);
 }
 .etapa-scene {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  padding: clamp(20px, 4vh, 32px) 0;
+  padding: clamp(22px, 4vh, 36px) clamp(20px, 5vw, 36px);
   border-top: 1px solid var(--ink-10);
+  opacity: 0.38;
+  transition: opacity 0.55s var(--ease), box-shadow 0.55s var(--ease);
 }
 .etapa-scene:first-child { border-top: none; padding-top: 0; }
+
+/* Mobile active: barra izquierda verde */
+.etapa-scene.is-active {
+  opacity: 1;
+  box-shadow: -4px 0 0 var(--green);
+}
+
+/* Barra de progreso animada por JS */
+.etapa-bar {
+  display: block;
+  height: 1.5px;
+  background: var(--green);
+  width: 0%;
+  margin-top: 6px;
+  border-radius: 2px;
+}
 .etapa-num {
   font-family: var(--sans);
   font-size: 0.7rem;
@@ -520,12 +559,37 @@ em { font-style: italic; font-family: var(--serif); }
   max-width: 50ch;
 }
 .etapa-body em { color: var(--ink); font-style: italic; }
-.etapas-progress { display: none; }
+
+/* Mobile: dots indicadores del ciclo — ocultos */
+.etapas-progress {
+  display: none;
+}
+.etapas-dots {
+  display: flex;
+  gap: 10px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.etapas-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--ink-40);
+  cursor: pointer;
+  transition: background 0.35s var(--ease), transform 0.35s var(--ease);
+}
+.etapas-dot span { display: none; }
+.etapas-dot.is-active {
+  background: var(--green);
+  transform: scale(1.5);
+}
 
 /* DESKTOP: 3 columnas en flow — sin sticky, sin scroll trap */
 @media (min-width: 768px) {
   .etapas {
-    margin-top: clamp(60px, 9vh, 120px);
+    margin-top: clamp(96px, 14vh, 192px);
+    margin-bottom: clamp(115px, 18vh, 230px);
     height: auto;
   }
   .etapas-track {
@@ -538,22 +602,38 @@ em { font-style: italic; font-family: var(--serif); }
     height: auto;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 0;
+    gap: 0 clamp(28px, 4vw, 56px);
   }
   .etapa-scene {
-    position: static;
-    opacity: 1;
-    transform: none;
-    transition: none;
+    position: relative;
+    opacity: 0.35;
+    transform: perspective(800px) rotateX(0deg) rotateY(0deg);
+    transition: opacity 0.55s var(--ease), border-top-color 0.55s var(--ease),
+                box-shadow 0.55s var(--ease), background 0.55s var(--ease),
+                outline-color 0.55s var(--ease), transform 0.5s var(--ease);
+    outline: 1px solid transparent;
+    outline-offset: 20px;
+    transform-style: preserve-3d;
+    will-change: transform, opacity;
     pointer-events: auto;
     display: flex;
     flex-direction: column;
     gap: clamp(12px, 2vh, 18px);
-    padding: clamp(24px, 3.5vh, 36px) clamp(20px, 3vw, 40px) clamp(24px, 3.5vh, 36px) 0;
-    border-top: 1px solid var(--ink-10);
+    padding: clamp(32px, 5vh, 56px) clamp(20px, 3vw, 40px) clamp(32px, 5vh, 56px) 0;
+    border-top: none;
     border-left: none;
   }
-  .etapa-scene:first-child { border-top: 2px solid var(--green); padding-top: clamp(20px, 3vh, 28px); }
+
+  /* Contorno + fondo en la card activa — outline con offset crea el respiro */
+  .etapa-scene.is-active {
+    opacity: 1;
+    background: rgba(57, 87, 20, 0.03);
+    outline: 1px solid var(--green-40);
+    outline-offset: 20px;
+    box-shadow: 0 6px 32px rgba(57,87,20,0.09);
+  }
+  /* Alineación uniforme top para todas las columnas */
+  .etapa-scene:first-child { padding-top: clamp(32px, 5vh, 56px); }
   .etapa-scene:not(:first-child) { padding-left: clamp(20px, 3vw, 40px); padding-right: 0; }
   .etapa-num   { font-size: 0.72rem; }
   .etapa-title { font-size: clamp(1.5rem, 2.8vw, 2.2rem); line-height: 1.1; max-width: 16ch; }
@@ -583,9 +663,22 @@ em { font-style: italic; font-family: var(--serif); }
   font-family: var(--serif);
   font-size: clamp(1.4rem, 5vw, 2.1rem);
   line-height: 1.18;
-  margin: 0 0 28px;
+  margin: 0 0 48px;
+  text-align: center;
 }
 .perfil-hook em { color: var(--green); font-style: italic; }
+.perfil-hook-payoff {
+  display: block;
+  font-size: clamp(2rem, 5.5vw, 3.2rem);
+  line-height: 1.08;
+  margin-top: 0.1em;
+}
+.juntos-word {
+  text-shadow:
+    0 0 12px rgba(57, 87, 20, 0.55),
+    0 0 35px rgba(57, 87, 20, 0.28),
+    0 0 70px rgba(57, 87, 20, 0.12);
+}
 
 .perfil-list {
   list-style: none;
@@ -664,6 +757,7 @@ em { font-style: italic; font-family: var(--serif); }
 .perfil-scroll-hint {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 10px;
   margin: clamp(40px, 7vh, 64px) 0 0;
   font-family: var(--sans);
@@ -708,9 +802,15 @@ em { font-style: italic; font-family: var(--serif); }
 
 @media (min-width: 860px) {
   .perfil-grid {
-    grid-template-columns: 1.2fr 1fr;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
   }
-  .perfil-visual { margin: 0; max-width: none; }
+  .perfil-hook  { grid-column: 1 / -1; }
+  .perfil-visual {
+    margin: 0; max-width: none;
+    grid-column: 1; grid-row: 2;
+  }
+  .perfil-content { grid-column: 2; grid-row: 2; }
 }
 
 /* CTA inline post-sección */
@@ -732,64 +832,110 @@ em { font-style: italic; font-family: var(--serif); }
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   3. CÓMO FUNCIONA — versión estática
+   3. CÓMO FUNCIONA — cards reveal al entrar en viewport
+   Sin sticky, sin scroll-lock. IntersectionObserver con stagger.
    ═══════════════════════════════════════════════════════════════ */
 .obra--static {
-  background: #ffffff;
-  padding: clamp(72px, 12vh, 140px) clamp(20px, 5vw, 72px);
+  background: #fff;
   border-top: 1px solid var(--ink-10);
   border-bottom: 1px solid var(--ink-10);
+  padding: clamp(72px, 11vh, 120px) clamp(20px, 5vw, 72px) clamp(56px, 9vh, 100px);
 }
+
 .obra-intro {
-  max-width: 1100px;
-  margin: 0 auto clamp(40px, 8vh, 96px);
-  text-align: left;
+  max-width: 640px;
+  margin: 0 auto clamp(36px, 5vh, 60px);
+  text-align: center;
 }
 .obra-intro .kicker { display: block; margin-bottom: 14px; }
 
-.annotations-list--static {
-  max-width: 760px;
-  margin: 0 auto;
+/* Contenedor de cards: flujo normal, sin wrappers sticky */
+.stack-cards {
   list-style: none;
   padding: 0;
-  display: flex;
-  flex-direction: column;
-  counter-reset: ann;
+  margin: 0 auto;
+  max-width: 640px;
 }
-.annotation {
-  display: grid;
-  grid-template-columns: 56px 1fr;
-  gap: 18px;
-  padding: clamp(20px, 3.5vh, 32px) 0;
-  border-top: 1px solid var(--ink-10);
+
+/* Card: arranca invisible y desplazada.
+   Al entrar en viewport recibe .is-in via IntersectionObserver. */
+.scard {
+  padding: clamp(20px, 2.8vh, 30px) clamp(20px, 3.5vw, 32px);
+  border-bottom: 1px solid var(--ink-10);
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.55s var(--ease), transform 0.55s var(--ease);
 }
-.annotation:first-child { border-top: none; padding-top: 0; }
-.annotation .ann-num {
-  font-family: var(--sans);
-  font-size: 0.68rem;
-  font-weight: 500;
-  letter-spacing: 0.3em;
-  color: var(--green);
-  text-transform: uppercase;
-  padding-top: 8px;
+.scard:first-child { border-top: 1px solid var(--ink-10); }
+
+/* Colores por card */
+.scard:nth-child(1) { background: var(--offwhite); }
+.scard:nth-child(2) { background: var(--cream); }
+.scard:nth-child(3) { background: var(--green-10); }
+.scard:nth-child(4) { background: #cfd8c8; }
+.scard:last-child   { background: var(--green); border-bottom: none; }
+
+/* Stagger: cada card espera un poco más que la anterior */
+.scard:nth-child(1) { transition-delay: 0s; }
+.scard:nth-child(2) { transition-delay: 0.09s; }
+.scard:nth-child(3) { transition-delay: 0.18s; }
+.scard:nth-child(4) { transition-delay: 0.27s; }
+.scard:nth-child(5) { transition-delay: 0.36s; }
+
+/* Revelada */
+.scard.is-in {
+  opacity: 1;
+  transform: none;
 }
-.annotation p {
+
+/* Hover: acento izquierdo */
+@media (hover: hover) and (pointer: fine) {
+  .scard.is-in:not(.scard--final):hover {
+    box-shadow: inset 4px 0 0 var(--green);
+  }
+  .scard--final.is-in:hover {
+    box-shadow: inset 4px 0 0 var(--green-40);
+  }
+}
+
+/* Label Caveat */
+.scard-label {
+  font-family: var(--script);
+  font-size: 1rem;
+  font-weight: 400;
+  color: var(--green-80);
+  display: block;
+  margin-bottom: 8px;
+  line-height: 1;
+}
+.scard--final .scard-label { color: var(--green-40); }
+
+/* Texto principal */
+.scard p {
   margin: 0;
   font-family: var(--serif);
-  font-size: clamp(1.15rem, 4.6vw, 1.6rem);
-  line-height: 1.2;
+  font-size: clamp(0.95rem, 3.6vw, 1.35rem);
+  line-height: 1.22;
   letter-spacing: -0.005em;
   color: var(--ink);
 }
-.annotation--final p {
-  font-style: italic;
-  color: var(--green);
-}
+.scard--final p { font-style: italic; color: var(--offwhite); }
 
 @media (min-width: 768px) {
-  .obra-intro { text-align: center; }
-  .annotation { grid-template-columns: 80px 1fr; gap: 24px; }
-  .annotation p { font-size: clamp(1.4rem, 2.4vw, 2rem); line-height: 1.18; }
+  .scard p { font-size: clamp(1.1rem, 1.7vw, 1.55rem); line-height: 1.18; }
+}
+
+/* Sin movimiento: mostrar todo de entrada */
+@media (prefers-reduced-motion: reduce) {
+  .scard { opacity: 1; transform: none; transition: none; }
+}
+
+/* Mini-form dentro de la sección */
+.obra-pad {
+  margin-top: clamp(36px, 5vh, 56px);
+  max-width: 640px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* Mini-form post-Cómo funciona */
@@ -1220,6 +1366,106 @@ em { font-style: italic; font-family: var(--serif); }
   .objecion-a { font-size: 1rem; }
 }
 
+/* ── ACCORDION: objecion-trigger + panel ────────────────────── */
+.objecion-body { gap: 0; } /* resetea el gap estático; el panel maneja su propio espacio */
+
+.objecion-trigger {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: inherit;
+  font-family: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+.objecion-trigger:focus-visible {
+  outline: 2px solid var(--green);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+
+/* Ícono circular +/− */
+.objecion-icon {
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid var(--ink-10);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink);
+  margin-top: 2px;
+  transition:
+    background 0.3s var(--ease),
+    border-color 0.3s var(--ease),
+    color 0.3s var(--ease);
+}
+.objecion-trigger:hover .objecion-icon,
+.objecion-trigger:focus-visible .objecion-icon {
+  border-color: var(--green);
+  color: var(--green);
+}
+.objecion-trigger[aria-expanded="true"] .objecion-icon {
+  background: var(--green);
+  border-color: var(--green);
+  color: var(--offwhite);
+}
+
+/* Línea vertical del + que desaparece al abrir */
+.objecion-icon .icon-v {
+  transform-origin: center;
+  transition: opacity 0.25s var(--ease), transform 0.25s var(--ease);
+}
+.objecion-trigger[aria-expanded="true"] .icon-v {
+  opacity: 0;
+  transform: rotate(90deg) scaleY(0);
+}
+/* Línea horizontal siempre visible */
+.objecion-icon .icon-h {
+  transition: transform 0.25s var(--ease);
+}
+
+/* Panel colapsable — trick grid-template-rows 0fr → 1fr */
+.objecion-panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.38s var(--ease-deep);
+}
+.objecion.is-open .objecion-panel {
+  grid-template-rows: 1fr;
+}
+.objecion-panel-inner {
+  overflow: hidden;
+  padding-top: 0;
+  transition: padding-top 0.38s var(--ease-deep);
+}
+.objecion.is-open .objecion-panel-inner {
+  padding-top: 14px;
+}
+.objecion-panel-inner .objecion-a { max-width: 60ch; }
+
+/* Hover sutil en la pregunta cerrada */
+.objecion-trigger:hover .objecion-q {
+  color: var(--green);
+  transition: color 0.2s var(--ease);
+}
+.objecion-trigger[aria-expanded="true"] .objecion-q {
+  color: var(--ink);
+}
+
+@media (min-width: 768px) {
+  .objecion-icon { width: 36px; height: 36px; margin-top: 4px; }
+}
+
+/* ────────────────────────────────────────────────────────────── */
+
 .escuchamos-cta {
   max-width: 760px;
   margin: clamp(48px, 8vh, 96px) auto 0;
@@ -1375,29 +1621,27 @@ em { font-style: italic; font-family: var(--serif); }
    ═══════════════════════════════════════════════════════════════ */
 .fab-whatsapp {
   position: fixed;
-  right: 16px;
+  right: 18px;
   bottom: calc(16px + env(safe-area-inset-bottom, 0px));
   z-index: 80;
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  padding: 14px 18px 14px 14px;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  padding: 0;
   background: #25D366; /* verde WhatsApp */
   color: #ffffff;
-  border-radius: 999px;
-  box-shadow: 0 12px 30px -8px rgba(37, 211, 102, 0.45),
+  border-radius: 50%;
+  box-shadow: 0 8px 24px -6px rgba(37, 211, 102, 0.5),
               0 4px 12px rgba(10, 10, 10, 0.18);
-  font-family: var(--sans);
-  font-size: 0.78rem;
-  font-weight: 500;
-  letter-spacing: 0.04em;
-  min-height: 56px;
   transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
 }
 .fab-whatsapp svg { flex-shrink: 0; }
+.fab-whatsapp span { display: none; }   /* label siempre oculto */
 .fab-whatsapp:hover, .fab-whatsapp:focus-visible {
-  transform: translateY(-2px);
-  box-shadow: 0 16px 40px -8px rgba(37, 211, 102, 0.55),
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 14px 36px -6px rgba(37, 211, 102, 0.6),
               0 6px 16px rgba(10, 10, 10, 0.22);
 }
 .fab-whatsapp:focus-visible {
@@ -1408,12 +1652,6 @@ em { font-style: italic; font-family: var(--serif); }
 /* Sólo visible en mobile — desktop tiene CTAs visibles en flujo */
 @media (min-width: 768px) {
   .fab-whatsapp { display: none; }
-}
-
-/* En pantallas muy chicas, ocultamos el label y dejamos sólo el ícono */
-@media (max-width: 380px) {
-  .fab-whatsapp span { display: none; }
-  .fab-whatsapp { padding: 14px; }
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -1448,8 +1686,8 @@ em { font-style: italic; font-family: var(--serif); }
 
 @media (max-width: 767px) {
 
-  /* El nav header se reemplaza por el dock */
-  .nav { display: none; }
+  /* El dock reemplaza los links de nav — el logo queda visible */
+  .nav-links { display: none; }
 
   /* FAB WhatsApp sube por encima del dock */
   .fab-whatsapp {

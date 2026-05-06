@@ -175,8 +175,101 @@ const FORMSPREE_ENDPOINT = '';
     revealables.forEach((el) => el.classList.add('is-in'));
   }
 
-  /* ── ETAPAS — layout estático, 3 cols en desktop / stack en mobile ── */
-  // El CSS maneja todo; no se necesita JS para esta sección.
+  /* ── ETAPAS: auto-cycling (3 s por etapa) ───────────────────── */
+  (function setupEtapasCycler() {
+    const etapas = document.querySelector('.etapas');
+    if (!etapas) return;
+
+    const scenes = Array.from(etapas.querySelectorAll('.etapa-scene'));
+    const bars   = Array.from(etapas.querySelectorAll('.etapa-bar'));
+    const dots   = Array.from(etapas.querySelectorAll('.etapas-dot'));
+    if (scenes.length < 2) return;
+
+    const DURATION = 3000; // ms
+    let current = 0;
+    let timer   = null;
+
+    // Con reduced-motion: mostrar todo sin dimming ni cycling
+    if (reducedMotion) {
+      scenes.forEach(s => s.classList.add('is-active'));
+      dots.forEach((d, i) => d.classList.toggle('is-active', i === 0));
+      return;
+    }
+
+    function activate(idx) {
+      scenes.forEach((s, i) => s.classList.toggle('is-active', i === idx));
+      dots.forEach((d, i)   => d.classList.toggle('is-active', i === idx));
+
+      // Resetear todas las barras y animar solo la activa
+      bars.forEach(b => {
+        b.style.transition = 'none';
+        b.style.width = '0%';
+      });
+      const bar = bars[idx];
+      if (bar) {
+        bar.offsetWidth; // force reflow para que el reset sea instantáneo
+        bar.style.transition = `width ${DURATION}ms linear`;
+        bar.style.width = '100%';
+      }
+      current = idx;
+    }
+
+    function advance() {
+      activate((current + 1) % scenes.length);
+    }
+
+    function startCycle() {
+      if (timer) clearInterval(timer);
+      activate(current); // sincroniza bar y timer
+      timer = setInterval(advance, DURATION);
+    }
+
+    function stopCycle() {
+      clearInterval(timer);
+      timer = null;
+    }
+
+    // Arranque inmediato desde page load: la animación ya corre
+    // cuando el usuario llega a la sección, sin depender del IO.
+    activate(0);
+    startCycle();
+
+    // Pausar en hover (desktop) — en touch no se dispara mouseenter
+    etapas.addEventListener('mouseenter', stopCycle);
+    etapas.addEventListener('mouseleave', () => {
+      if (!timer) startCycle();
+    });
+
+    // Click en dots: navegar manualmente y reiniciar timer
+    dots.forEach((dot, i) => {
+      dot.addEventListener('click', () => {
+        stopCycle();
+        activate(i);
+        timer = setInterval(advance, DURATION);
+      });
+    });
+
+    // Tilt 3D en hover (desktop con puntero fino, solo card activa)
+    if (mqDesktop.matches && mqHover.matches && !reducedMotion) {
+      scenes.forEach((scene) => {
+        scene.addEventListener('mousemove', (e) => {
+          const rect  = scene.getBoundingClientRect();
+          const x     = e.clientX - rect.left;
+          const y     = e.clientY - rect.top;
+          const cx    = rect.width  / 2;
+          const cy    = rect.height / 2;
+          const rotY  =  (x - cx) / cx * 5;  // ±5° horizontal
+          const rotX  = -(y - cy) / cy * 4;  // ±4° vertical
+          scene.style.transform = `perspective(800px) rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+          scene.style.transition = 'opacity 0.55s var(--ease), border-top-color 0.55s var(--ease), box-shadow 0.55s var(--ease), background 0.55s var(--ease)';
+        });
+        scene.addEventListener('mouseleave', () => {
+          scene.style.transform = 'perspective(800px) rotateX(0deg) rotateY(0deg)';
+          scene.style.transition = ''; // volver al CSS
+        });
+      });
+    }
+  })();
 
   /* ── PROBLEM CANVAS: sketch lines hover (desktop + hover only) ─ */
   // Sólo se inicializa en desktop con puntero fino. En touch/mobile no aporta
@@ -357,6 +450,33 @@ const FORMSPREE_ENDPOINT = '';
   })();
 
 
+  /* ── STACK CARDS: reveal al entrar en viewport ──────────────── */
+  // Cada card se revela individualmente cuando entra en el viewport.
+  // Sin scroll-locking ni sticky: IntersectionObserver limpio.
+  (function setupStackCards() {
+    const cards = Array.from(document.querySelectorAll('.scard'));
+    if (!cards.length) return;
+
+    if (reducedMotion) {
+      cards.forEach(c => c.classList.add('is-in'));
+      return;
+    }
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-in');
+            io.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.2, rootMargin: '0px 0px -20px 0px' }
+    );
+
+    cards.forEach(c => io.observe(c));
+  })();
+
   /* ── FORMS: contacto (solo email) + mini-form ────────────────── */
   const EMAIL_RE = /^[A-Za-z0-9._%+-]{1,64}@[A-Za-z0-9.-]{1,253}\.[A-Za-z]{2,}$/;
 
@@ -514,6 +634,45 @@ const FORMSPREE_ENDPOINT = '';
     // Estado inicial
     updateDockVisibility();
     updateActiveSection();
+  })();
+
+  /* ── OBJECIONES: accordion con +/− ──────────────────────────
+     Comportamiento: una sola objeción abierta a la vez.
+     Teclado: Enter / Space togglean; Escape cierra la activa.
+  ─────────────────────────────────────────────────────────────── */
+  (function setupObjecionesAccordion() {
+    const triggers = Array.from(document.querySelectorAll('.objecion-trigger'));
+    if (!triggers.length) return;
+
+    function openTrigger(trigger) {
+      trigger.setAttribute('aria-expanded', 'true');
+      trigger.closest('.objecion').classList.add('is-open');
+    }
+
+    function closeTrigger(trigger) {
+      trigger.setAttribute('aria-expanded', 'false');
+      trigger.closest('.objecion').classList.remove('is-open');
+    }
+
+    function closeAll() {
+      triggers.forEach(closeTrigger);
+    }
+
+    triggers.forEach((trigger) => {
+      trigger.addEventListener('click', () => {
+        const isOpen = trigger.getAttribute('aria-expanded') === 'true';
+        closeAll();
+        if (!isOpen) openTrigger(trigger);
+      });
+
+      // Cierre con Escape
+      trigger.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && trigger.getAttribute('aria-expanded') === 'true') {
+          closeTrigger(trigger);
+          trigger.focus();
+        }
+      });
+    });
   })();
 
 })();
