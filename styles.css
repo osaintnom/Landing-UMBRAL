@@ -227,7 +227,7 @@ em { font-style: italic; font-family: var(--serif); }
   width: 100%;
   height: 100dvh;
   overflow: hidden;
-  background: var(--green);
+  background: #60743c;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -385,11 +385,11 @@ em { font-style: italic; font-family: var(--serif); }
 .problem-logo-bg {
   position: absolute;
   right: clamp(20px, 5vw, 72px);
-  top: 50%;
-  transform: translateY(-50%);
+  /* Alineado al header "nace de una convicción" (no al medio de la sección) */
+  top: clamp(72px, 14vh, 180px);
   width: clamp(90px, 22vw, 340px);
   height: auto;
-  opacity: 0.22;
+  opacity: 0.12;
   filter: saturate(0.5);
   pointer-events: none;
   z-index: 0;
@@ -469,7 +469,7 @@ em { font-style: italic; font-family: var(--serif); }
   }
   .problem-body p     { font-size: clamp(1.05rem, 1.4vw, 1.25rem); line-height: 1.65; }
   .problem-body p.accent { font-size: clamp(1.1rem, 1.5vw, 1.35rem); line-height: 1.65; }
-  .problem-logo-bg { opacity: 0.45; }
+  .problem-logo-bg { opacity: 0.35; }
 }
 
 /* Word reveal: cada palabra empieza apagada y se ilumina al scrollear */
@@ -1498,9 +1498,11 @@ em { font-style: italic; font-family: var(--serif); }
    6. CONTACTO — fondo verde, form solo email
    ═══════════════════════════════════════════════════════════════ */
 .contacto {
-  background: var(--green);
+  background: #60743c;
   color: var(--offwhite);
-  padding: clamp(72px, 14vh, 220px) clamp(20px, 5vw, 72px);
+  /* padding-top mantiene el aire editorial; padding-bottom acotado
+     para que el footer no quede separado por un vacío excesivo */
+  padding: clamp(72px, 14vh, 220px) clamp(20px, 5vw, 72px) clamp(48px, 8vh, 96px);
   position: relative;
   overflow: hidden;
 }
@@ -1672,9 +1674,11 @@ em { font-style: italic; font-family: var(--serif); }
 .foot > div { display: inline-flex; align-items: center; gap: 12px; color: var(--green-40); }
 .foot img { height: 22px; width: auto; opacity: 0.85; }
 
-/* En mobile, dejamos espacio extra abajo para que el FAB y el dock no tapen el footer */
+/* En mobile el dock se oculta al entrar #contacto (ver mobileDock JS), y el
+   footer está después de #contacto — por eso no hace falta padding extra
+   para el dock. Sólo respetamos la safe-area del notch. */
 @media (max-width: 767px) {
-  .foot { padding-bottom: calc(128px + env(safe-area-inset-bottom, 0px)); }
+  .foot { padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px)); }
 }
 
 /* ═══════════════════════════════════════════════════════════════

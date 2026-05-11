@@ -147,6 +147,43 @@ const FORMSPREE_ENDPOINT = '';
     window.addEventListener('touchmove',  onTouchMove,  { passive: false });
     window.addEventListener('touchend',   onTouchEnd);
 
+    // Anchor links del nav / CTAs: si el hero está colapsado, expandirlo
+    // y hacer el scroll nosotros. Sin esto, onScroll aborta el anchor jump
+    // del browser y el usuario queda atrapado en el hero.
+    document.addEventListener('click', (ev) => {
+      const a = ev.target.closest && ev.target.closest('a[href^="#"]');
+      if (!a) return;
+      const href = a.getAttribute('href');
+      if (!href || href === '#') return;
+      const target = document.getElementById(href.slice(1));
+      if (!target) return;
+      if (!expanded) {
+        ev.preventDefault();
+        setProgress(1);
+        // setProgress ya marcó expanded=true síncronamente. Animamos el
+        // scroll manualmente con rAF: el smooth scroll programático
+        // del browser nunca completa en esta página (probablemente por
+        // interferencia con los listeners del hero). Cada frame usamos
+        // 'instant' porque es atómico.
+        const startY = window.scrollY;
+        const targetY = target.getBoundingClientRect().top + startY;
+        const distance = targetY - startY;
+        const duration = 900; // ms — sensación de smooth sin ser lenta
+        const t0 = performance.now();
+        function step() {
+          const t = Math.min(1, (performance.now() - t0) / duration);
+          // ease-out cubic: arranque rápido, llegada suave
+          const eased = 1 - Math.pow(1 - t, 3);
+          window.scrollTo({ top: startY + distance * eased, behavior: 'instant' });
+          if (t < 1) requestAnimationFrame(step);
+        }
+        requestAnimationFrame(step);
+        if (history && history.replaceState) {
+          history.replaceState(null, '', href);
+        }
+      }
+    });
+
     applyProgress(0); // estado inicial
   })();
 

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Test — Stack Cards</title>
+<link rel="stylesheet" href="styles.css?v=7">
+<style>
+  body { margin: 0; padding: 0; background: #fafaf8; font-family: sans-serif; }
+  .spacer { height: 60vh; display: flex; align-items: center; justify-content: center; color: #999; font-size: 14px; border-bottom: 1px solid #eee; }
+</style>
+</head>
+<body>
+<div class="spacer">↓ scroll para ver la sección</div>
+
+<section class="obra obra--static" id="como-funciona" aria-label="Cómo funciona UMBRAL">
+  <div class="obra-intro">
+    <span class="kicker">02 — Cómo funciona</span>
+    <h2 class="display-md">La obra avanza con vos.</h2>
+  </div>
+  <ol class="stack-cards">
+    <li class="scard">
+      <span class="scard-label">inicio</span>
+      <p>Sabés desde el primer día en qué etapa está tu inversión.</p>
+    </li>
+    <li class="scard">
+      <span class="scard-label">avance</span>
+      <p>Te notificamos cada avance. Sin que tengas que preguntar.</p>
+    </li>
+    <li class="scard">
+      <span class="scard-label">presencia</span>
+      <p>Un equipo presente donde vos no podés estar.</p>
+    </li>
+    <li class="scard">
+      <span class="scard-label">registro</span>
+      <p>Tus metros avanzan. Cada etapa se comunica, se registra y se comparte.</p>
+    </li>
+    <li class="scard scard--final">
+      <span class="scard-label">reputación</span>
+      <p>UMBRAL estuvo ahí desde el principio. Tu reputación, también.</p>
+    </li>
+  </ol>
+  <div class="obra-pad">
+    <p style="color:#888;font-size:14px;text-align:center;">mini-form iría acá</p>
+  </div>
+</section>
+
+<div class="spacer" style="border-top:1px solid #eee;border-bottom:none;">sección siguiente ↓</div>
+
+<script>
+(function() {
+  const cards = Array.from(document.querySelectorAll('.scard'));
+  if (!cards.length) return;
+
+  const io = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-in');
+          io.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.2, rootMargin: '0px 0px -20px 0px' }
+  );
+
+  cards.forEach(c => io.observe(c));
+})();
+</script>
+</body>
+</html>
