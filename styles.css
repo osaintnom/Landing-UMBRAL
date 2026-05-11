@@ -1651,7 +1651,10 @@ em { font-style: italic; font-family: var(--serif); }
   outline-offset: 2px;
 }
 
-/* Sólo visible en mobile — desktop tiene CTAs visibles en flujo */
+/* Suspendido temporalmente en mobile (decisión de UX — ver stg branch).
+   Desktop ya lo ocultaba; ahora también mobile. Para reactivar,
+   revertir este bloque y volver a `display: inline-flex` en .fab-whatsapp. */
+.fab-whatsapp { display: none; }
 @media (min-width: 768px) {
   .fab-whatsapp { display: none; }
 }
