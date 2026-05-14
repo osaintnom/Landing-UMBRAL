@@ -1432,6 +1432,10 @@ em { font-style: italic; font-family: var(--serif); }
     padding: 14px 24px;
     font-size: 0.76rem;
     letter-spacing: 0.14em;
+    /* Desktop: el body del slide tiene align-items: center; el align-self
+       flex-start de mobile rompe esa centralización y deja el botón pegado
+       a la izquierda. En desktop lo centramos como el resto del contenido. */
+    align-self: center;
   }
   .pilar-slide-cta svg { width: 22px; height: 10px; }
 }
@@ -3026,14 +3030,16 @@ em { font-style: italic; font-family: var(--serif); }
   margin: 14px 0 10px;
 }
 @media (min-width: 768px) {
-  /* Desktop: respeta el alto del slide pero permite scroll interno si excede.
-     gap más chico y ecuación más compacta para que en la mayoría de casos no haga falta scroll. */
+  /* Desktop: contenido vertically centered (antes era flex-start, que dejaba
+     el bloque pegado al borde superior y desbalanceaba la columna izquierda
+     que sí tiene su título centrado). Padding generoso para que aún
+     centrando, el contenido tenga aire arriba y abajo. */
   .pilar-slide--inteligencia .pilar-slide-body {
     max-height: 86vh;
     overflow-y: auto;
-    justify-content: flex-start;
-    padding-top: clamp(20px, 3vh, 40px);
-    padding-bottom: clamp(20px, 3vh, 40px);
+    justify-content: center;
+    padding-top: clamp(40px, 6vh, 80px);
+    padding-bottom: clamp(40px, 6vh, 80px);
     gap: 12px;
     /* Scrollbar discreto cuando aparece */
     scrollbar-width: thin;
@@ -3061,6 +3067,16 @@ em { font-style: italic; font-family: var(--serif); }
   .pilar-slide--inteligencia .pilar-3-eq-icon { width: 52px; height: 52px; }
   .pilar-slide--inteligencia .pilar-3-eq-icon--wide { width: 88px; }
   .pilar-slide--inteligencia .pilar-3-eq-op { font-size: 1.6rem; }
+
+  /* Pilar 5 (Banca): el body es alto (lead + figure + bullets + CTA + foot)
+     y el justify-content: center default no daba suficiente respiro arriba.
+     Padding-top/bottom explícito para que el contenido no quede pegado al
+     borde superior del slide, manteniendo el centrado vertical. */
+  .pilar-slide--banca .pilar-slide-body {
+    padding-top: clamp(40px, 6vh, 80px);
+    padding-bottom: clamp(40px, 6vh, 80px);
+    justify-content: center;
+  }
 }
 
 
