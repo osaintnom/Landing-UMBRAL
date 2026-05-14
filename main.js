@@ -41,6 +41,7 @@ const FORMSPREE_ENDPOINT = '';
     if (!hero) return;
     const media   = hero.querySelector('.hx-media');
     const overlay = hero.querySelector('.hx-video-overlay');
+    const video   = hero.querySelector('.hx-video');
     const wordA   = hero.querySelector('.hx-word-a');
     const wordB   = hero.querySelector('.hx-word-b');
     const hint    = hero.querySelector('.hx-hint');
@@ -52,6 +53,7 @@ const FORMSPREE_ENDPOINT = '';
       media.style.width  = '100vw';
       media.style.height = '100dvh';
       if (overlay) overlay.style.opacity = '0.2';
+      if (video)   video.style.opacity   = '1';
       if (hint)    hint.style.opacity    = '0';
       return;
     }
@@ -78,6 +80,8 @@ const FORMSPREE_ENDPOINT = '';
         : `0 12px ${Math.round(64 * (1 - p))}px rgba(0,0,0,${0.6 - p * 0.35})`;
 
       if (overlay) overlay.style.opacity = String(Math.max(0.2, 0.42 - p * 0.22));
+      // Video parte al 80% y sube a 100% con el progreso del scroll del hero
+      if (video)   video.style.opacity    = String(0.8 + p * 0.2);
       if (wordA)   wordA.style.transform  = `translateX(${-tx}vw)`;
       if (wordB)   wordB.style.transform  = `translateX(${tx}vw)`;
       if (hint)    hint.style.opacity     = String(Math.max(0, 1 - p * 4));
@@ -211,6 +215,38 @@ const FORMSPREE_ENDPOINT = '';
   } else {
     revealables.forEach((el) => el.classList.add('is-in'));
   }
+
+  /* ── PUENTE CHART: replay garantizado en cada visibilidad ───────
+     El gráfico CON/SIN UMBRAL tiene su propio observer porque queremos
+     que la animación se reproduzca cada vez que entra en pantalla, no
+     una sola vez. Removemos .is-in al salir y la re-agregamos al entrar
+     (con un reflow forzado en medio) para reiniciar las CSS animations. */
+  (function setupPuenteChartReplay() {
+    const chart = document.querySelector('.puente-chart');
+    if (!chart) return;
+    if (!('IntersectionObserver' in window)) {
+      chart.classList.add('is-in');
+      return;
+    }
+    const replay = () => {
+      chart.classList.remove('is-in');
+      // Forzar reflow: leemos una propiedad de layout para que el browser
+      // reconozca la quita de la clase antes de re-agregarla. Sin esto,
+      // batch de cambios → animations no se reinician.
+      void chart.offsetWidth;
+      chart.classList.add('is-in');
+    };
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          replay();
+        } else {
+          chart.classList.remove('is-in');
+        }
+      });
+    }, { threshold: 0.25, rootMargin: '0px 0px -10% 0px' });
+    io.observe(chart);
+  })();
 
   /* ── ETAPAS: auto-cycling (3 s por etapa) ───────────────────── */
   (function setupEtapasCycler() {
@@ -439,9 +475,27 @@ const FORMSPREE_ENDPOINT = '';
     updateWordReveal();
   })();
 
-  /* ── PILARES: scroll storytelling ───────────────────────────── */
-  // Mobile: IntersectionObserver ya maneja los .reveal de cada slide.
-  // Desktop: sticky + scroll listener crossfadea entre slides.
+  /* ── PILARES (desktop) ──────────────────────────────────────────
+     Refactor 2026-05: se eliminó el sticky scroll storytelling (los 5 slides
+     superpuestos con crossfade controlado por scroll). Ahora cada pilar es
+     una sección que fluye al scrollear normal. Esta función queda solo para
+     asegurar que el reveal no deje los slides con opacity:0 en desktop. */
+  (function setupPilaresStaticDesktop() {
+    if (!mqDesktop.matches) return;
+    const slides = Array.from(document.querySelectorAll('.pilar-slide'));
+    if (slides.length === 0) return;
+    slides.forEach((s) => {
+      s.classList.remove('reveal');
+      s.classList.add('is-in');
+      s.classList.add('is-active');
+    });
+  })();
+
+  /* ── PILARES DESKTOP: sticky scroll storytelling ────────────── */
+  // Desktop: el .pilares-scroll-wrap es alto (100dvh × 6) creando scroll-space.
+  // El .pilares-stage se queda sticky en el viewport mientras el usuario
+  // scrollea, y los slides crossfadean en el mismo lugar. Al pasar el último,
+  // el sticky se libera y la página sigue.
   (function setupPilaresScrolly() {
     if (reducedMotion || !mqDesktop.matches) return;
 
@@ -450,23 +504,23 @@ const FORMSPREE_ENDPOINT = '';
     const dots       = Array.from(document.querySelectorAll('.pilares-dot'));
     if (!scrollWrap || slides.length < 2) return;
 
-    // En desktop los slides usan position:absolute/opacity — quitamos el
-    // opacity:0 que el reveal añade para que el JS controle la visibilidad.
+    // En desktop los slides son position: absolute con opacity: 0 por default.
+    // Quitamos el .reveal global para que el JS controle la visibilidad,
+    // y marcamos .is-in para que las animaciones internas arranquen.
     slides.forEach((s) => {
       s.classList.remove('reveal');
-      s.classList.add('is-in'); // evita que el observer los muestre
+      s.classList.add('is-in');
     });
 
     let lastIdx    = -1;
     let rafPending = false;
 
     function update() {
-      const rect      = scrollWrap.getBoundingClientRect();
+      const rect       = scrollWrap.getBoundingClientRect();
       const scrollable = scrollWrap.offsetHeight - window.innerHeight;
       const progress   = Math.max(0, Math.min(1, -rect.top / Math.max(1, scrollable)));
       // Distribuimos los 5 slides linealmente a lo largo del scroll
-      const raw = progress * slides.length;
-      const idx = Math.min(slides.length - 1, Math.floor(raw));
+      const idx = Math.min(slides.length - 1, Math.floor(progress * slides.length));
 
       if (idx !== lastIdx) {
         lastIdx = idx;
@@ -484,6 +538,79 @@ const FORMSPREE_ENDPOINT = '';
     window.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('resize', onScroll);
     update();
+  })();
+
+  /* ── PILARES MOBILE: carrusel scroll-snap ───────────────────── */
+  // Mobile: 5 cards lado a lado con scroll-snap horizontal.
+  // - IntersectionObserver detecta la card centrada → activa el dot.
+  // - Click en un dot scrollea al pilar correspondiente.
+  // - El hint manuscrito "deslizá →" se desvanece al primer scroll.
+  (function setupPilaresMobileCarousel() {
+    if (mqDesktop.matches) return; // desktop maneja el sticky en setupPilaresScrolly
+
+    const slidesContainer = document.querySelector('.pilares-slides');
+    const slides = Array.from(document.querySelectorAll('.pilar-slide'));
+    const dots   = Array.from(document.querySelectorAll('.pilares-dot'));
+    const hint   = document.querySelector('.pilares-hint');
+    if (!slidesContainer || slides.length < 2) return;
+
+    // Las cards llevan .reveal por default → en mobile las queremos visibles
+    // de entrada para no chocar con el observer del reveal global.
+    slides.forEach((s) => {
+      s.classList.remove('reveal');
+      s.classList.add('is-in');
+    });
+
+    function setActive(idx) {
+      slides.forEach((s, i) => s.classList.toggle('is-active', i === idx));
+      dots.forEach((d, i)   => d.classList.toggle('is-active', i === idx));
+    }
+    setActive(0);
+
+    // Observer sobre las cards usando el container como root.
+    // threshold 0.6 → la card cuenta como activa cuando >60% es visible.
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver((entries) => {
+        // Tomamos la entrada con mayor intersectionRatio para evitar saltos
+        // cuando dos cards entran parcialmente.
+        let best = null;
+        entries.forEach((entry) => {
+          if (!best || entry.intersectionRatio > best.intersectionRatio) best = entry;
+        });
+        if (best && best.intersectionRatio >= 0.55) {
+          const idx = slides.indexOf(best.target);
+          if (idx >= 0) setActive(idx);
+        }
+      }, {
+        root: slidesContainer,
+        threshold: [0.55, 0.75, 0.95]
+      });
+      slides.forEach((s) => io.observe(s));
+    }
+
+    // Dots como botones: scroll horizontal smooth hacia la card target.
+    dots.forEach((dot) => {
+      dot.addEventListener('click', () => {
+        const idx = parseInt(dot.getAttribute('data-pilar-target'), 10);
+        const target = slides[idx];
+        if (!target) return;
+        // scrollIntoView con inline: 'center' alinea con scroll-snap-align: center.
+        // block: 'nearest' evita scroll vertical de la página.
+        target.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        dismissHint();
+      });
+    });
+
+    // Hint manuscrito: se desvanece al primer scroll del carrusel.
+    let hintDismissed = false;
+    function dismissHint() {
+      if (hintDismissed || !hint) return;
+      hintDismissed = true;
+      hint.classList.add('is-dismissed');
+    }
+    if (hint) {
+      slidesContainer.addEventListener('scroll', dismissHint, { passive: true, once: true });
+    }
   })();
 
 

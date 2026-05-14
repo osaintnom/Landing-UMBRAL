@@ -8,10 +8,11 @@
    ═══════════════════════════════════════════════════════════════ */
 
 :root {
-  --green: #395714;
-  --green-80: #607d4e;
-  --green-40: #bfcabb;
-  --green-10: #eef1e8;
+  --green: #395714;          /* Verde primario UMBRAL — manual de marca */
+  --green-60: #60743c;       /* Verde 60% — para áreas con mucho fondo (ej. hero) */
+  --green-80: #607d4e;       /* Verde 80% — derivado claro */
+  --green-40: #bfcabb;       /* Verde 40% — separadores, detalles */
+  --green-10: #eef1e8;       /* Verde 10% — fondo papel-verde */
   --offwhite: #fafaf8;
   --cream: #f5f4f0;
   --ink: #1a1a1a;
@@ -260,6 +261,9 @@ em { font-style: italic; font-family: var(--serif); }
   object-fit: cover;
   display: block;
   pointer-events: none;
+  /* Opacidad inicial al 80%; JS la sube a 100% con el progreso del scroll */
+  opacity: 0.8;
+  transition: opacity 120ms linear;
 }
 .hx-video-overlay {
   position: absolute;
@@ -654,7 +658,7 @@ em { font-style: italic; font-family: var(--serif); }
   margin: clamp(48px, 8vh, 96px) auto 0;
   display: grid;
   grid-template-columns: 1fr;
-  gap: clamp(32px, 5vw, 60px);
+  gap: clamp(16px, 2.5vw, 28px);
   align-items: start;
   position: relative;
   z-index: 1;
@@ -732,7 +736,7 @@ em { font-style: italic; font-family: var(--serif); }
   font-style: italic;
   font-size: clamp(1.05rem, 3.6vw, 1.3rem);
   color: var(--ink);
-  margin: clamp(40px, 8vh, 64px) 0 clamp(28px, 5vh, 40px);
+  margin: 0 0 clamp(18px, 2.5vh, 24px);
   max-width: 480px;
   padding: clamp(22px, 5vw, 30px) clamp(20px, 4vw, 28px);
   border: 1px solid var(--ink-10);
@@ -801,16 +805,26 @@ em { font-style: italic; font-family: var(--serif); }
 }
 
 @media (min-width: 860px) {
+  /* Layout simplificado: hook arriba, imagen centrada en el medio,
+     cuadro + nota centrados debajo. Sin el ul de items, no necesita 2-col. */
   .perfil-grid {
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto auto;
+    grid-template-columns: 1fr;
+    grid-template-rows: none;
+    justify-items: center;
   }
-  .perfil-hook  { grid-column: 1 / -1; }
   .perfil-visual {
-    margin: 0; max-width: none;
-    grid-column: 1; grid-row: 2;
+    grid-column: auto;
+    grid-row: auto;
+    margin: 0 auto;
+    max-width: 420px;
   }
-  .perfil-content { grid-column: 2; grid-row: 2; }
+  .perfil-content {
+    grid-column: auto;
+    grid-row: auto;
+    max-width: 540px;
+    width: 100%;
+    margin: 0 auto;
+  }
 }
 
 /* CTA inline post-sección */
@@ -843,11 +857,16 @@ em { font-style: italic; font-family: var(--serif); }
 }
 
 .obra-intro {
-  max-width: 640px;
+  /* Más ancho que las cards (640px) para que el headline
+     "UMBRAL avanza con vos." entre en una sola línea en desktop. */
+  max-width: 820px;
   margin: 0 auto clamp(36px, 5vh, 60px);
   text-align: center;
 }
 .obra-intro .kicker { display: block; margin-bottom: 14px; }
+/* Si en algún viewport chico el título tiene que wrappear, que lo haga
+   balanceado en vez de dejar la última palabra suelta. */
+.obra-intro .display-md { text-wrap: balance; }
 
 /* Contenedor de cards: flujo normal, sin wrappers sticky */
 .stack-cards {
@@ -898,17 +917,47 @@ em { font-style: italic; font-family: var(--serif); }
   }
 }
 
-/* Label Caveat */
+/* Label institucional: sans uppercase (matchea la nota verde de abajo,
+   con más peso visual + ícono lineal estilo Lordicon system / regular) */
 .scard-label {
-  font-family: var(--script);
-  font-size: 1rem;
-  font-weight: 400;
-  color: var(--green-80);
-  display: block;
-  margin-bottom: 8px;
+  font-family: var(--sans);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--green);
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
   line-height: 1;
 }
 .scard--final .scard-label { color: var(--green-40); }
+.scard-label-text { display: inline-block; }
+@media (min-width: 768px) {
+  .scard-label { font-size: 0.78rem; gap: 12px; margin-bottom: 16px; }
+}
+
+/* Ícono lineal estilo Lordicon system / regular — hereda color del label
+   via currentColor para que cambie automáticamente en .scard--final */
+.scard-icon {
+  width: 22px;
+  height: 22px;
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: currentColor;
+}
+.scard-icon svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+}
+@media (min-width: 768px) {
+  .scard-icon { width: 26px; height: 26px; }
+}
 
 /* Texto principal */
 .scard p {
@@ -921,8 +970,24 @@ em { font-style: italic; font-family: var(--serif); }
 }
 .scard--final p { font-style: italic; color: var(--offwhite); }
 
+/* Anotación debajo del texto principal — institucional: sans uppercase verde */
+.scard-note {
+  display: block;
+  margin-top: 16px;
+  font-family: var(--sans);
+  font-style: normal;
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  line-height: 1.55;
+  color: var(--green);
+}
+.scard--final .scard-note { color: var(--green-40); }
+
 @media (min-width: 768px) {
   .scard p { font-size: clamp(1.1rem, 1.7vw, 1.55rem); line-height: 1.18; }
+  .scard-note { font-size: 0.78rem; margin-top: 20px; }
 }
 
 /* Sin movimiento: mostrar todo de entrada */
@@ -1015,6 +1080,84 @@ em { font-style: italic; font-family: var(--serif); }
 }
 
 /* ═══════════════════════════════════════════════════════════════
+   AGENDA 2030 — statement institucional entre Pilares y Escuchamos
+   Mismo lenguaje visual que .mini-form-wrap (caja cream con borde fino),
+   contenido puramente declarativo: sin form, sin inputs, sin JS. */
+.agenda {
+  background: var(--offwhite);
+  padding: clamp(48px, 8vh, 96px) clamp(20px, 5vw, 72px);
+  border-top: 1px solid var(--ink-10);
+}
+.agenda-box {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: clamp(28px, 5vh, 48px) clamp(24px, 4vw, 40px);
+  background: var(--cream);
+  border: 1px solid var(--ink-10);
+  border-radius: 4px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  align-items: center;
+}
+.agenda-kicker {
+  font-family: var(--sans);
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--green);
+}
+.agenda-title {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(1.5rem, 4vw, 2.1rem);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  margin: 0;
+  text-wrap: balance;
+}
+.agenda-title em {
+  color: var(--green);
+  font-style: italic;
+}
+.agenda-body {
+  font-family: var(--sans);
+  font-size: clamp(0.92rem, 2.4vw, 1rem);
+  line-height: 1.55;
+  color: var(--ink-60);
+  margin: 0 auto;
+  max-width: 56ch;
+}
+.agenda-body strong { color: var(--ink); font-weight: 500; }
+
+/* Payoff de cierre — dos líneas: setup en sans + línea final serif italic
+   verde, mismo treatment editorial que usan los <em> del resto del sitio. */
+.agenda-payoff {
+  font-family: var(--sans);
+  font-size: clamp(0.95rem, 2.5vw, 1.05rem);
+  line-height: 1.5;
+  color: var(--ink);
+  margin: 6px 0 0;
+  max-width: 56ch;
+  margin-inline: auto;
+}
+.agenda-payoff em {
+  font-family: var(--serif);
+  font-style: italic;
+  color: var(--green);
+  font-size: clamp(1.05rem, 2.8vw, 1.2rem);
+  line-height: 1.3;
+  display: inline-block;
+  margin-top: 2px;
+}
+@media (min-width: 768px) {
+  .agenda-kicker { font-size: 0.72rem; }
+}
+
+/* ═══════════════════════════════════════════════════════════════
    4. PILARES — scroll storytelling
    Mobile: cards apiladas con reveal
    Desktop: sticky panel, crossfade entre slides
@@ -1028,25 +1171,42 @@ em { font-style: italic; font-family: var(--serif); }
 .pilares-head {
   max-width: 1100px;
   margin: 0 auto;
-  padding: clamp(64px, 10vh, 120px) clamp(20px, 5vw, 72px) clamp(32px, 5vh, 56px);
+  /* Top padding más generoso para que el kicker no quede pegado al borde
+     superior de la sección — antes 64-120, ahora 96-180 (matchea el aire
+     que tienen .obra y .escuchamos en sus cabeceras). */
+  padding: clamp(96px, 14vh, 180px) clamp(20px, 5vw, 72px) clamp(32px, 5vh, 56px);
+  text-align: center;
 }
 .pilares-head .kicker { display: block; margin-bottom: 16px; }
+.pilares-head .display-md { text-wrap: balance; }
 
 /* ── Dots de progreso ──────────────────────────────────────── */
 .pilares-dots {
   display: flex;
-  gap: 8px;
-  padding: 0 clamp(20px, 5vw, 72px);
-  margin-bottom: clamp(24px, 4vh, 40px);
+  gap: 10px;
+  padding: 0;
+  margin: 28px auto 0;
+  justify-content: center;
+  align-items: center;
 }
 .pilares-dot {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: var(--ink-10);
+  background: transparent;
   border: 1px solid var(--ink-40);
   transition: background 0.35s var(--ease), transform 0.35s var(--ease), border-color 0.35s var(--ease);
   flex-shrink: 0;
+  /* En mobile los <button>: reset visual */
+  appearance: none;
+  padding: 0;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+}
+.pilares-dot:focus-visible {
+  outline: 2px solid var(--green);
+  outline-offset: 3px;
 }
 .pilares-dot.is-active {
   background: var(--green);
@@ -1054,28 +1214,85 @@ em { font-style: italic; font-family: var(--serif); }
   transform: scale(1.25);
 }
 
-/* ── Mobile: slides apiladas ───────────────────────────────── */
+/* ── Mobile: carrusel horizontal con scroll-snap ──────────── */
 .pilares-scroll-wrap {
   padding-bottom: clamp(64px, 10vh, 120px);
 }
 .pilares-stage {
-  /* mobile: flow normal */
-}
-.pilares-slides {
-  list-style: none;
-  padding: 0 clamp(20px, 5vw, 72px);
-  margin: 0 auto;
-  max-width: 1100px;
   display: flex;
   flex-direction: column;
-  gap: clamp(40px, 7vh, 72px);
 }
+.pilares-stage .pilares-slides { order: 1; }
+.pilares-stage .pilares-dots   { order: 2; }
+.pilares-stage .pilares-hint   { order: 3; }
 
-/* Slide base (mobile) */
+.pilares-slides {
+  list-style: none;
+  margin: 0;
+  padding: 4px 0 12px;
+  max-width: none;
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  overflow-x: auto;
+  overflow-y: visible;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scroll-padding-inline: 24px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  /* Padding lateral igual al espacio "extra" del viewport para que
+     la primera y última card puedan centrarse con scroll-snap-align:center */
+  padding-inline: max(24px, calc((100% - 360px) / 2));
+}
+.pilares-slides::-webkit-scrollbar { display: none; }
+
+/* Slide base (mobile carousel card) */
 .pilar-slide {
+  flex: 0 0 86%;
+  max-width: 360px;
+  scroll-snap-align: center;
+  scroll-snap-stop: always;
   display: grid;
-  grid-template-columns: 1fr;
-  gap: clamp(16px, 3vh, 28px);
+  grid-template-rows: auto 1fr;
+  gap: 22px;
+  background: var(--offwhite);
+  border: 1px solid var(--green-10);
+  border-radius: 4px;
+  padding: 28px 24px 26px;
+  box-shadow: 0 1px 0 rgba(57, 87, 20, 0.04);
+  transition: opacity 0.5s var(--ease);
+}
+.pilar-slide:not(.is-active) { opacity: 0.55; }
+.pilar-slide.is-active       { opacity: 1; }
+
+/* Swipe hint manuscrito (solo mobile) */
+.pilares-hint {
+  margin: 14px auto 0;
+  text-align: center;
+  font-family: var(--script);
+  color: var(--green-60);
+  font-size: 1.15rem;
+  letter-spacing: 0.01em;
+  opacity: 0.85;
+  transition: opacity 0.6s var(--ease), transform 0.6s var(--ease);
+  pointer-events: none;
+}
+.pilares-hint .pilares-hint-arrow {
+  display: inline-block;
+  margin-left: 6px;
+  animation: hintArrow 1.8s var(--ease) infinite;
+}
+.pilares-hint.is-dismissed {
+  opacity: 0;
+  transform: translateY(-4px);
+}
+@keyframes hintArrow {
+  0%, 100% { transform: translateX(0); }
+  50%      { transform: translateX(6px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pilares-hint .pilares-hint-arrow { animation: none; }
 }
 .pilar-slide-meta { display: flex; flex-direction: column; gap: 6px; }
 .pilar-slide-num {
@@ -1131,14 +1348,29 @@ em { font-style: italic; font-family: var(--serif); }
   border-radius: 50%;
   background: var(--green);
 }
+/* Foot — institucional: sans, uppercase, verde. Sin cursiva manuscrita. */
 .pilar-slide-foot {
-  font-family: var(--script);
-  font-size: 1.05rem;
+  font-family: var(--sans);
+  font-style: normal;
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
   color: var(--green);
-  margin: 6px 0 0;
-  letter-spacing: 0.01em;
+  line-height: 1.55;
+  margin: 14px 0 0;
 }
-.pilar-slide-foot--script { font-family: var(--script); }
+/* La variante --script ahora hereda el mismo estilo (uppercase verde) */
+.pilar-slide-foot--script {
+  font-family: var(--sans);
+  font-style: normal;
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--green);
+  line-height: 1.55;
+}
 
 /* Dos columnas (Beneficios, slide 03) */
 .pilar-slide-cols {
@@ -1157,44 +1389,68 @@ em { font-style: italic; font-family: var(--serif); }
   margin-bottom: 10px;
 }
 
-/* Banca: fondo oscuro */
+/* Banca: contorno negro fino sobre fondo transparente — el "clímax" del pilar
+   pasa por el tratamiento de borde (gestión privada, capa reservada), no por
+   un fondo oscuro. Tipografía, numerador, lista y CTA quedan en el mismo
+   treatment que el resto de los pilares (sin overrides). */
 .pilar-slide--banca {
-  background: var(--ink);
-  padding: clamp(24px, 4vh, 40px) clamp(20px, 4vw, 40px);
+  background: transparent;
+  border: 1px solid var(--ink);
+  padding: 32px 24px 28px;
   border-radius: 4px;
+  box-shadow: none;
 }
-.pilar-slide--banca .pilar-slide-num { color: var(--green-40); }
-.pilar-slide--banca .pilar-slide-title { color: var(--offwhite); }
-.pilar-slide--banca .pilar-slide-lead { color: rgba(250,250,248,0.75); }
-.pilar-slide--banca .pilar-slide-list li { color: rgba(250,250,248,0.6); }
-.pilar-slide--banca .pilar-slide-list li::before { background: var(--green-40); }
-.pilar-slide--banca .pilar-slide-foot { color: var(--green-40); }
 
-/* CTA dentro del slide Banca */
+/* CTA dentro del slide Banca — mobile-first: pill chiquita en una sola línea
+   (el texto "SOLICITAR EVALUACIÓN DE INGRESO" + letter-spacing en uppercase
+   no entra cómodo en la card mobile sin esto). Desktop sube tamaño abajo. */
 .pilar-slide-cta {
   display: inline-flex;
   align-items: center;
-  gap: 12px;
-  padding: 14px 24px;
+  gap: 8px;
+  padding: 11px 18px;
   background: var(--green);
   color: var(--offwhite);
   border-radius: 999px;
   font-family: var(--sans);
-  font-size: 0.76rem;
+  font-size: 0.66rem;
   font-weight: 500;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.10em;
   text-transform: uppercase;
+  white-space: nowrap;            /* nunca wrappear a 2-3 líneas */
   transition: background 0.3s var(--ease), color 0.3s var(--ease);
   margin-top: 4px;
   align-self: flex-start;
+  max-width: 100%;                /* si el contenedor es muy chico, la pill
+                                     se contiene en vez de desbordar */
 }
 .pilar-slide-cta:hover { background: var(--green-80); }
-.pilar-slide-cta svg { flex-shrink: 0; }
-
-/* ── Desktop: sticky storytelling ─────────────────────────── */
+.pilar-slide-cta svg { flex-shrink: 0; width: 18px; height: 9px; }
 @media (min-width: 768px) {
+  .pilar-slide-cta {
+    gap: 12px;
+    padding: 14px 24px;
+    font-size: 0.76rem;
+    letter-spacing: 0.14em;
+    /* Desktop: el body del slide tiene align-items: center; el align-self
+       flex-start de mobile rompe esa centralización y deja el botón pegado
+       a la izquierda. En desktop lo centramos como el resto del contenido. */
+    align-self: center;
+  }
+  .pilar-slide-cta svg { width: 22px; height: 10px; }
+}
+
+/* ── Desktop: pilares como secciones que fluyen al scrollear ──
+   Refactor 2026-05: se eliminó el sticky scroll storytelling (los 5 slides
+   superpuestos con crossfade) porque "trababa" el scroll. Ahora cada pilar
+   es una sección de altura natural que se ve al pasar.                      */
+@media (min-width: 768px) {
+  /* ── Desktop: sticky scroll storytelling ──
+     El wrap crea un scroll space tall, el stage se queda sticky en el viewport
+     mientras el usuario scrollea, y los slides se crossfadean en la misma posición.
+     Al terminar los 5, el sticky se libera y la página sigue. */
   .pilares-scroll-wrap {
-    height: calc(100dvh * 6);
+    height: calc(100dvh * 6);  /* 5 slides + buffer de entrada/salida */
     position: relative;
     padding-bottom: 0;
   }
@@ -1206,29 +1462,41 @@ em { font-style: italic; font-family: var(--serif); }
     display: flex;
     flex-direction: column;
     padding: clamp(28px, 4vh, 48px) clamp(40px, 5vw, 72px);
-    gap: 0;
   }
+  /* Dots como indicadores de progreso del scrolly (no clickables visualmente) */
   .pilares-dots {
+    display: flex;
     padding: 0;
-    margin-bottom: clamp(16px, 2.5vh, 28px);
+    margin: 0 0 clamp(16px, 2.5vh, 28px);
     justify-content: flex-start;
   }
-  /* Sobreescribe margin: 0 auto y max-width del mobile */
+  .pilares-hint { display: none; }
+  /* Contenedor de slides relative — slides absolutos crossfadeados */
   .pilares-slides {
     flex: 1;
     align-self: stretch;
     position: relative;
+    display: block;
     gap: 0;
     padding: 0;
+    padding-inline: 0;
     margin: 0;
     max-width: none;
     width: 100%;
+    overflow: hidden;
+    scroll-snap-type: none;
   }
+  .pilares-stage .pilares-slides,
+  .pilares-stage .pilares-dots { order: initial; }
   .pilar-slide {
     position: absolute;
     inset: 0;
+    flex: initial;
+    max-width: none;
+    scroll-snap-align: none;
     display: grid;
     grid-template-columns: 1fr 1.15fr;
+    grid-template-rows: none;
     align-items: stretch;
     gap: 0;
     opacity: 0;
@@ -1236,55 +1504,68 @@ em { font-style: italic; font-family: var(--serif); }
     transition: opacity 0.6s var(--ease), transform 0.7s var(--ease);
     pointer-events: none;
     padding: 0;
+    min-height: 0;
     background: transparent;
+    border: 0;
     border-radius: 0;
+    box-shadow: none;
+  }
+  /* En mobile las cards inactivas están a 0.55 opacity (peek del carrusel).
+     En desktop tienen que estar 100% invisibles porque ocupan el mismo lugar. */
+  .pilar-slide:not(.is-active) {
+    opacity: 0;
   }
   .pilar-slide.is-active {
     opacity: 1;
     transform: translateY(0);
     pointer-events: auto;
   }
+
+  /* Banca en desktop: mantiene el outline negro fino sobre el cream del stage,
+     igual que mobile — sin fill oscuro porque rompería el ritmo del crossfade. */
   .pilar-slide--banca {
     background: transparent;
+    border: none;
     padding: 0;
+    border-radius: 0;
   }
-  /* Banca en desktop: fondo cream → resetear colores a tinta oscura */
-  .pilar-slide--banca .pilar-slide-num  { color: var(--green); }
-  .pilar-slide--banca .pilar-slide-title { color: var(--ink); }
-  .pilar-slide--banca .pilar-slide-lead  { color: var(--ink-80); }
-  .pilar-slide--banca .pilar-slide-list li { color: var(--ink-60); }
-  .pilar-slide--banca .pilar-slide-list li::before { background: var(--green); }
-  .pilar-slide--banca .pilar-slide-foot  { color: var(--green); }
 
-  /* Columna izquierda: panel de título con separador vertical */
+  /* Columna izquierda: contenido centrado vertical y horizontalmente */
   .pilar-slide-meta {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    height: 100%;
-    padding-right: clamp(40px, 5vw, 80px);
+    justify-content: center;        /* vertical center */
+    align-items: center;            /* horizontal center de los flex children */
+    text-align: center;             /* centra el texto dentro del título */
+    padding: 0 clamp(40px, 5vw, 80px) 0 0;
     border-right: 1px solid var(--ink-10);
-    gap: clamp(16px, 2.5vh, 28px);
+    gap: clamp(14px, 2vh, 24px);
   }
   .pilar-slide-num {
     letter-spacing: 0.26em;
   }
-  /* Título grande que llena la columna */
   .pilar-slide-title {
-    font-size: clamp(3.4rem, 6vw, 6rem);
-    line-height: 1.0;
+    font-size: clamp(2.8rem, 5vw, 4.6rem);
+    line-height: 1.04;
   }
 
-  /* Columna derecha: contenido con padding desde el separador */
+  /* Columna derecha: contenido centrado vertical y horizontalmente */
   .pilar-slide-body {
-    padding-left: clamp(40px, 5vw, 80px);
-    max-height: 80vh;
-    overflow: hidden;
+    padding: 0 0 0 clamp(40px, 5vw, 80px);
+    max-height: none;
+    overflow: visible;
     display: flex;
     flex-direction: column;
-    gap: 14px;
-    justify-content: center;
+    gap: 16px;
+    justify-content: center;        /* vertical center */
+    align-items: center;            /* horizontal center */
+    text-align: center;
   }
+  .pilar-slide-body .pilar-slide-lead { max-width: 52ch; }
+  /* El texto dentro del callout inline vuelve a left-align — uppercase
+     verde multilínea centrado se ve dentado */
+  .pilar-foot-inline .pilar-slide-foot,
+  .pilar-foot-inline .pilar-slide-foot--script { text-align: left; }
   .pilar-slide-lead  { font-size: clamp(1.05rem, 1.5vw, 1.22rem); }
   .pilar-slide-list li { font-size: 0.95rem; }
   .pilar-slide-cols  { grid-template-columns: 1fr 1fr; gap: 28px; }
@@ -1500,9 +1781,16 @@ em { font-style: italic; font-family: var(--serif); }
 .contacto {
   background: #60743c;
   color: var(--offwhite);
-  /* padding-top mantiene el aire editorial; padding-bottom acotado
-     para que el footer no quede separado por un vacío excesivo */
-  padding: clamp(72px, 14vh, 220px) clamp(20px, 5vw, 72px) clamp(48px, 8vh, 96px);
+  /* Sección full-screen: ocupa exactamente la altura del viewport con el
+     contenido vertical-centrado. Padding top extra para compensar el nav fijo. */
+  min-height: 100dvh;
+  padding:
+    calc(env(safe-area-inset-top, 0px) + clamp(96px, 11vh, 132px))
+    clamp(20px, 5vw, 72px)
+    clamp(48px, 6vh, 80px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   position: relative;
   overflow: hidden;
 }
@@ -1516,22 +1804,37 @@ em { font-style: italic; font-family: var(--serif); }
   pointer-events: none;
 }
 .contacto-inner {
-  max-width: 760px;
+  width: 100%;
+  max-width: 880px;
   margin: 0 auto;
   position: relative;
   text-align: left;
 }
-.contacto .kicker { color: rgba(250,250,248,0.6); display: block; margin-bottom: 14px; }
+.contacto .kicker { color: rgba(250,250,248,0.6); display: block; margin-bottom: clamp(16px, 2.5vh, 26px); }
 .contacto .display-md {
-  margin: 0 0 14px;
+  margin: 0 0 clamp(14px, 2vh, 22px);
   color: var(--offwhite);
+  /* Override del clamp base para que el título quede más contenido (3 líneas) */
+  font-size: clamp(1.5rem, 3.2vw, 2.4rem);
+  line-height: 1.15;
+  text-wrap: balance;
+}
+/* El em queda en blanco translúcido con glow más blanco — recede sutilmente
+   pero conserva luz, no se ve gris-apagado */
+.contacto .display-md em {
+  color: rgba(255,255,255,0.82);
+  font-style: italic;
+  text-shadow:
+    0 0 14px rgba(255,255,255,0.45),
+    0 0 38px rgba(255,255,255,0.22),
+    0 0 80px rgba(255,255,255,0.10);
 }
 .contacto-sub {
   font-family: var(--serif);
   font-style: italic;
   font-size: clamp(1rem, 3.8vw, 1.3rem);
   color: rgba(250,250,248,0.75);
-  margin: 0 0 32px;
+  margin: 0 0 clamp(28px, 4.5vh, 52px);
   line-height: 1.45;
 }
 .contacto-form { max-width: 640px; margin: 0; }
@@ -1574,11 +1877,16 @@ em { font-style: italic; font-family: var(--serif); }
 .form-field input::placeholder { color: rgba(250,250,248,0.35); }
 
 .contacto-submit {
-  display: inline-flex;
+  /* display: flex (block-level) + width: fit-content + margin-inline: auto
+     centra el botón en ambos breakpoints, sin depender del text-align
+     heredado del .contacto-inner (que solo es center en desktop). */
+  display: flex;
   align-items: center;
+  justify-content: center;
   gap: 10px;
-  margin-top: 28px;
-  padding: 14px 0;
+  width: fit-content;
+  margin: 28px auto 0;
+  padding: 14px 24px;
   font-family: var(--sans);
   font-size: 0.74rem;
   font-weight: 500;
@@ -1651,7 +1959,10 @@ em { font-style: italic; font-family: var(--serif); }
   outline-offset: 2px;
 }
 
-/* Sólo visible en mobile — desktop tiene CTAs visibles en flujo */
+/* Suspendido temporalmente en mobile (decisión de UX — ver stg branch).
+   Desktop ya lo ocultaba; ahora también mobile. Para reactivar,
+   revertir este bloque y volver a `display: inline-flex` en .fab-whatsapp. */
+.fab-whatsapp { display: none; }
 @media (min-width: 768px) {
   .fab-whatsapp { display: none; }
 }
@@ -1815,6 +2126,961 @@ em { font-style: italic; font-family: var(--serif); }
 }
 
 /* ═══════════════════════════════════════════════════════════════
+   PUENTE — "UMBRAL no es un producto"
+   Título grande arriba + comparativa CON/SIN UMBRAL en grande (con áreas
+   sombreadas, hitos, fricciones y ecuación de cierre). Reveal al entrar.
+   ═══════════════════════════════════════════════════════════════ */
+.puente {
+  padding: 64px 24px;
+  background: var(--offwhite);
+  border-top: 1px solid var(--ink-10);
+  border-bottom: 1px solid var(--ink-10);
+}
+.puente--grafico { padding: 72px 24px; }
+.puente-wide {
+  max-width: 980px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+/* —— Título del puente —— */
+.puente-headline {
+  font-family: var(--serif);
+  font-size: clamp(1.6rem, 4.2vw, 2.8rem);
+  font-weight: 400;
+  line-height: 1.1;
+  color: var(--ink);
+  margin: 0;
+  max-width: 880px;
+}
+.puente-headline em {
+  font-style: italic;
+  color: var(--green);
+}
+.puente-headline-sub {
+  display: block;
+  font-family: var(--sans);
+  font-size: clamp(1rem, 2.2vw, 1.25rem);
+  font-weight: 300;
+  line-height: 1.5;
+  color: var(--ink-80);
+  margin-top: 14px;
+}
+.puente-headline-sub strong {
+  font-weight: 500;
+  color: var(--green);
+}
+
+/* —— Gráfico —— */
+.puente-chart {
+  background: var(--green-10);
+  border: 1px solid var(--green-40);
+  padding: 24px clamp(16px, 2.5vw, 32px) 24px;
+}
+.puente-chart-legend {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  font-family: var(--sans);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 500;
+  margin-bottom: 18px;
+}
+.puente-chart-legend .swatch {
+  display: inline-block;
+  width: 22px;
+  height: 3px;
+  vertical-align: middle;
+  margin-right: 10px;
+}
+/* "CON UMBRAL" como píldora verde — destaca como label de marca */
+.puente-chart-legend .with {
+  background: var(--green);
+  color: var(--offwhite);
+  padding: 7px 14px 6px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+}
+.puente-chart-legend .with .swatch { background: var(--offwhite); }
+/* "SIN UMBRAL" queda neutro */
+.puente-chart-legend .without {
+  color: var(--ink-60);
+  display: inline-flex;
+  align-items: center;
+  padding: 7px 0 6px;
+}
+.puente-chart-legend .without .swatch { background: var(--ink); opacity: .55; }
+.puente-chart-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  max-width: 880px;
+  margin: 0 auto;
+}
+
+/* Ejes del chart */
+.puente-chart-svg .pc-axis { stroke: var(--ink); stroke-opacity: .2; stroke-width: 1; }
+.puente-chart-svg .pc-axis-label {
+  fill: var(--ink-60);
+  font-family: var(--sans);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+/* Labels temporales (Firma / Llaves) — más fuertes, pegados al eje X */
+.puente-chart-svg .pc-axis-label--time {
+  fill: var(--ink);
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  font-weight: 600;
+}
+.puente-chart-svg .pc-axis-sign {
+  fill: var(--ink-40);
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 300;
+}
+
+/* Líneas y áreas */
+.puente-chart-svg .pc-line-with    { stroke: var(--green); stroke-width: 3; fill: none; }
+.puente-chart-svg .pc-line-without { stroke: var(--ink); stroke-opacity: .55; stroke-width: 2.5; fill: none; }
+.puente-chart-svg .pc-area-with    {
+  fill: var(--green);
+  fill-opacity: .18;
+  /* Estado inicial: oculto a la derecha. Antes el reveal lo hacía un SMIL
+     <animate> dentro de un <clipPath>, que arrancaba con el reloj del SVG
+     al parsearse — eso disparaba la animación aunque la sección estuviera
+     fuera de pantalla. Ahora el reveal vive en CSS (.is-in + keyframes)
+     y main.js reinicia la clase cada vez que el chart entra al viewport. */
+  clip-path: inset(0 100% 0 0);
+}
+.puente-chart.is-in .pc-area-with {
+  animation: pcAreaReveal 2.6s var(--ease) .4s forwards;
+}
+@keyframes pcAreaReveal {
+  from { clip-path: inset(0 100% 0 0); }
+  to   { clip-path: inset(0 0 0 0); }
+}
+.puente-chart-svg .pc-area-without { fill: var(--ink); fill-opacity: .07; }
+
+/* Hitos verdes */
+.puente-chart-svg .pc-milestone-dot   { fill: var(--green); }
+.puente-chart-svg .pc-milestone-label {
+  fill: var(--ink); font-family: var(--sans); font-size: 12px; font-weight: 500; letter-spacing: 0.02em;
+}
+.puente-chart-svg .pc-milestone-sub {
+  fill: var(--ink-60); font-family: var(--sans); font-size: 10px; font-weight: 300;
+}
+
+/* Fricciones */
+.puente-chart-svg .pc-friction-mark  { stroke: var(--ink); stroke-opacity: .65; stroke-width: 1.8; fill: none; }
+.puente-chart-svg .pc-friction-label { fill: var(--ink-60); font-family: var(--sans); font-size: 11px; font-weight: 500; }
+
+/* Flecha final + label "Más valor" */
+.puente-chart-svg .pc-arrow-final path  { stroke: var(--green); stroke-width: 3; fill: none; }
+.puente-chart-svg .pc-arrow-final circle { fill: var(--green); }
+.puente-chart-svg .pc-arrow-final .pc-arrow-label {
+  fill: var(--green); font-family: var(--sans); font-size: 12px; font-weight: 600; letter-spacing: 0.02em;
+}
+
+/* Dot final de la línea SIN UMBRAL — sin label, mismo momento que LLAVE */
+.puente-chart-svg .pc-end-without {
+  fill: var(--ink);
+  fill-opacity: 0.55;
+}
+
+/* Footer del chart — ecuación centrada + logo a la derecha (misma altura) */
+.puente-chart-footer {
+  position: relative;
+  margin-top: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+}
+.puente-chart-footer .puente-chart-eq {
+  margin: 0;
+  /* la ecuación mantiene su animación fadeUp y centrado natural por flex */
+}
+.puente-chart-watermark {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 28px;
+  width: auto;
+  opacity: 0.55;
+  pointer-events: none;
+}
+@media (min-width: 768px) {
+  .puente-chart-watermark { height: 34px; }
+}
+
+/* Draw-on de las líneas (pathLength=100) sincronizado con el reveal */
+.puente-chart-svg .pc-line-with,
+.puente-chart-svg .pc-line-without {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+}
+.puente-chart.is-in .pc-line-with    { animation: drawOnce 2.6s var(--ease) .4s forwards; }
+.puente-chart.is-in .pc-line-without { animation: drawOnce 2.6s var(--ease) .6s forwards; }
+
+/* Hitos y fricciones aparecen sincronizados con cuándo la línea pasa por su x */
+.puente-chart-svg .pc-milestone,
+.puente-chart-svg .pc-friction,
+.puente-chart-svg .pc-arrow-final { opacity: 0; }
+.puente-chart.is-in .pc-milestone--1 { animation: fadeUp .5s var(--ease) .85s forwards; }
+.puente-chart.is-in .pc-milestone--2 { animation: fadeUp .5s var(--ease) 1.4s forwards; }
+.puente-chart.is-in .pc-milestone--3 { animation: fadeUp .5s var(--ease) 2.0s forwards; }
+.puente-chart.is-in .pc-arrow-final  { animation: fadeUp .6s var(--ease) 2.7s forwards; }
+.puente-chart.is-in .pc-friction--1  { animation: fadeUp .5s var(--ease) 1.2s forwards; }
+.puente-chart.is-in .pc-friction--2  { animation: fadeUp .5s var(--ease) 1.9s forwards; }
+.puente-chart.is-in .pc-friction--3  { animation: fadeUp .5s var(--ease) 2.8s forwards; }
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Ecuación de cierre — Caveat, verde */
+.puente-chart-eq {
+  text-align: center;
+  margin: 22px 0 0;
+  font-family: var(--script);
+  font-size: clamp(1.3rem, 3vw, 1.9rem);
+  color: var(--green-60);
+  font-weight: 500;
+  line-height: 1.2;
+  opacity: 0;
+}
+.puente-chart-eq strong { color: var(--green); font-weight: 500; }
+.puente-chart-eq-arrow { font-family: var(--sans); color: var(--green); }
+.puente-chart.is-in .puente-chart-eq { animation: fadeUp .9s var(--ease) 3.0s forwards; }
+
+@media (min-width: 768px) {
+  .puente--grafico { padding: 96px 32px; }
+  .puente-wide { gap: 36px; }
+  .puente-chart { padding: 32px 36px; }
+  .puente-chart-svg .pc-milestone-label { font-size: 13px; }
+}
+@media (max-width: 640px) {
+  .puente-chart-svg .pc-milestone-label { font-size: 10px; }
+  .puente-chart-svg .pc-milestone-sub   { font-size: 8.5px; }
+  .puente-chart-svg .pc-axis-label--time { font-size: 11px; }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   PILARES — numerado •••U + íconos animados
+   Sprint 0: tokens y clases listos para usar en HTML del refactor.
+   Cero dependencias externas — todos los SVG van inline en `index.html`.
+   ═══════════════════════════════════════════════════════════════ */
+
+/* •••U N — numerado de pilares */
+.pilar-num {
+  display: inline-flex;
+  align-items: center;
+  gap: 18px;
+  padding: 6px 0;
+}
+.pilar-num-mark {
+  height: 32px;
+  width: auto;
+  display: block;
+  color: var(--green);   /* el SVG inline usa fill="currentColor" */
+}
+.pilar-num-mark svg { height: 100%; width: auto; }
+.pilar-num-digit {
+  font-family: var(--serif);
+  font-size: 32px;
+  line-height: 1;
+  color: var(--green);
+  font-variant-numeric: lining-nums;
+}
+/* Variante sobre fondo oscuro */
+.pilar-num--invert .pilar-num-mark,
+.pilar-num--invert .pilar-num-digit { color: var(--green-40); }
+
+/* —— ÍCONOS DE PILARES — animaciones reusables ——
+   Todos los SVG van con stroke="currentColor", stroke-linecap="round" y
+   stroke-linejoin="round". Los paths que se animan llevan pathLength="100"
+   para que --len:100 funcione consistente.                                  */
+
+/* 1. drawLoop — trazo que se dibuja, mantiene, des-dibuja y vuelve */
+.anim-draw path,
+.anim-draw line,
+.anim-draw polyline,
+.anim-draw circle {
+  stroke-dasharray: var(--len, 100);
+  stroke-dashoffset: var(--len, 100);
+  animation: drawLoop 7s var(--ease) infinite;
+}
+.anim-draw > *:nth-child(2) { animation-delay: .6s; }
+.anim-draw > *:nth-child(3) { animation-delay: 1.1s; }
+.anim-draw > *:nth-child(4) { animation-delay: 1.5s; }
+@keyframes drawLoop {
+  0%   { stroke-dashoffset: var(--len, 100); }
+  28%  { stroke-dashoffset: 0; }
+  75%  { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: -100; }
+}
+
+/* 2. spin — rotación lenta perpetua (engranaje, rueda) */
+.anim-spin {
+  transform-origin: center;
+  transform-box: fill-box;
+  animation: spinSlow 18s linear infinite;
+}
+@keyframes spinSlow { to { transform: rotate(360deg); } }
+
+/* 3. pulse — escala suave 1 → 1.12 (corazón, pertenencia) */
+.anim-pulse {
+  transform-origin: center;
+  transform-box: fill-box;
+  animation: pulseSoft 2.4s var(--ease) infinite;
+}
+@keyframes pulseSoft {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.12); }
+}
+
+/* 4. bell — temblor sutil cada 4s (notificación) */
+.anim-bell {
+  transform-origin: 50% 18%;
+  transform-box: fill-box;
+  animation: bellShake 4s var(--ease) infinite;
+}
+@keyframes bellShake {
+  0%, 90%, 100% { transform: rotate(0); }
+  92%  { transform: rotate(-6deg); }
+  94%  { transform: rotate(6deg); }
+  96%  { transform: rotate(-4deg); }
+  98%  { transform: rotate(3deg); }
+}
+
+/* 5. layerStack — capas que se stackean UNA vez al cargar y quedan
+   visibles. Antes era un loop infinito (layerLoop) que reseteaba cada
+   9s — sentía invasivo en una sección con texto. */
+.anim-layers > * {
+  opacity: 0;
+  transform: translateY(14px) scale(.9);
+  transform-origin: center bottom;
+  transform-box: fill-box;
+  animation: layerStack 1.1s var(--ease) forwards;
+}
+.anim-layers > *:nth-child(2) { animation-delay: .30s; }
+.anim-layers > *:nth-child(3) { animation-delay: .55s; }
+.anim-layers > *:nth-child(4) { animation-delay: .80s; }
+.anim-layers > *:nth-child(5) { animation-delay: 1.05s; }
+@keyframes layerStack {
+  0%   { opacity: 0; transform: translateY(14px) scale(.9); }
+  100% { opacity: 1; transform: translateY(0)   scale(1);  }
+}
+
+/* 6. network-v2 — nodo central + 4 satélites, edges crecen desde el centro */
+.anim-network-v2 .node-center {
+  opacity: 0;
+  transform-origin: center;
+  transform-box: fill-box;
+  animation: nodePulseLoop 9s var(--ease) infinite;
+}
+.anim-network-v2 .edge {
+  stroke-dasharray: 14;
+  stroke-dashoffset: 14;
+  animation: edgeLoop 9s var(--ease) infinite;
+}
+.anim-network-v2 .edge-1 { animation-delay: .4s; }
+.anim-network-v2 .edge-2 { animation-delay: .65s; }
+.anim-network-v2 .edge-3 { animation-delay: .9s; }
+.anim-network-v2 .edge-4 { animation-delay: 1.15s; }
+.anim-network-v2 .sat {
+  opacity: 0;
+  transform: scale(.4);
+  transform-origin: center;
+  transform-box: fill-box;
+  animation: satLoop 9s var(--ease) infinite;
+}
+.anim-network-v2 .sat-1 { animation-delay: .9s; }
+.anim-network-v2 .sat-2 { animation-delay: 1.15s; }
+.anim-network-v2 .sat-3 { animation-delay: 1.4s; }
+.anim-network-v2 .sat-4 { animation-delay: 1.65s; }
+@keyframes nodePulseLoop {
+  0%   { opacity: 0; transform: scale(.6); }
+  10%  { opacity: 1; transform: scale(1.08); }
+  18%  { opacity: 1; transform: scale(1); }
+  82%  { opacity: 1; transform: scale(1); }
+  92%  { opacity: 0; transform: scale(.8); }
+  100% { opacity: 0; transform: scale(.6); }
+}
+@keyframes edgeLoop {
+  0%   { stroke-dashoffset: 14; }
+  20%  { stroke-dashoffset: 0; }
+  82%  { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: -14; }
+}
+@keyframes satLoop {
+  0%   { opacity: 0; transform: scale(.4); }
+  12%  { opacity: 1; transform: scale(1); }
+  82%  { opacity: 1; transform: scale(1); }
+  92%  { opacity: 0; transform: scale(.7); }
+  100% { opacity: 0; transform: scale(.4); }
+}
+
+/* 6b. tetris-b — edificio Tetris: piezas caen secuenciales y salen en cascada inversa.
+   Cada piso tiene su keyframe propio (no comparte) — así las trayectorias nunca
+   se cruzan y se salen de arriba a abajo (piso 5 primero, piso 1 último).        */
+.anim-tetris-b .floor { stroke: currentColor; stroke-width: 2; stroke-linecap: round; opacity: .4; }
+.anim-tetris-b .floor-piece { transform-origin: center; transform-box: fill-box; }
+.anim-tetris-b .floor-piece-1 { animation: floorBuild1 8s cubic-bezier(.55, 0, .35, 1) infinite; }
+.anim-tetris-b .floor-piece-2 { animation: floorBuild2 8s cubic-bezier(.55, 0, .35, 1) infinite; }
+.anim-tetris-b .floor-piece-3 { animation: floorBuild3 8s cubic-bezier(.55, 0, .35, 1) infinite; }
+.anim-tetris-b .floor-piece-4 { animation: floorBuild4 8s cubic-bezier(.55, 0, .35, 1) infinite; }
+.anim-tetris-b .floor-piece-5 { animation: floorBuild5 8s cubic-bezier(.55, 0, .35, 1) infinite; }
+
+@keyframes floorBuild1 {
+  0%      { opacity: 0; transform: translateY(-130px); }
+  3%      { opacity: 1; }
+  9%      { opacity: 1; transform: translateY(0); }
+  88%     { opacity: 1; transform: translateY(0); }
+  95%     { opacity: 0; transform: translateY(-130px); }
+  100%    { opacity: 0; transform: translateY(-130px); }
+}
+@keyframes floorBuild2 {
+  0%, 9%  { opacity: 0; transform: translateY(-130px); }
+  12%     { opacity: 1; }
+  18%     { opacity: 1; transform: translateY(0); }
+  80%     { opacity: 1; transform: translateY(0); }
+  87%     { opacity: 0; transform: translateY(-130px); }
+  100%    { opacity: 0; transform: translateY(-130px); }
+}
+@keyframes floorBuild3 {
+  0%, 18% { opacity: 0; transform: translateY(-130px); }
+  21%     { opacity: 1; }
+  27%     { opacity: 1; transform: translateY(0); }
+  72%     { opacity: 1; transform: translateY(0); }
+  79%     { opacity: 0; transform: translateY(-130px); }
+  100%    { opacity: 0; transform: translateY(-130px); }
+}
+@keyframes floorBuild4 {
+  0%, 27% { opacity: 0; transform: translateY(-130px); }
+  30%     { opacity: 1; }
+  36%     { opacity: 1; transform: translateY(0); }
+  64%     { opacity: 1; transform: translateY(0); }
+  71%     { opacity: 0; transform: translateY(-130px); }
+  100%    { opacity: 0; transform: translateY(-130px); }
+}
+@keyframes floorBuild5 {
+  0%, 36% { opacity: 0; transform: translateY(-130px); }
+  39%     { opacity: 1; }
+  45%     { opacity: 1; transform: translateY(0); }
+  56%     { opacity: 1; transform: translateY(0); }
+  63%     { opacity: 0; transform: translateY(-130px); }
+  100%    { opacity: 0; transform: translateY(-130px); }
+}
+
+.anim-tetris-b .comm-dot { fill: var(--offwhite); transform-origin: center; transform-box: fill-box; }
+.anim-tetris-b .comm-dot-1 { animation: dotBuild1 8s var(--ease) infinite; }
+.anim-tetris-b .comm-dot-2 { animation: dotBuild2 8s var(--ease) infinite; }
+.anim-tetris-b .comm-dot-3 { animation: dotBuild3 8s var(--ease) infinite; }
+.anim-tetris-b .comm-dot-4 { animation: dotBuild4 8s var(--ease) infinite; }
+.anim-tetris-b .comm-dot-5 { animation: dotBuild5 8s var(--ease) infinite; }
+
+@keyframes dotBuild1 {
+  0%, 8%   { opacity: 0; transform: scale(0); }
+  11%      { opacity: 1; transform: scale(1.6); }
+  14%      { transform: scale(1); }
+  88%      { opacity: 1; transform: scale(1); }
+  95%      { opacity: 0; transform: scale(0); }
+  100%     { opacity: 0; transform: scale(0); }
+}
+@keyframes dotBuild2 {
+  0%, 17%  { opacity: 0; transform: scale(0); }
+  20%      { opacity: 1; transform: scale(1.6); }
+  23%      { transform: scale(1); }
+  80%      { opacity: 1; transform: scale(1); }
+  87%      { opacity: 0; transform: scale(0); }
+  100%     { opacity: 0; transform: scale(0); }
+}
+@keyframes dotBuild3 {
+  0%, 26%  { opacity: 0; transform: scale(0); }
+  29%      { opacity: 1; transform: scale(1.6); }
+  32%      { transform: scale(1); }
+  72%      { opacity: 1; transform: scale(1); }
+  79%      { opacity: 0; transform: scale(0); }
+  100%     { opacity: 0; transform: scale(0); }
+}
+@keyframes dotBuild4 {
+  0%, 35%  { opacity: 0; transform: scale(0); }
+  38%      { opacity: 1; transform: scale(1.6); }
+  41%      { transform: scale(1); }
+  64%      { opacity: 1; transform: scale(1); }
+  71%      { opacity: 0; transform: scale(0); }
+  100%     { opacity: 0; transform: scale(0); }
+}
+@keyframes dotBuild5 {
+  0%, 44%  { opacity: 0; transform: scale(0); }
+  47%      { opacity: 1; transform: scale(1.6); }
+  50%      { transform: scale(1); }
+  56%      { opacity: 1; transform: scale(1); }
+  63%      { opacity: 0; transform: scale(0); }
+  100%     { opacity: 0; transform: scale(0); }
+}
+
+/* 7. vault — caja fuerte: puerta se construye en loop, rueda gira eternamente */
+.anim-vault .vault-frame path {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  animation: drawLoop 9s var(--ease) infinite;
+}
+.anim-vault .vault-frame path:nth-child(2) { animation-delay: .55s; }
+.anim-vault .vault-wheel {
+  opacity: 0;
+  transform-origin: center;
+  transform-box: fill-box;
+  animation:
+    vaultIn 9s var(--ease) infinite,
+    vaultSpin 12s linear infinite;
+}
+@keyframes vaultIn {
+  0%   { opacity: 0; }
+  28%  { opacity: 0; }
+  38%  { opacity: 1; }
+  82%  { opacity: 1; }
+  92%  { opacity: 0; }
+  100% { opacity: 0; }
+}
+@keyframes vaultSpin {
+  to { transform: rotate(360deg); }
+}
+
+/* 8. anim-fill — outline se dibuja, después se rellena (reservado, no usado hoy) */
+.anim-fill .shape {
+  stroke-dasharray: 120;
+  stroke-dashoffset: 120;
+  fill: transparent;
+  animation:
+    drawOnce 1.2s var(--ease) forwards,
+    fillSoft .8s var(--ease) 1.2s forwards;
+}
+@keyframes drawOnce { to { stroke-dashoffset: 0; } }
+@keyframes fillSoft { to { fill: currentColor; fill-opacity: .08; } }
+
+/* 9. anim-presence — arcos concéntricos radiando desde un punto central.
+   Concepto: la presencia operativa alcanza al inversor en capas.
+   Los anillos se dibujan desde adentro (stroke-dasharray) y luego se
+   expanden levemente desvaneciéndose. El punto central pulsa suave en loop. */
+.anim-presence .presence-ring {
+  stroke-dasharray: 60;
+  stroke-dashoffset: 60;
+  transform-origin: center;
+  transform-box: fill-box;
+  opacity: 0;
+  animation: presenceRing 4s var(--ease) infinite;
+}
+.anim-presence .presence-ring-1 { animation-delay: 0s;    }
+.anim-presence .presence-ring-2 { animation-delay: 0.55s; }
+.anim-presence .presence-dot {
+  transform-origin: center;
+  transform-box: fill-box;
+  animation: presenceDot 4s var(--ease) infinite;
+}
+@keyframes presenceRing {
+  0%   { stroke-dashoffset: 60; opacity: 0;   transform: scale(0.85); }
+  18%  { opacity: 1;             transform: scale(1);    }
+  55%  { stroke-dashoffset: 0;  opacity: 1;   transform: scale(1);    }
+  85%  { stroke-dashoffset: 0;  opacity: 0;   transform: scale(1.08); }
+  100% { stroke-dashoffset: 0;  opacity: 0;   transform: scale(1.08); }
+}
+@keyframes presenceDot {
+  0%, 100% { opacity: 1;    transform: scale(1);    }
+  50%      { opacity: 0.75; transform: scale(0.82); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .anim-presence .presence-ring {
+    stroke-dashoffset: 0;
+    opacity: 1;
+    animation: none;
+  }
+  .anim-presence .presence-dot { animation: none; }
+}
+
+
+/* —— Pilares slide v2 — adaptaciones para el refactor con numerado •••U —— */
+.pilar-slide-title em {
+  color: var(--green);
+  font-style: italic;
+}
+
+/* Numerado de pilar — formato vertical (logo arriba, número abajo).
+   Mobile: flujo normal dentro del meta (el slide es una card chiquita del carrusel).
+   Desktop: position: absolute top-left del slide, mismo lugar entre los 5 pilares
+   (consistencia visual al crossfade del scroll storytelling). */
+.pilar-num--slide {
+  display: inline-block;
+  position: relative;             /* contexto para el dígito absolute */
+  align-self: center;             /* el bloque se centra dentro de .pilar-slide-meta */
+  padding: 0;
+  margin: 0;
+  line-height: 1;
+}
+.pilar-num--slide .pilar-num-mark {
+  height: clamp(36px, 4.4vw, 56px);
+  width: auto;
+  display: block;
+}
+.pilar-num--slide .pilar-num-digit {
+  /* Exponente: posición absoluta al top-right del mark, justo donde
+     termina la "U" del logo. */
+  position: absolute;
+  top: 10%;            /* desciende ~10% desde el tope del mark, queda a la
+                          altura de la cap-height de la "U" */
+  right: 0;            /* arranca en el borde derecho de la imagen */
+  transform: translateX(40%);  /* empuja el dígito un poco hacia la derecha
+                                  para que parezca exponente, no overlap */
+  font-family: var(--serif);
+  font-size: clamp(11px, 1.2vw, 16px);  /* chico, ~35% del mark */
+  line-height: 1;
+  color: var(--green);
+}
+/* Nota: el numerador no usa position: absolute en desktop hoy.
+   .pilar-num--slide tiene su propio position: relative para anclar el dígito,
+   así que no hace falta forzar relative en .pilar-slide (que en desktop debe
+   ser absolute para el sticky storytelling). */
+
+@media (min-width: 768px) {
+  /* Desktop: el numerador fluye dentro de .pilar-slide-meta (mismo orden DOM
+     que en mobile) y queda centrado horizontalmente sobre el título. Como
+     .pilar-slide-meta tiene justify-content: center, el conjunto •••U + dígito
+     + título queda vertical y horizontalmente centrado en la columna izquierda
+     del slide — mismo posicionamiento para los 5 pilares. */
+  .pilar-num--slide .pilar-num-mark { height: clamp(52px, 4.5vw, 68px); }
+  .pilar-num--slide .pilar-num-digit { font-size: clamp(15px, 1.3vw, 22px); }
+}
+
+/* Figure dentro del slide — contenedor del ícono animado */
+.pilar-slide-figure {
+  width: 100px;
+  height: 100px;
+  margin: 18px 0;
+  color: var(--green);
+}
+.pilar-slide-figure svg { width: 100%; height: 100%; }
+.pilar-slide-figure img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.pilar-slide-figure--inline {
+  width: 56px;
+  height: 56px;
+  margin: 8px 0 10px;
+}
+.pilar-slide-figure--banca {
+  width: 110px;
+  height: 110px;
+  color: var(--green);
+  margin: 14px 0;
+}
+/* Variante tetris — respeta aspect ratio 100:110 del viewBox */
+.pilar-slide-figure--tetris {
+  width: 100px;
+  height: 110px;
+  margin: 8px 0;
+}
+@media (min-width: 768px) {
+  .pilar-slide-figure { width: 120px; height: 120px; }
+  .pilar-slide-figure--inline { width: 64px; height: 64px; }
+  .pilar-slide-figure--banca { width: 140px; height: 140px; }
+  .pilar-slide-figure--tetris { width: 130px; height: 143px; }
+}
+
+/* Banca ya no tiene fondo oscuro: foot y variante --script usan el verde
+   default heredado de .pilar-slide-foot, sin override. */
+
+/* ── Callout inline: ícono + texto verde en la misma fila ──
+   Usado en Pilars 1 y 2 para que el ícono no quede como elemento
+   aislado entre el lead y el foot institucional. */
+.pilar-foot-inline {
+  display: flex;
+  align-items: flex-start;   /* texto multilínea: ícono ancla arriba */
+  gap: 16px;
+  margin-top: 10px;
+}
+.pilar-foot-inline .pilar-slide-figure {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  margin: 2px 0 0;           /* leve nudge para alinear con la primera línea del texto */
+}
+.pilar-foot-inline .pilar-slide-foot,
+.pilar-foot-inline .pilar-slide-foot--script {
+  flex: 1;
+  margin: 0;
+}
+@media (min-width: 768px) {
+  .pilar-foot-inline { gap: 22px; }
+  .pilar-foot-inline .pilar-slide-figure { width: 64px; height: 64px; }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   PILAR 3 — Inteligencia UMBRAL (Beneficios)
+   Kicker + título, dos columnas dual (desarrollador / inversor),
+   ecuación visual: Inversión + Servicio en línea de tiempo = Mejores proyectos
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Kicker que va arriba del título (en pilar 3 y donde haga falta) */
+.pilar-slide-kicker {
+  font-family: var(--sans);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--green-60);
+  margin-top: 6px;
+}
+
+/* —— Dos columnas (Desarrollador / Inversor) —— */
+.pilar-3-dual {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 28px;
+  margin: 24px 0;
+  padding: 28px 0;
+  border-top: 1px solid var(--green-40);
+  border-bottom: 1px solid var(--green-40);
+}
+.pilar-3-dual-divider { display: none; }
+.pilar-3-dual-col {
+  /* Grid 2x2: ícono spaneando las dos filas a la izquierda,
+     tag (fila 1) + texto (fila 2) a la derecha. */
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto auto;
+  align-items: start;
+  column-gap: 16px;
+  row-gap: 6px;
+  text-align: left;     /* override del text-align: center heredado del body */
+}
+.pilar-3-dual-col .pilar-3-dual-icon {
+  grid-row: 1 / 3;
+  grid-column: 1;
+  align-self: center;
+}
+.pilar-3-dual-col .pilar-3-dual-tag  { grid-column: 2; grid-row: 1; align-self: end;   }
+.pilar-3-dual-col .pilar-3-dual-text { grid-column: 2; grid-row: 2; align-self: start; }
+.pilar-3-dual-icon {
+  width: 56px;
+  height: 56px;
+  color: var(--green);
+}
+.pilar-3-dual-icon svg { width: 100%; height: 100%; }
+.pilar-3-dual-tag {
+  font-family: var(--sans);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--green);
+}
+.pilar-3-dual-text {
+  font-family: var(--serif);
+  font-size: clamp(1.05rem, 2.6vw, 1.35rem);
+  line-height: 1.3;
+  color: var(--ink);
+  margin: 0;
+}
+.pilar-3-dual-text em {
+  color: var(--green);
+  font-style: italic;
+}
+
+@media (min-width: 768px) {
+  .pilar-3-dual {
+    grid-template-columns: 1fr 1px 1fr;
+    gap: 36px;
+  }
+  .pilar-3-dual-divider {
+    display: block;
+    background: var(--green-40);
+    width: 1px;
+  }
+}
+
+/* —— Ecuación visual: Inversión + Servicio = Mejores proyectos —— */
+.pilar-3-eq {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr auto 1fr;
+  align-items: center;
+  gap: 12px;
+  margin: 24px 0 16px;
+  padding: 24px;
+  background: var(--green-10);
+  border-radius: 2px;
+}
+.pilar-3-eq-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 10px;
+}
+.pilar-3-eq-icon {
+  width: 56px;
+  height: 56px;
+  color: var(--green);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.pilar-3-eq-icon svg { width: 100%; height: 100%; }
+.pilar-3-eq-icon--wide {
+  width: 88px;
+}
+.pilar-3-eq-label {
+  font-family: var(--sans);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-80);
+  line-height: 1.4;
+  max-width: 14ch;
+}
+.pilar-3-eq-item--result .pilar-3-eq-label {
+  color: var(--green);
+  font-weight: 600;
+}
+.pilar-3-eq-op {
+  font-family: var(--serif);
+  font-size: 1.6rem;
+  color: var(--green-60);
+  font-weight: 400;
+  line-height: 1;
+}
+
+@media (min-width: 768px) {
+  .pilar-3-eq { padding: 32px 28px; gap: 18px; }
+  .pilar-3-eq-icon { width: 64px; height: 64px; }
+  .pilar-3-eq-icon--wide { width: 110px; }
+  .pilar-3-eq-op { font-size: 2rem; }
+  .pilar-3-eq-label { font-size: 0.78rem; }
+}
+@media (max-width: 560px) {
+  /* En mobile: stack vertical para que no se apriete */
+  .pilar-3-eq {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    gap: 18px;
+  }
+  .pilar-3-eq-op { font-size: 1.4rem; }
+  .pilar-3-eq-icon--wide { width: 88px; }
+}
+/* En el carrusel mobile (< 768px) la card es muy angosta para la ecuación.
+   La ecuación brilla en desktop donde hay espacio horizontal. */
+@media (max-width: 767px) {
+  .pilar-3-eq { display: none; }
+  .pilar-3-dual { margin: 18px 0 4px; padding: 22px 0; }
+}
+
+/* Animación de los dots del timeline — pulsan secuencialmente */
+.anim-timeline .tl-dot {
+  transform-origin: center;
+  transform-box: fill-box;
+  opacity: 0.3;
+  animation: tlDotPulse 3s var(--ease) infinite;
+}
+.anim-timeline .tl-dot-1 { animation-delay: 0s; }
+.anim-timeline .tl-dot-2 { animation-delay: 0.4s; }
+.anim-timeline .tl-dot-3 { animation-delay: 0.8s; }
+.anim-timeline .tl-dot-4 { animation-delay: 1.2s; }
+.anim-timeline .tl-dot-5 { animation-delay: 1.6s; }
+@keyframes tlDotPulse {
+  0%, 80%, 100% { opacity: 0.3; transform: scale(1); }
+  15%, 25%      { opacity: 1;   transform: scale(1.35); }
+}
+
+/* Animación del diamante — pulse con leve brillo */
+.anim-diamond {
+  transform-origin: center;
+  transform-box: fill-box;
+  animation: diamondPulse 3.6s var(--ease) infinite;
+}
+@keyframes diamondPulse {
+  0%, 100% { transform: scale(1);    opacity: 0.85; }
+  50%      { transform: scale(1.08); opacity: 1; }
+}
+
+/* —— Fix de altura para el Pilar 3 (Inteligencia)
+   El slide del pilar usa max-height: 80vh con overflow:hidden y justify-content:center;
+   con el contenido nuevo (dual + ecuación) supera ese alto y se corta arriba.
+   Override targeted: alinear desde arriba, permitir scroll interno si hace falta,
+   y compactar gaps. Solo aplica al Pilar 3, los demás siguen como están. —— */
+.pilar-slide--inteligencia .pilar-slide-body {
+  max-height: none;
+  overflow: visible;
+  justify-content: flex-start;
+  gap: 10px;
+}
+.pilar-slide--inteligencia .pilar-3-dual {
+  margin: 14px 0;
+  padding: 18px 0;
+}
+.pilar-slide--inteligencia .pilar-3-eq {
+  padding: 18px;
+  margin: 14px 0 10px;
+}
+@media (min-width: 768px) {
+  /* Desktop: contenido vertically centered (antes era flex-start, que dejaba
+     el bloque pegado al borde superior y desbalanceaba la columna izquierda
+     que sí tiene su título centrado). Padding generoso para que aún
+     centrando, el contenido tenga aire arriba y abajo. */
+  .pilar-slide--inteligencia .pilar-slide-body {
+    max-height: 86vh;
+    overflow-y: auto;
+    justify-content: center;
+    padding-top: clamp(40px, 6vh, 80px);
+    padding-bottom: clamp(40px, 6vh, 80px);
+    gap: 12px;
+    /* Scrollbar discreto cuando aparece */
+    scrollbar-width: thin;
+    scrollbar-color: var(--green-40) transparent;
+  }
+  .pilar-slide--inteligencia .pilar-slide-body::-webkit-scrollbar { width: 6px; }
+  .pilar-slide--inteligencia .pilar-slide-body::-webkit-scrollbar-thumb {
+    background: var(--green-40); border-radius: 3px;
+  }
+  .pilar-slide--inteligencia .pilar-slide-body::-webkit-scrollbar-track { background: transparent; }
+
+  .pilar-slide--inteligencia .pilar-3-dual {
+    margin: 14px 0;
+    padding: 18px 0;
+    gap: 24px;
+  }
+  .pilar-slide--inteligencia .pilar-3-dual-icon { width: 48px; height: 48px; }
+  .pilar-slide--inteligencia .pilar-3-dual-text { font-size: clamp(1rem, 1.5vw, 1.2rem); }
+
+  .pilar-slide--inteligencia .pilar-3-eq {
+    padding: 20px 24px;
+    margin: 12px 0 8px;
+    gap: 14px;
+  }
+  .pilar-slide--inteligencia .pilar-3-eq-icon { width: 52px; height: 52px; }
+  .pilar-slide--inteligencia .pilar-3-eq-icon--wide { width: 88px; }
+  .pilar-slide--inteligencia .pilar-3-eq-op { font-size: 1.6rem; }
+
+  /* Pilar 5 (Banca): el body es alto (lead + figure + bullets + CTA + foot)
+     y el justify-content: center default no daba suficiente respiro arriba.
+     Padding-top/bottom explícito para que el contenido no quede pegado al
+     borde superior del slide, manteniendo el centrado vertical. */
+  .pilar-slide--banca .pilar-slide-body {
+    padding-top: clamp(40px, 6vh, 80px);
+    padding-bottom: clamp(40px, 6vh, 80px);
+    justify-content: center;
+  }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
    REDUCED MOTION
    ═══════════════════════════════════════════════════════════════ */
 @media (prefers-reduced-motion: reduce) {
@@ -1830,4 +3096,36 @@ em { font-style: italic; font-family: var(--serif); }
   /* Etapas: el layout ya es estático — nada extra para reduced-motion */
   /* Pilares: en reduced-motion todos los slides visibles en stack */
   .pilar-slide { opacity: 1 !important; transform: none !important; position: static !important; }
+
+  /* Íconos animados: mostrar el estado "dibujado / armado" como estático,
+     no el estado final del keyframe (que es invisible por el loop).        */
+  .anim-draw path,
+  .anim-draw line,
+  .anim-draw polyline,
+  .anim-draw circle,
+  .anim-vault .vault-frame path {
+    stroke-dashoffset: 0 !important;
+    animation: none !important;
+  }
+  .anim-layers > *,
+  .anim-network-v2 .node-center,
+  .anim-network-v2 .sat,
+  .anim-vault .vault-wheel {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+  }
+  .anim-network-v2 .edge {
+    stroke-dashoffset: 0 !important;
+    animation: none !important;
+  }
+  .anim-spin, .anim-pulse, .anim-bell, .anim-diamond { animation: none !important; }
+  .anim-timeline .tl-dot { opacity: 1 !important; transform: none !important; animation: none !important; }
+  /* Tetris edificio: mostrar el edificio armado (estado del plateau) sin animar */
+  .anim-tetris-b .floor-piece,
+  .anim-tetris-b .comm-dot {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+  }
 }
