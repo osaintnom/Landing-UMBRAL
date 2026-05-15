@@ -1124,14 +1124,16 @@ em { font-style: italic; font-family: var(--serif); }
   font-style: italic;
 }
 .agenda-body {
-  font-family: var(--sans);
-  font-size: clamp(0.92rem, 2.4vw, 1rem);
-  line-height: 1.55;
-  color: var(--ink-60);
+  font-family: var(--serif);
+  font-size: clamp(1.5rem, 4.5vw, 2.4rem);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--ink);
   margin: 0 auto;
-  max-width: 56ch;
+  max-width: 22ch;
+  text-wrap: balance;
 }
-.agenda-body strong { color: var(--ink); font-weight: 500; }
+.agenda-body strong { color: var(--green); font-weight: 400; font-style: italic; }
 
 /* Payoff de cierre — dos líneas: setup en sans + línea final serif italic
    verde, mismo treatment editorial que usan los <em> del resto del sitio. */
@@ -1549,7 +1551,7 @@ em { font-style: italic; font-family: var(--serif); }
     line-height: 1.04;
   }
 
-  /* Columna derecha: contenido centrado vertical y horizontalmente */
+  /* Columna derecha: vertical center, contenido alineado a la izquierda */
   .pilar-slide-body {
     padding: 0 0 0 clamp(40px, 5vw, 80px);
     max-height: none;
@@ -1558,14 +1560,12 @@ em { font-style: italic; font-family: var(--serif); }
     flex-direction: column;
     gap: 16px;
     justify-content: center;        /* vertical center */
-    align-items: center;            /* horizontal center */
-    text-align: center;
+    align-items: flex-start;        /* bloques pegados al borde izquierdo */
+    text-align: left;
   }
   .pilar-slide-body .pilar-slide-lead { max-width: 52ch; }
-  /* El texto dentro del callout inline vuelve a left-align — uppercase
-     verde multilínea centrado se ve dentado */
-  .pilar-foot-inline .pilar-slide-foot,
-  .pilar-foot-inline .pilar-slide-foot--script { text-align: left; }
+  /* CTA: anclado al borde izquierdo */
+  .pilar-slide-body .pilar-slide-cta { align-self: flex-start; }
   .pilar-slide-lead  { font-size: clamp(1.05rem, 1.5vw, 1.22rem); }
   .pilar-slide-list li { font-size: 0.95rem; }
   .pilar-slide-cols  { grid-template-columns: 1fr 1fr; gap: 28px; }
