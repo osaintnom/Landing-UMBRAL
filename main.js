@@ -216,6 +216,22 @@ const FORMSPREE_ENDPOINT = '';
     revealables.forEach((el) => el.classList.add('is-in'));
   }
 
+  /* ── OVERLAY CARD (perfil): entra y sale con el viewport ─────── */
+  const overlayCard = document.querySelector('.perfil-overlay-card');
+  if (overlayCard) {
+    if ('IntersectionObserver' in window) {
+      const ioCard = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) overlayCard.classList.add('is-in');
+          else overlayCard.classList.remove('is-in');
+        });
+      }, { threshold: 0.25 });
+      ioCard.observe(overlayCard);
+    } else {
+      overlayCard.classList.add('is-in');
+    }
+  }
+
   /* ── PUENTE CHART: replay garantizado en cada visibilidad ───────
      El gráfico CON/SIN UMBRAL tiene su propio observer porque queremos
      que la animación se reproduzca cada vez que entra en pantalla, no
