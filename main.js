@@ -7,15 +7,16 @@
    - Problem canvas sketch (desktop+hover only)
    - Word reveal (scroll-linked)
    - Pilares flip cards
-   - Formularios: contacto (solo email) + mini-form
+   - Formularios: contacto + mini-form
    ═══════════════════════════════════════════════════════════════ */
 
 // Para activar el envío real:
 // 1. Crear cuenta en formspree.io
-// 2. Crear un form apuntando a umbralestructura@gmail.com
+// 2. Crear un form apuntando a info@umbrallcollection.com.ar
 // 3. Reemplazar FORMSPREE_ENDPOINT con la URL (ej: https://formspree.io/f/abcd1234)
 // El dominio formspree.io ya está autorizado en la CSP.
 const FORMSPREE_ENDPOINT = '';
+const CONTACT_EMAIL = 'info@umbrallcollection.com.ar';
 
 (() => {
   'use strict';
@@ -170,7 +171,8 @@ const FORMSPREE_ENDPOINT = '';
         // interferencia con los listeners del hero). Cada frame usamos
         // 'instant' porque es atómico.
         const startY = window.scrollY;
-        const targetY = target.getBoundingClientRect().top + startY;
+        const anchorOffset = href === '#contacto' && window.innerWidth < 768 ? 56 : 0;
+        const targetY = target.getBoundingClientRect().top + startY - anchorOffset;
         const distance = targetY - startY;
         const duration = 900; // ms — sensación de smooth sin ser lenta
         const t0 = performance.now();
@@ -240,6 +242,39 @@ const FORMSPREE_ENDPOINT = '';
   (function setupPuenteChartReplay() {
     const chart = document.querySelector('.puente-chart');
     if (!chart) return;
+    const scoreValues = Array.from(chart.querySelectorAll('.puente-score-value[data-count-to]'));
+    let scoreFrame = 0;
+    let scoreTimer = 0;
+
+    const setScoreValues = (progress) => {
+      scoreValues.forEach((el) => {
+        const target = Number(el.dataset.countTo || 0);
+        el.textContent = `${Math.round(target * progress)}%`;
+      });
+    };
+
+    const animateScores = () => {
+      if (!scoreValues.length) return;
+      window.clearTimeout(scoreTimer);
+      window.cancelAnimationFrame(scoreFrame);
+      setScoreValues(0);
+      if (reducedMotion) {
+        setScoreValues(1);
+        return;
+      }
+      scoreTimer = window.setTimeout(() => {
+        const duration = 950;
+        const start = performance.now();
+        const tick = (now) => {
+          const raw = Math.min(1, (now - start) / duration);
+          const eased = 1 - Math.pow(1 - raw, 3);
+          setScoreValues(eased);
+          if (raw < 1) scoreFrame = window.requestAnimationFrame(tick);
+        };
+        scoreFrame = window.requestAnimationFrame(tick);
+      }, 500);
+    };
+
     if (!('IntersectionObserver' in window)) {
       chart.classList.add('is-in');
       return;
@@ -251,6 +286,7 @@ const FORMSPREE_ENDPOINT = '';
       // batch de cambios → animations no se reinician.
       void chart.offsetWidth;
       chart.classList.add('is-in');
+      animateScores();
     };
     const io = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
@@ -258,6 +294,8 @@ const FORMSPREE_ENDPOINT = '';
           replay();
         } else {
           chart.classList.remove('is-in');
+          window.clearTimeout(scoreTimer);
+          window.cancelAnimationFrame(scoreFrame);
         }
       });
     }, { threshold: 0.25, rootMargin: '0px 0px -10% 0px' });
@@ -657,8 +695,20 @@ const FORMSPREE_ENDPOINT = '';
     cards.forEach(c => io.observe(c));
   })();
 
-  /* ── FORMS: contacto (solo email) + mini-form ────────────────── */
+  /* ── FORMS: contacto + mini-form ──────────────────────────────── */
   const EMAIL_RE = /^[A-Za-z0-9._%+-]{1,64}@[A-Za-z0-9.-]{1,253}\.[A-Za-z]{2,}$/;
+
+  function buildContactMailto(payload) {
+    const lines = [
+      payload.name && `Nombre: ${payload.name}`,
+      `Email: ${payload.email}`,
+      payload.company && `Empresa: ${payload.company}`,
+      payload.role && `Cargo: ${payload.role}`,
+      payload.message && `Consulta: ${payload.message}`,
+    ].filter(Boolean);
+
+    return `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent('Consulta desde la web de UMBRAL')}&body=${encodeURIComponent(lines.join('\n'))}`;
+  }
 
   function attachForm({ formId, errorId, okId, submitId, defaultLabel }) {
     const form = document.getElementById(formId);
@@ -673,7 +723,7 @@ const FORMSPREE_ENDPOINT = '';
     }
     function clearMessages() { setMessage('', ''); }
 
-    form.querySelectorAll('input').forEach((input) => {
+    form.querySelectorAll('input, textarea').forEach((input) => {
       input.addEventListener('input', clearMessages);
     });
 
@@ -686,7 +736,22 @@ const FORMSPREE_ENDPOINT = '';
       if (gotcha && gotcha.value) return;
 
       const emailInput = form.querySelector('input[type="email"]');
+      const nameInput = form.querySelector('input[name="name"]');
+      const companyInput = form.querySelector('input[name="company"]');
+      const roleInput = form.querySelector('input[name="role"]');
+      const messageInput = form.querySelector('textarea[name="message"]');
       const email = emailInput ? emailInput.value.trim() : '';
+      const name = nameInput ? nameInput.value.trim() : '';
+      const company = companyInput ? companyInput.value.trim() : '';
+      const role = roleInput ? roleInput.value.trim() : '';
+      const message = messageInput ? messageInput.value.trim() : '';
+      const payload = { email, source: formId };
+
+      if (nameInput && name.length < 2) {
+        setMessage('error', 'Dejanos tu nombre para poder contactarte.');
+        nameInput.focus();
+        return;
+      }
 
       if (!email || email.length > 254 || !EMAIL_RE.test(email)) {
         setMessage('error', 'El email no parece válido. Revisalo.');
@@ -694,10 +759,15 @@ const FORMSPREE_ENDPOINT = '';
         return;
       }
 
-      // Modo optimista: si no hay endpoint configurado, confirmamos sin enviar.
+      if (nameInput) payload.name = name;
+      if (company) payload.company = company;
+      if (role) payload.role = role;
+      if (message) payload.message = message;
+
+      // Si no hay endpoint configurado, abrimos un mail precompletado como fallback.
       if (!FORMSPREE_ENDPOINT) {
-        setMessage('ok', 'Gracias. Te contactamos dentro del día.');
-        form.reset();
+        window.location.href = buildContactMailto(payload);
+        setMessage('ok', `Se abrió tu mail para enviar la consulta a ${CONTACT_EMAIL}.`);
         return;
       }
 
@@ -711,7 +781,7 @@ const FORMSPREE_ENDPOINT = '';
         const res = await fetch(FORMSPREE_ENDPOINT, {
           method: 'POST',
           headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, source: formId }),
+          body: JSON.stringify(payload),
         });
 
         if (res.ok) {
@@ -719,11 +789,11 @@ const FORMSPREE_ENDPOINT = '';
           form.reset();
         } else {
           const data = await res.json().catch(() => ({}));
-          const msg = data?.errors?.[0]?.message || 'Algo falló. Escribinos por WhatsApp.';
+          const msg = data?.errors?.[0]?.message || `Algo falló. Escribinos a ${CONTACT_EMAIL}.`;
           setMessage('error', msg);
         }
       } catch {
-        setMessage('error', 'No pudimos enviar. Escribinos por WhatsApp.');
+        setMessage('error', `No pudimos enviar. Escribinos a ${CONTACT_EMAIL}.`);
       } finally {
         if (submit) {
           submit.disabled = false;
