@@ -12,11 +12,11 @@
 
 // Para activar el envío real:
 // 1. Crear cuenta en formspree.io
-// 2. Crear un form apuntando a info@umbrallcollection.com.ar
+// 2. Crear un form apuntando a info@umbralcollection.com.ar
 // 3. Reemplazar FORMSPREE_ENDPOINT con la URL (ej: https://formspree.io/f/abcd1234)
 // El dominio formspree.io ya está autorizado en la CSP.
 const FORMSPREE_ENDPOINT = '';
-const CONTACT_EMAIL = 'info@umbrallcollection.com.ar';
+const CONTACT_EMAIL = 'info@umbralcollection.com.ar';
 
 (() => {
   'use strict';
